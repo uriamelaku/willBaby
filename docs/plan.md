@@ -10,7 +10,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ `lib/pregnancy.ts` + Vitest tests for every calculation method and edge case
 - ✅ Dexie schema (`lib/db.ts`) + `StorageAdapter` interface and IndexedDB implementation
 - ✅ Zod schemas for content (`content/schema.ts`), validated at build time (`prebuild`), including completeness
-- 🔄 GitHub repository (✅ github.com/uriamelaku/willBaby) + first Vercel deployment (⬜ import in the Vercel dashboard; the MCP connector lacked permission)
+- ✅ GitHub repository (github.com/uriamelaku/willBaby) + Vercel deployment at https://will-baby.vercel.app (`vercel.json` serves the static export from `out/`)
 
 ## Phase 1 — MVP (core + basic tools)
 - ✅ Onboarding: role, names, calculation method, number of babies, optional sex and name, "wow" screen
@@ -56,7 +56,7 @@ Mark ✅ only after tests, lint and build actually passed.
 ## Deployment to Vercel (only with explicit approval)
 1. Push the project to GitHub (with permission).
 2. Vercel: Add New → Project → select the repository; Next.js is detected automatically.
-3. `next.config.ts` uses `output: "export"` (fully static).
-4. Address: `willbaby.vercel.app` (or the closest free name).
+3. `next.config.ts` uses `output: "export"`; `vercel.json` makes Vercel run `npm run build` (content check + service worker) and serve `out/` as a static site with clean URLs.
+4. Address: https://will-baby.vercel.app (`willbaby` was taken).
 5. Every push to `main` deploys to production; every branch gets a Preview URL.
 6. After deploying: install to home screen on Android and iPhone, test in airplane mode.
