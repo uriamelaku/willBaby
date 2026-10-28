@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { completeOnboarding, freezeTime, weekRing } from "./helpers";
+import { completeOnboarding, enterApp, freezeTime, weekRing } from "./helpers";
 
 test("asks for a name before continuing", async ({ page }) => {
   await freezeTime(page);
@@ -29,7 +29,7 @@ test("onboarding shows the wow screen, then Today with the week's content", asyn
 
   await expect(page.getByRole("heading", { name: "את בשבוע 15+2!" })).toBeVisible();
   await expect(page.getByText("השבוע ה-16 של ההיריון")).toBeVisible();
-  await page.getByRole("button", { name: "קדימה" }).click();
+  await enterApp(page);
 
   await expect(page).toHaveURL(/\/today$/);
   await expect(page.getByRole("heading", { name: "בוקר טוב, בדיקה" })).toBeVisible();
@@ -45,14 +45,14 @@ test("onboarding shows the wow screen, then Today with the week's content", asyn
 
 test("twins get plural wording", async ({ page }) => {
   await completeOnboarding(page, { twins: true });
-  await page.getByRole("button", { name: "קדימה" }).click();
+  await enterApp(page);
   await expect(page.getByText("כל אחד בגודל של אבוקדו", { exact: true })).toBeVisible();
   await expect(page.getByText("התאומים בגודל של אבוקדו")).toBeVisible();
 });
 
 test("the Week tab opens the current week", async ({ page }) => {
   await completeOnboarding(page);
-  await page.getByRole("button", { name: "קדימה" }).click();
+  await enterApp(page);
   await page.getByRole("link", { name: "השבוע", exact: true }).click();
   await expect(page).toHaveURL(/\/week\/16$/);
   await expect(page.getByRole("heading", { name: "השבוע ה-16" })).toBeVisible();

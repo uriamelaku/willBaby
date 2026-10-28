@@ -396,5 +396,12 @@
       "empty": "צריך לכתוב שם",
       "duplicate": "השם הזה כבר ברשימה"
     }
+  },
+  "badges": {
+    "newTitle": "{count, plural, one {תג חדש!} other {# תגים חדשים!}}",
+    "close": "יופי!",
+    "title": "תגים",
+    "earnedOn": "התקבל ב-{date}",
+    "locked": "עוד לא"
   }
 }

@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { completeOnboarding, weekRing } from "./helpers";
+import { completeOnboarding, enterApp, weekRing } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await completeOnboarding(page);
-  await page.getByRole("button", { name: "קדימה" }).click();
+  await enterApp(page);
   await expect(weekRing(page, "15+2")).toBeVisible();
 });
 

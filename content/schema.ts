@@ -105,15 +105,37 @@ export const hospitalBagItemSchema = z.strictObject({
   text,
 });
 
+/** The closed list of badge conditions (no free code); see features/achievements. */
+export const badgeRuleSchema = z.discriminatedUnion("type", [
+  z.strictObject({ type: z.literal("onboarded") }),
+  z.strictObject({ type: z.literal("week"), min: z.int().min(1).max(MAX_CONTENT_WEEK) }),
+  z.strictObject({ type: z.literal("photos"), min: z.int().min(1) }),
+  z.strictObject({ type: z.literal("journalStreak"), days: z.int().min(2) }),
+  z.strictObject({ type: z.literal("kickSessions"), min: z.int().min(1) }),
+  z.strictObject({ type: z.literal("hospitalBagComplete") }),
+  z.strictObject({ type: z.literal("favoriteName") }),
+]);
+
+export const badgeSchema = z.strictObject({
+  id: contentId,
+  name: text,
+  emoji: z.string().min(1),
+  description: text,
+  rule: badgeRuleSchema,
+});
+
 export const weeksSchema = uniqueBy(weekSchema, "week");
 export const dailySchema = uniqueBy(dailyItemSchema, "day");
 export const testsSchema = uniqueBy(medicalTestSchema, "id");
 export const hospitalBagSchema = uniqueBy(hospitalBagItemSchema, "id").min(1);
+export const badgesSchema = uniqueBy(badgeSchema, "id").min(1);
 
 export type WeekContent = z.infer<typeof weekSchema>;
 export type DailyItem = z.infer<typeof dailyItemSchema>;
 export type MedicalTest = z.infer<typeof medicalTestSchema>;
 export type HospitalBagItem = z.infer<typeof hospitalBagItemSchema>;
+export type BadgeRule = z.infer<typeof badgeRuleSchema>;
+export type Badge = z.infer<typeof badgeSchema>;
 
 /** testIds in weekly summaries that do not exist in tests.json. */
 export const findUnknownTestIds = (weeks: WeekContent[], tests: MedicalTest[]) => {

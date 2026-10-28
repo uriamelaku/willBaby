@@ -31,3 +31,29 @@ export async function completeOnboarding(page: Page, { twins = false, lmpDate = 
   if (twins) await page.getByText("תאומים").click();
   await page.getByRole("button", { name: "סיימנו" }).click();
 }
+
+/** Leaves the wow screen for Today and closes the toast of the badges earned on the way in. */
+export async function enterApp(page: Page) {
+  await page.getByRole("button", { name: "קדימה" }).click();
+  await expect(page).toHaveURL(/\/today$/);
+  await page.getByRole("button", { name: "יופי!" }).click();
+  // Wait until the badges are saved as seen, so a page load does not show the toast again.
+  await expect.poll(() => countUnseenBadges(page)).toBe(0);
+}
+
+const countUnseenBadges = (page: Page) =>
+  page.evaluate(
+    () =>
+      new Promise<number>((resolve, reject) => {
+        const open = indexedDB.open("willbaby");
+        open.onerror = () => reject(open.error);
+        open.onsuccess = () => {
+          const request = open.result.transaction("badges").objectStore("badges").getAll();
+          request.onerror = () => reject(request.error);
+          request.onsuccess = () => {
+            resolve(request.result.filter((badge: { seenAt?: string }) => !badge.seenAt).length);
+            open.result.close();
+          };
+        };
+      }),
+  );

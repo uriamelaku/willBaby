@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { completeOnboarding } from "./helpers";
+import { completeOnboarding, enterApp } from "./helpers";
 
 test("a backup restores a deleted journal entry", async ({ page }, testInfo) => {
   await completeOnboarding(page);
-  await page.getByRole("button", { name: "קדימה" }).click();
+  await enterApp(page);
 
   await page.goto("/journal");
   await page.getByRole("button", { name: "רשומה חדשה" }).click();
@@ -37,7 +37,7 @@ test("a backup restores a deleted journal entry", async ({ page }, testInfo) => 
 
 test("an invalid backup file is rejected without changes", async ({ page }) => {
   await completeOnboarding(page);
-  await page.getByRole("button", { name: "קדימה" }).click();
+  await enterApp(page);
   await page.goto("/more");
   await page.locator('input[type="file"]').setInputFiles({
     name: "other.json",

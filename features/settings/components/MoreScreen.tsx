@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Screen } from "@/components/Screen";
 import { Card } from "@/components/ui/Card";
 import { ChoiceGroup } from "@/components/ui/ChoiceGroup";
+import { BadgesCard } from "@/features/achievements/components/BadgesCard";
 import { BackupCard } from "@/features/backup/components/BackupCard";
 import { PregnancyDetailsCard } from "@/features/pregnancy/components/PregnancyDetailsCard";
 import { DeleteDataCard } from "@/features/settings/components/DeleteDataCard";
@@ -20,6 +21,7 @@ export function MoreScreen() {
     <Screen>
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
       <PregnancyDetailsCard />
+      <BadgesCard />
       <Card>
         <ChoiceGroup
           legend={t("appearance")}

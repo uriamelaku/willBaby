@@ -4,12 +4,14 @@ import {
   findMissingDays,
   findMissingWeeks,
   findUnknownTestIds,
+  badgesSchema,
   hospitalBagSchema,
   testsSchema,
   weeksSchema,
   type DailyItem,
   type WeekContent,
 } from "@/content/schema";
+import badges from "@/content/he/badges.json";
 import daily from "@/content/he/daily.json";
 import hospitalBag from "@/content/he/hospitalBag.json";
 import tests from "@/content/he/tests.json";
@@ -57,6 +59,10 @@ describe("content files (build gate)", () => {
 
   it("hospitalBag.json is valid", () => {
     expect(issuesOf(hospitalBagSchema.safeParse(hospitalBag))).toEqual([]);
+  });
+
+  it("badges.json is valid", () => {
+    expect(issuesOf(badgesSchema.safeParse(badges))).toEqual([]);
   });
 
   it("weekly testIds all exist in tests.json", () => {
@@ -201,6 +207,18 @@ describe("hospitalBagSchema", () => {
     expect(hospitalBagSchema.safeParse([{ ...item, id: "ID Card" }]).success).toBe(false);
     expect(issuesOf(hospitalBagSchema.safeParse([item, item]))).toEqual(["Duplicate id id-card"]);
     expect(hospitalBagSchema.safeParse([]).success).toBe(false);
+  });
+});
+
+describe("badgesSchema", () => {
+  const badge = { id: "halfway", name: "חצי הדרך", emoji: "⛰️", description: "20 שבועות", rule: { type: "week", min: 20 } };
+
+  it("accepts rules from the closed list only", () => {
+    expect(badgesSchema.safeParse([badge]).success).toBe(true);
+    expect(badgesSchema.safeParse([{ ...badge, rule: { type: "custom", code: "x" } }]).success).toBe(false);
+    expect(badgesSchema.safeParse([{ ...badge, rule: { type: "week" } }]).success).toBe(false);
+    expect(badgesSchema.safeParse([{ ...badge, rule: { type: "week", min: 50 } }]).success).toBe(false);
+    expect(issuesOf(badgesSchema.safeParse([badge, badge]))).toEqual(["Duplicate id halfway"]);
   });
 });
 

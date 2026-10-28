@@ -1,9 +1,11 @@
+import badges from "@/content/he/badges.json";
 import daily from "@/content/he/daily.json";
 import hospitalBag from "@/content/he/hospitalBag.json";
 import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
 import {
   TOTAL_DAILY_ITEMS,
+  type Badge,
   type DailyItem,
   type HospitalBagItem,
   type MedicalTest,
@@ -15,6 +17,7 @@ const weekContents = weeks as WeekContent[];
 const dailyItems = daily as DailyItem[];
 const medicalTests = tests as MedicalTest[];
 const hospitalBagItems = hospitalBag as HospitalBagItem[];
+const badgeList = badges as Badge[];
 
 export const findWeekContent = (contents: WeekContent[], week: number) =>
   contents.find((content) => content.week === week);
@@ -34,3 +37,5 @@ export const getMedicalTests = () => medicalTests;
 export const getMedicalTest = (id: string) => medicalTests.find((test) => test.id === id);
 
 export const getHospitalBagItems = () => hospitalBagItems;
+
+export const getBadges = () => badgeList;

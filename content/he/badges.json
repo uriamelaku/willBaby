@@ -1,0 +1,12 @@
+[
+  { "id": "welcome", "name": "ברוכים הבאים", "emoji": "👋", "description": "התחלתם לעקוב אחרי ההיריון", "rule": { "type": "onboarded" } },
+  { "id": "first-trimester", "name": "השליש הראשון מאחורינו", "emoji": "🌱", "description": "סיימתם את השליש הראשון", "rule": { "type": "week", "min": 14 } },
+  { "id": "halfway", "name": "חצי הדרך", "emoji": "⛰️", "description": "עברתם 20 שבועות", "rule": { "type": "week", "min": 20 } },
+  { "id": "third-trimester", "name": "השליש השלישי", "emoji": "🚀", "description": "נכנסתם לישורת האחרונה", "rule": { "type": "week", "min": 28 } },
+  { "id": "full-term", "name": "היריון מלא", "emoji": "🎈", "description": "הגעתם לשבוע 37", "rule": { "type": "week", "min": 37 } },
+  { "id": "belly-photographer", "name": "אלבום הבטן", "emoji": "📸", "description": "5 תמונות בטן באלבום", "rule": { "type": "photos", "min": 5 } },
+  { "id": "journal-star", "name": "כוכבי היומן", "emoji": "⭐", "description": "כתבתם ביומן 7 ימים ברצף", "rule": { "type": "journalStreak", "days": 7 } },
+  { "id": "little-footballer", "name": "כדורגלן קטן", "emoji": "⚽", "description": "ספירת הבעיטות הראשונה הסתיימה", "rule": { "type": "kickSessions", "min": 1 } },
+  { "id": "bag-ready", "name": "התיק מוכן", "emoji": "🧳", "description": "כל מה שברשימת תיק הלידה ארוז", "rule": { "type": "hospitalBagComplete" } },
+  { "id": "we-have-a-name", "name": "יש לנו שם!", "emoji": "💝", "description": "סימנתם שם מועדף", "rule": { "type": "favoriteName" } }
+]

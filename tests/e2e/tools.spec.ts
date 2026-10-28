@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { completeOnboarding } from "./helpers";
+import { completeOnboarding, enterApp } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await completeOnboarding(page);
-  await page.getByRole("button", { name: "קדימה" }).click();
+  await enterApp(page);
   await page.getByRole("link", { name: "כלים" }).click();
 });
 
@@ -123,4 +123,22 @@ test("names: both people vote in turn on one phone", async ({ page }) => {
   await page.getByRole("button", { name: "מועדף: ליה" }).click();
   await expect(page.getByRole("button", { name: "מועדף: ליה" })).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("main li").first()).toContainText("ליה");
+});
+
+test("finishing the first kick session earns a badge, shown once", async ({ page }) => {
+  await page.getByRole("link", { name: /מונה בעיטות/ }).click();
+  await page.getByRole("button", { name: "מתחילים לספור" }).click();
+  await page.getByRole("button", { name: "סיום" }).click();
+
+  const toast = page.getByRole("status").filter({ hasText: "תג חדש!" });
+  await expect(toast).toContainText("כדורגלן קטן");
+  await toast.getByRole("button", { name: "יופי!" }).click();
+  await expect(toast).toHaveCount(0);
+
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "מונה בעיטות" })).toBeVisible();
+  await expect(page.getByText("תג חדש!")).toHaveCount(0);
+
+  await page.goto("/more");
+  await expect(page.getByRole("heading", { name: "תגים (3/10)" })).toBeVisible();
 });
