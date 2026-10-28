@@ -9,7 +9,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ "Coming soon" home page with the will·B·aby logo text
 - ✅ `lib/pregnancy.ts` + Vitest tests for every calculation method and edge case
 - ✅ Dexie schema (`lib/db.ts`) + `StorageAdapter` interface and IndexedDB implementation
-- ⬜ Zod schemas for content (`content/schema.ts`), validated at build time
+- ✅ Zod schemas for content (`content/schema.ts`), validated at build time (`prebuild`); completeness check is off until the content is written
 - ⬜ GitHub repository + first Vercel deployment (only with explicit approval)
 
 ## Phase 1 — MVP (core + basic tools)
@@ -17,7 +17,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ⬜ "Today" screen: week+day, fruit, countdown, progress bar, daily item, fact card, shortcuts
 - ⬜ Weekly summary with navigation between weeks and role-based version
 - ⬜ Bottom navigation: Today · Week · Journal · Tools · More
-- ⬜ Content: 42 weekly summaries + 294 daily items (pregnant + partner versions)
+- ⬜ Content: 42 weekly summaries + 294 daily items (pregnant + partner versions); then set `REQUIRE_COMPLETE_CONTENT = true` in `tests/content.test.ts`
 - ⬜ Journal + mood (1–5)
 - ⬜ Belly photos: one per week, compression, timeline gallery
 - ⬜ Tests by week + appointments linked to tests; upcoming ones on "Today"
