@@ -16,7 +16,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Onboarding: role, names, calculation method, number of babies, optional sex and name, "wow" screen
 - ✅ "Today" screen: week+day, fruit, countdown, progress bar, daily item, fact card, shortcuts
 - ⬜ Weekly summary with navigation between weeks and role-based version
-- ⬜ Bottom navigation: Today · Week · Journal · Tools · More
+- ✅ Bottom navigation: Today · Week · Journal · Tools · More
 - ⬜ Content: 42 weekly summaries + 294 daily items (pregnant + partner versions); then set `REQUIRE_COMPLETE_CONTENT = true` in `tests/content.test.ts`
 - ⬜ Journal + mood (1–5)
 - ⬜ Belly photos: one per week, compression, timeline gallery
