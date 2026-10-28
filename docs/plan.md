@@ -37,7 +37,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Badges (`checkAchievements`)
 - ✅ Weekly surprises (weeks 12, 20, 24, 30, 37, 40)
 - ✅ Family bets + winner scoring (the winner is shown on the phase 3 "baby is born" screen, which supplies the birth data)
-- ⬜ Sex reveal screen
+- ✅ Sex reveal screen
 
 ## Phase 3 — After birth
 - ⬜ "The baby is born" screen (date, time, weights, name)

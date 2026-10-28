@@ -26,7 +26,11 @@ export function ChoiceGroup<T extends string>({
   return (
     <fieldset>
       <legend className={hideLegend ? "sr-only" : "mb-3 font-semibold"}>{legend}</legend>
-      <div className={inline ? "grid grid-cols-3 gap-2" : "flex flex-col gap-3"}>
+      <div
+        className={
+          inline ? `grid gap-2 ${options.length % 2 === 0 ? "grid-cols-2" : "grid-cols-3"}` : "flex flex-col gap-3"
+        }
+      >
         {options.map((option) => (
           <label
             key={option.value}

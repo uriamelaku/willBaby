@@ -168,3 +168,22 @@ test("family bets are added, edited and deleted", async ({ page }) => {
   await page.getByRole("dialog").getByRole("button", { name: "מחיקה" }).click();
   await expect(page.getByText("עוד אין הימורים. מי ראשון?")).toBeVisible();
 });
+
+test("the sex reveal sets the sex and the wording follows it", async ({ page }) => {
+  await page.getByRole("link", { name: /חשיפת המין/ }).click();
+  await expect(page).toHaveURL(/\/reveal$/);
+  const ready = page.getByRole("button", { name: "מוכנים לחשיפה" });
+  await expect(ready).toBeDisabled();
+  await page.getByText("בת", { exact: true }).click();
+  await ready.click();
+
+  await page.getByRole("button", { name: /לוחצים וחושפים/ }).click();
+  await expect(page.getByRole("heading", { name: "זו בת! ✨" })).toBeVisible();
+
+  await page.getByRole("link", { name: "חזרה להיום" }).click();
+  await page.goto("/week/16");
+  await expect(page.getByText("הבייבי זזה הרבה", { exact: false })).toBeVisible();
+
+  await page.goto("/reveal");
+  await expect(page.getByRole("heading", { name: "כבר יודעים!" })).toBeVisible();
+});

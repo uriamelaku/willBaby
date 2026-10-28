@@ -38,7 +38,7 @@ Edge cases: before week 4 → gentle "still early" content; after 40 → "any da
 ## Data model (Dexie / IndexedDB)
 Every record: `id` (UUID), `createdAt`, `updatedAt` (ISO timestamps). Calendar dates (`lmpDate`, `dueDate`, journal and appointment dates) are stored as local `YYYY-MM-DD` strings so they never shift across time zones or in backups.
 
-Schema version 1 holds the MVP tables (`profile`, `pregnancy`, `babies`, `journal`, `photos`, `appointments`, `settings`); the other tables are added in later Dexie versions together with their features.
+Schema version 1 holds the MVP tables (`profile`, `pregnancy`, `babies`, `journal`, `photos`, `appointments`, `settings`); version 2 adds the phase 2 tables (`weights`, `kickSessions`, `contractions`, `checklist`, `names`, `bets`, `badges`). `birth` comes with phase 3.
 
 | Table | Main fields |
 | --- | --- |
@@ -49,19 +49,19 @@ Schema version 1 holds the MVP tables (`profile`, `pregnancy`, `babies`, `journa
 | `journal` | date, week, text, mood (1–5), tags[] |
 | `photos` | week, blob (compressed), caption, takenAt |
 | `weights` | date, kg |
-| `kickSessions` | startedAt, endedAt, kicks[] |
-| `contractions` | sessionId, startedAt, endedAt |
+| `kickSessions` | startedAt, endedAt (missing while running), kicks[] (timestamps) |
+| `contractions` | sessionId (a new session after a 2-hour gap), startedAt, endedAt (missing while running) |
 | `appointments` | title, date, time, place, linkedTestId, done, notes |
-| `checklist` | listType (`hospitalBag`), itemId, custom, checked |
-| `names` | name, sex, votes {me, partner} (−1/0/1), favorite |
-| `bets` | guesserName, dueDateGuess, weightGuess, sexGuess, nameGuess |
+| `checklist` | listType (`hospitalBag`), itemId (default item from content) or customText, checked |
+| `names` | name, sex (`boy` / `girl` / `any`), votes {me?, partner?} (−1/0/1, missing until voted), favorite |
+| `bets` | guesserName, dueDateGuess, weightGuess (kg), sexGuess? (`boy` / `girl` / `mixed`), nameGuess? |
 | `badges` | badgeId, earnedAt, seenAt |
-| `settings` | seenSurprises[], disclaimerAcceptedAt, lastBackupAt, schemaVersion (the theme is a device preference in localStorage) |
+| `settings` | seenSurprises[] (weeks), disclaimerAcceptedAt, lastBackupAt, schemaVersion (the theme is a device preference in localStorage) |
 
-**Backup:** export all tables to `willbaby-backup-YYYY-MM-DD.json` (photos as Base64; ZIP for large backups is a later option). Import validates every record (Zod) and `schemaVersion`, then replaces all data in one transaction after the user confirms. Until sync exists, this is also how data moves to the partner's phone.
+**Backup:** export all tables (version 1 files restore with the version 2 tables empty) to `willbaby-backup-YYYY-MM-DD.json` (photos as Base64; ZIP for large backups is a later option). Import validates every record (Zod) and `schemaVersion`, then replaces all data in one transaction after the user confirms. Until sync exists, this is also how data moves to the partner's phone.
 
 ## Gamification logic
-`checkAchievements(state)` runs on app open and after every save, returning new badges/surprises not yet seen. Badge rules come from a closed list of conditions (no free code).
+`checkAchievements(badges, state, earned)` runs on app open and after every write (`onStorageChange` in `lib/storage`), returning badges not yet earned; new ones show once in a toast. Badge rules come from a closed list of conditions (no free code, validated by `badgeRuleSchema`). Surprises are separate: the current week's surprise shows on Today unless its week is in `settings.seenSurprises`.
 
 Family bets scoring (lowest wins; twins compare with the average weight):
 ```ts

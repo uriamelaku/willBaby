@@ -125,7 +125,6 @@ function NamesList({ data }: { data: PregnancyData }) {
         <Card className="flex flex-col gap-4">
           <ChoiceGroup
             legend={t("names.whoVotes")}
-            inline={false}
             value={voter}
             onChange={setVoter}
             options={VOTERS.map((value) => ({ value, label: voterNames[value] }))}

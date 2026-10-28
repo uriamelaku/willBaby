@@ -11,6 +11,7 @@ const tools = [
   { href: "/tools/hospital-bag", icon: "🧳", title: "hospitalBag", description: "hospitalBagDescription" },
   { href: "/tools/names", icon: "📝", title: "names", description: "namesDescription" },
   { href: "/tools/bets", icon: "🎲", title: "bets", description: "betsDescription" },
+  { href: "/reveal", icon: "🎁", title: "reveal", description: "revealDescription" },
 ] as const;
 
 export function ToolsScreen() {
@@ -37,7 +38,6 @@ export function ToolsScreen() {
           </li>
         ))}
       </ul>
-      <p className="text-sm text-muted">{t("more")}</p>
     </Screen>
   );
 }
