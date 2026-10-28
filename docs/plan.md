@@ -4,10 +4,10 @@ Status marks: ✅ done and verified · 🔄 in progress · ⬜ not started · �
 Mark ✅ only after tests, lint and build actually passed.
 
 ## Phase 0 — Foundation
-- ⬜ Next.js + TypeScript + Tailwind project, RTL (`dir="rtl"`, `lang="he"`), Rubik font
-- ⬜ Theme tokens for light/dark (see `docs/design.md`)
-- ⬜ "Coming soon" home page with the will·B·aby logo text
-- ⬜ `lib/pregnancy.ts` + Vitest tests for every calculation method and edge case
+- ✅ Next.js + TypeScript + Tailwind project, RTL (`dir="rtl"`, `lang="he"`), Rubik font
+- ✅ Theme tokens for light/dark (see `docs/design.md`)
+- ✅ "Coming soon" home page with the will·B·aby logo text
+- ✅ `lib/pregnancy.ts` + Vitest tests for every calculation method and edge case
 - ⬜ Dexie schema (`lib/db.ts`) + `StorageAdapter` interface and IndexedDB implementation
 - ⬜ Zod schemas for content (`content/schema.ts`), validated at build time
 - ⬜ GitHub repository + first Vercel deployment (only with explicit approval)
