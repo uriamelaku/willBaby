@@ -49,7 +49,7 @@ function TodayContent({ data }: { data: PregnancyData }) {
         </h1>
         <div className="flex items-center justify-between gap-2">
           <div className="flex flex-col gap-1">
-            {weekContent && (
+            {weekContent?.fruit && weekContent.size && (
               <>
                 <WeekFruit fruit={weekContent.fruit} className="text-[44px]" />
                 <p className="text-lg font-bold">

@@ -64,7 +64,7 @@ function WeekContentView({ week, data }: { week: number; data: PregnancyData }) 
   return (
     <>
       <header className="flex flex-col items-center gap-2 text-center">
-        {content && <WeekFruit fruit={content.fruit} className="text-7xl" />}
+        {content?.fruit && <WeekFruit fruit={content.fruit} className="text-7xl" />}
         <h1 className="text-3xl font-semibold">{t("week.title", { week })}</h1>
         {week === currentWeek && (
           <span className="rounded-full bg-accent/30 px-3 py-1 text-sm">{t("week.current")}</span>
@@ -72,7 +72,7 @@ function WeekContentView({ week, data }: { week: number; data: PregnancyData }) 
         {content && (
           <>
             <p className="text-lg">{render(content.headline)}</p>
-            <p className="text-sm text-muted">{t("pregnancy.size", content.size)}</p>
+            {content.size && <p className="text-sm text-muted">{t("pregnancy.size", content.size)}</p>}
           </>
         )}
       </header>

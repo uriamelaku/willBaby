@@ -22,7 +22,7 @@ export function WowStep({ records, onContinue }: {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-      {weekContent && <WeekFruit fruit={weekContent.fruit} className="text-8xl" />}
+      {weekContent?.fruit && <WeekFruit fruit={weekContent.fruit} className="text-8xl" />}
       <h1 className="text-4xl font-semibold">
         {t("onboarding.wow.title", {
           role: records.profile.role,
@@ -31,7 +31,7 @@ export function WowStep({ records, onContinue }: {
       </h1>
       <p className="text-xl">{t("pregnancy.contentWeek", { week: status.contentWeek })}</p>
       {status.week < EARLY_WEEKS && <p>{t("pregnancy.early")}</p>}
-      {weekContent && (
+      {weekContent?.fruit && (
         <p>
           {t("pregnancy.fruit", {
             babiesCount: records.babies.length,

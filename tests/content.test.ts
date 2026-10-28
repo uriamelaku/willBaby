@@ -72,6 +72,16 @@ describe("weeksSchema", () => {
     expect(weeksSchema.safeParse([{ ...validWeek, twinsNote: "פי שניים" }]).success).toBe(true);
   });
 
+  it("allows a week without fruit and size, but not one without the other", () => {
+    const early: Partial<WeekContent> = { ...validWeek, week: 2 };
+    delete early.fruit;
+    delete early.size;
+    expect(weeksSchema.safeParse([early]).success).toBe(true);
+    expect(issuesOf(weeksSchema.safeParse([{ ...validWeek, size: undefined }]))).toEqual([
+      "fruit and size go together",
+    ]);
+  });
+
   it.each([0, 43, 1.5])("rejects week %j", (week) => {
     expect(weeksSchema.safeParse([{ ...validWeek, week }]).success).toBe(false);
   });

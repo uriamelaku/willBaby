@@ -27,20 +27,26 @@ const shortText = text.refine(
 
 const textList = z.array(text).min(1);
 
-export const weekSchema = z.strictObject({
-  week: z.int().min(1).max(MAX_CONTENT_WEEK),
-  fruit: z.strictObject({ emoji: z.string().min(1), name: text }),
-  size: z.strictObject({ cm: z.number().positive(), grams: z.number().positive() }),
-  headline: text,
-  baby: textList,
-  body: textList,
-  tips: textList,
-  partner: z.strictObject({ tip: text, mission: text }),
-  funFact: text,
-  twinsNote: text.optional(),
-  testIds: z.array(z.string().min(1)),
-  sources: textList,
-});
+export const weekSchema = z
+  .strictObject({
+    week: z.int().min(1).max(MAX_CONTENT_WEEK),
+    /** Omitted for the first weeks, before there is an embryo to compare (fruit and size go together). */
+    fruit: z.strictObject({ emoji: z.string().min(1), name: text }).optional(),
+    size: z.strictObject({ cm: z.number().positive(), grams: z.number().positive() }).optional(),
+    headline: text,
+    baby: textList,
+    body: textList,
+    tips: textList,
+    partner: z.strictObject({ tip: text, mission: text }),
+    funFact: text,
+    twinsNote: text.optional(),
+    testIds: z.array(z.string().min(1)),
+    sources: textList,
+  })
+  .refine((week) => (week.fruit === undefined) === (week.size === undefined), {
+    error: "fruit and size go together",
+    path: ["size"],
+  });
 
 export const dailyItemTypes = ["tip", "fact", "funny", "emotional", "partner"] as const;
 
