@@ -1,0 +1,122 @@
+import {
+  addDays,
+  differenceInCalendarDays,
+  isValid,
+  parse,
+  startOfDay,
+} from "date-fns";
+
+// All dates are local calendar dates (midnight in the device's time zone), never UTC,
+// so the pregnancy day changes at local midnight.
+
+export type CalculationMethod = "lmp" | "due" | "ivf3" | "ivf5";
+
+export const FULL_TERM_DAYS = 280;
+export const MAX_PREGNANCY_DAYS = 300;
+export const MAX_CONTENT_WEEK = 42;
+
+/** Days from LMP (day 0) to the transfer date, per embryo age. */
+const IVF_TRANSFER_OFFSET_DAYS = { ivf3: 17, ivf5: 19 } as const;
+
+export type Trimester = 1 | 2 | 3;
+
+export interface PregnancyStatus {
+  daysPregnant: number;
+  /** Completed weeks: the "14" in "14+3". */
+  week: number;
+  /** Days into the current week, 0..6: the "3" in "14+3". */
+  dayOfWeek: number;
+  /** "The 15th week", clamped to 1..42 for content lookup. */
+  contentWeek: number;
+  /** Negative once the due date has passed. */
+  daysLeft: number;
+  /** 0..1 of full term. */
+  progress: number;
+  trimester: Trimester;
+  dueDate: Date;
+}
+
+export type LmpValidation =
+  | { valid: true }
+  | { valid: false; reason: "invalidDate" | "inFuture" | "tooFarInPast" };
+
+const LOCAL_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
+
+function assertValidDate(date: Date): void {
+  if (!isValid(date)) throw new RangeError("Invalid date");
+}
+
+/** Parses a `YYYY-MM-DD` string (e.g. from `<input type="date">`) as a local calendar date. */
+export function parseLocalDate(value: string): Date {
+  const date = LOCAL_DATE_PATTERN.test(value)
+    ? parse(value, "yyyy-MM-dd", new Date())
+    : new Date(NaN);
+  if (!isValid(date)) {
+    throw new RangeError(`Expected a valid YYYY-MM-DD date, got "${value}"`);
+  }
+  return date;
+}
+
+/** Converts any input method to day 0 (LMP). */
+export function lmpFromInput(method: CalculationMethod, inputDate: Date): Date {
+  assertValidDate(inputDate);
+  const date = startOfDay(inputDate);
+  switch (method) {
+    case "lmp":
+      return date;
+    case "due":
+      return addDays(date, -FULL_TERM_DAYS);
+    case "ivf3":
+    case "ivf5":
+      return addDays(date, -IVF_TRANSFER_OFFSET_DAYS[method]);
+  }
+}
+
+export function dueDateFromLmp(lmpDate: Date): Date {
+  assertValidDate(lmpDate);
+  return addDays(startOfDay(lmpDate), FULL_TERM_DAYS);
+}
+
+/** Day 0 must be 0..300 days before today. */
+export function validateLmp(lmpDate: Date, today: Date): LmpValidation {
+  if (!isValid(lmpDate) || !isValid(today)) {
+    return { valid: false, reason: "invalidDate" };
+  }
+  const daysPregnant = differenceInCalendarDays(today, lmpDate);
+  if (daysPregnant < 0) return { valid: false, reason: "inFuture" };
+  if (daysPregnant > MAX_PREGNANCY_DAYS) {
+    return { valid: false, reason: "tooFarInPast" };
+  }
+  return { valid: true };
+}
+
+function trimesterForWeek(week: number): Trimester {
+  if (week < 14) return 1;
+  if (week < 28) return 2;
+  return 3;
+}
+
+/** Derives everything shown to the user from day 0. Expects a date that passed `validateLmp`. */
+export function getPregnancyStatus(lmpDate: Date, today: Date): PregnancyStatus {
+  const validation = validateLmp(lmpDate, today);
+  if (!validation.valid) {
+    throw new RangeError(`Invalid LMP date: ${validation.reason}`);
+  }
+
+  const daysPregnant = differenceInCalendarDays(today, lmpDate);
+  const week = Math.floor(daysPregnant / 7);
+
+  return {
+    daysPregnant,
+    week,
+    dayOfWeek: daysPregnant % 7,
+    contentWeek: clamp(week + 1, 1, MAX_CONTENT_WEEK),
+    daysLeft: FULL_TERM_DAYS - daysPregnant,
+    progress: clamp(daysPregnant / FULL_TERM_DAYS, 0, 1),
+    trimester: trimesterForWeek(week),
+    dueDate: dueDateFromLmp(lmpDate),
+  };
+}
