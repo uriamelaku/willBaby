@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/Button";
 import {
   buildOnboardingRecords,
+  hasCompletedOnboarding,
   saveOnboarding,
   type OnboardingAnswers,
   type OnboardingRecords,
@@ -37,6 +38,15 @@ export function OnboardingFlow() {
   const [draft, setDraft] = useState<Draft>(initialDraft);
   const [saved, setSaved] = useState<OnboardingRecords | null>(null);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "error">("idle");
+
+  // Onboarding runs once; an existing pregnancy goes straight to Today.
+  useEffect(() => {
+    hasCompletedOnboarding(storage)
+      .then((done) => {
+        if (done) router.replace("/today");
+      })
+      .catch((error) => console.error("Reading storage failed", error));
+  }, [router]);
 
   const update = (patch: Partial<Draft>) => setDraft((current) => ({ ...current, ...patch }));
   const goNext = () => setStepIndex((index) => index + 1);
