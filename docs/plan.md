@@ -25,7 +25,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Backup and restore (JSON file) + backup reminder every 4 weeks + `navigator.storage.persist()`
 - ✅ PWA: manifest, icons, offline support (hand-written service worker)
 - ✅ Dark mode (automatic + manual toggle) and medical disclaimer
-- ⬜ Playwright tests for onboarding, Today, backup/restore
+- ✅ Playwright tests for onboarding, Today, backup/restore
 
 ## Phase 2 — Tools & gamification
 - ⬜ Kick counter

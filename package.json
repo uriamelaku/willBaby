@@ -10,7 +10,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "validate:content": "vitest run tests/content.test.ts"
+    "validate:content": "vitest run tests/content.test.ts",
+    "preview": "node scripts/preview.mjs out 4173",
+    "test:e2e": "npm run build && playwright test"
   },
   "dependencies": {
     "date-fns": "^4.4.0",
