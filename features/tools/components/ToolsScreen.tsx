@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Screen } from "@/components/Screen";
+import { BagReminder } from "@/features/hospitalBag/components/BagReminder";
 
 const tools = [
   { href: "/tools/appointments", icon: "🩺", title: "appointments", description: "appointmentsDescription" },
   { href: "/tools/kicks", icon: "👣", title: "kicks", description: "kicksDescription" },
   { href: "/tools/contractions", icon: "⏱️", title: "contractions", description: "contractionsDescription" },
   { href: "/tools/weight", icon: "⚖️", title: "weight", description: "weightDescription" },
+  { href: "/tools/hospital-bag", icon: "🧳", title: "hospitalBag", description: "hospitalBagDescription" },
 ] as const;
 
 export function ToolsScreen() {
@@ -14,6 +16,7 @@ export function ToolsScreen() {
   return (
     <Screen>
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
+      <BagReminder />
       <ul className="flex flex-col gap-3">
         {tools.map((tool) => (
           <li key={tool.href}>

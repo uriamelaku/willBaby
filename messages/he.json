@@ -222,7 +222,9 @@
     "contractions": "טיימר צירים",
     "contractionsDescription": "כמה זמן כל ציר, וכמה זמן ביניהם",
     "weight": "מעקב משקל",
-    "weightDescription": "שקילה מדי פעם, וגרף לאורך ההיריון"
+    "weightDescription": "שקילה מדי פעם, וגרף לאורך ההיריון",
+    "hospitalBag": "תיק לידה",
+    "hospitalBagDescription": "רשימה מוכנה, ואפשר להוסיף דברים משלכם"
   },
   "appointments": {
     "title": "בדיקות ותורים",
@@ -345,5 +347,21 @@
       "invalidDate": "התאריך צריך להיות בין תחילת ההיריון להיום",
       "invalidWeight": "המשקל צריך להיות בין 30 ל-250 ק״ג"
     }
+  },
+  "hospitalBag": {
+    "title": "תיק לידה",
+    "intro": "כדאי שהתיק יהיה מוכן כמה שבועות לפני התאריך המשוער. מסמנים מה כבר בפנים.",
+    "progress": "{checked} מתוך {total} בתיק",
+    "complete": "התיק מוכן! 🎉",
+    "categories": {
+      "documents": "מסמכים",
+      "forBirth": "ללידה ואחריה",
+      "baby": "לבייבי",
+      "partner": "למלווה",
+      "custom": "דברים שלנו"
+    },
+    "newItem": "פריט חדש",
+    "add": "הוספה",
+    "reminder": "הגיע הזמן לארוז את תיק הלידה ({checked} מתוך {total})"
   }
 }

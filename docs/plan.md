@@ -32,7 +32,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Kick counter
 - ✅ Contraction timer
 - ✅ Weight tracking with chart
-- ⬜ Hospital bag checklist (default + custom items, in-app reminder from week 32)
+- ✅ Hospital bag checklist (default + custom items, in-app reminder from week 32)
 - ⬜ Baby names list with two-person voting on one device ("whose turn")
 - ⬜ Badges (`checkAchievements`)
 - ⬜ Weekly surprises (weeks 12, 20, 24, 30, 37, 40)

@@ -4,12 +4,14 @@ import {
   findMissingDays,
   findMissingWeeks,
   findUnknownTestIds,
+  hospitalBagSchema,
   testsSchema,
   weeksSchema,
   type DailyItem,
   type WeekContent,
 } from "@/content/schema";
 import daily from "@/content/he/daily.json";
+import hospitalBag from "@/content/he/hospitalBag.json";
 import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
 
@@ -51,6 +53,10 @@ describe("content files (build gate)", () => {
   it("tests.json is valid", () => {
     const result = testsSchema.safeParse(tests);
     expect(issuesOf(result)).toEqual([]);
+  });
+
+  it("hospitalBag.json is valid", () => {
+    expect(issuesOf(hospitalBagSchema.safeParse(hospitalBag))).toEqual([]);
   });
 
   it("weekly testIds all exist in tests.json", () => {
@@ -183,6 +189,18 @@ describe("testsSchema", () => {
   it("finds unknown test ids in weeks", () => {
     const week = { testIds: ["glucose-challenge", "nope"] } as WeekContent;
     expect(findUnknownTestIds([week], [validTest])).toEqual(["nope"]);
+  });
+});
+
+describe("hospitalBagSchema", () => {
+  const item = { id: "id-card", category: "documents", text: "תעודת זהות" };
+
+  it("accepts a valid list and rejects bad items, duplicates and an empty list", () => {
+    expect(hospitalBagSchema.safeParse([item]).success).toBe(true);
+    expect(hospitalBagSchema.safeParse([{ ...item, category: "toys" }]).success).toBe(false);
+    expect(hospitalBagSchema.safeParse([{ ...item, id: "ID Card" }]).success).toBe(false);
+    expect(issuesOf(hospitalBagSchema.safeParse([item, item]))).toEqual(["Duplicate id id-card"]);
+    expect(hospitalBagSchema.safeParse([]).success).toBe(false);
   });
 });
 

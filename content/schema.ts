@@ -76,11 +76,13 @@ const uniqueBy = <T extends z.ZodType>(item: T, key: keyof z.infer<T> & string) 
     });
   });
 
+const contentId = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use a kebab-case id");
+
 const contentWeek = z.int().min(1).max(MAX_CONTENT_WEEK);
 
 export const medicalTestSchema = z
   .strictObject({
-    id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use a kebab-case id"),
+    id: contentId,
     name: text,
     /** Compact name for tight spots like the Today timeline. */
     shortName: text.optional(),
@@ -95,13 +97,23 @@ export const medicalTestSchema = z
     path: ["weekTo"],
   });
 
+export const hospitalBagCategories = ["documents", "forBirth", "baby", "partner"] as const;
+
+export const hospitalBagItemSchema = z.strictObject({
+  id: contentId,
+  category: z.enum(hospitalBagCategories),
+  text,
+});
+
 export const weeksSchema = uniqueBy(weekSchema, "week");
 export const dailySchema = uniqueBy(dailyItemSchema, "day");
 export const testsSchema = uniqueBy(medicalTestSchema, "id");
+export const hospitalBagSchema = uniqueBy(hospitalBagItemSchema, "id").min(1);
 
 export type WeekContent = z.infer<typeof weekSchema>;
 export type DailyItem = z.infer<typeof dailyItemSchema>;
 export type MedicalTest = z.infer<typeof medicalTestSchema>;
+export type HospitalBagItem = z.infer<typeof hospitalBagItemSchema>;
 
 /** testIds in weekly summaries that do not exist in tests.json. */
 export const findUnknownTestIds = (weeks: WeekContent[], tests: MedicalTest[]) => {

@@ -69,3 +69,32 @@ test("weight tracking saves weights, shows the change and the chart", async ({ p
   await expect(page.getByText("28 באוק׳ 2026")).toBeVisible();
   await expect(page.getByText("13 ביולי 2026")).toBeVisible();
 });
+
+test("hospital bag checks default items and adds custom ones", async ({ page }) => {
+  await page.getByRole("link", { name: /תיק לידה/ }).click();
+  const progress = page.getByText(/מתוך \d+ בתיק/);
+  await expect(progress).toHaveText("0 מתוך 23 בתיק");
+
+  await page.getByLabel("תעודת זהות").click();
+  await expect(progress).toHaveText("1 מתוך 23 בתיק");
+
+  await page.getByLabel("פריט חדש").fill("כרית הנקה");
+  await page.getByRole("button", { name: "הוספה" }).click();
+  await expect(progress).toHaveText("1 מתוך 24 בתיק");
+  await page.getByLabel("כרית הנקה").click();
+
+  await page.reload();
+  await expect(page.getByText("2 מתוך 24 בתיק")).toBeVisible();
+  await expect(page.getByLabel("תעודת זהות")).toBeChecked();
+});
+
+test("the bag reminder shows from week 32", async ({ page }) => {
+  await expect(page.getByText(/הגיע הזמן לארוז/)).toHaveCount(0);
+  await page.goto("/more");
+  // Moving the due date earlier puts the pregnancy in week 33.
+  await page.getByRole("button", { name: "עדכון תאריך הלידה" }).click();
+  await page.getByLabel("תאריך לידה משוער חדש").fill("2026-12-20");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await page.goto("/tools");
+  await expect(page.getByRole("link", { name: /הגיע הזמן לארוז את תיק הלידה \(0 מתוך 23\)/ })).toBeVisible();
+});
