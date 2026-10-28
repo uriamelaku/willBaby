@@ -82,7 +82,7 @@ describe("IndexedDB StorageAdapter", () => {
   it("lists all records of a table only", async () => {
     const first = await storage.save("journal", journalEntry);
     const second = await storage.save("journal", { ...journalEntry, date: "2026-03-16" });
-    await storage.save("settings", { theme: "auto", schemaVersion: SCHEMA_VERSION });
+    await storage.save("settings", { schemaVersion: SCHEMA_VERSION });
 
     const ids = (await storage.list("journal")).map((entry) => entry.id).sort();
     expect(ids).toEqual([first.id, second.id].sort());

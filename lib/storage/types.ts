@@ -72,10 +72,7 @@ export interface Appointment extends BaseRecord {
   notes?: string;
 }
 
-export type ThemePreference = "light" | "dark" | "auto";
-
 export interface Settings extends BaseRecord {
-  theme: ThemePreference;
   disclaimerAcceptedAt?: Timestamp;
   schemaVersion: number;
 }

@@ -24,7 +24,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ⬜ WhatsApp share (Web Share API, `wa.me` fallback)
 - ⬜ Backup and restore (JSON file) + backup reminder every 4 weeks + `navigator.storage.persist()`
 - ⬜ PWA: manifest, icons, offline support (Serwist)
-- ⬜ Dark mode (automatic + manual toggle) and medical disclaimer
+- ✅ Dark mode (automatic + manual toggle) and medical disclaimer
 - ⬜ Playwright tests for onboarding, Today, backup/restore
 
 ## Phase 2 — Tools & gamification

@@ -85,7 +85,7 @@ export function buildOnboardingRecords(
       sex: baby.sex,
       name: optionalText(baby.name),
     })),
-    settings: { theme: "auto", schemaVersion: SCHEMA_VERSION },
+    settings: { schemaVersion: SCHEMA_VERSION },
   };
 }
 

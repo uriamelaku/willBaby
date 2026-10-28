@@ -55,7 +55,7 @@ describe("buildOnboardingRecords", () => {
         status: "active",
       },
       babies: [{ index: 0, sex: "unknown", name: undefined }],
-      settings: { theme: "auto", schemaVersion: SCHEMA_VERSION },
+      settings: { schemaVersion: SCHEMA_VERSION },
     });
   });
 

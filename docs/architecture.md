@@ -56,7 +56,7 @@ Schema version 1 holds the MVP tables (`profile`, `pregnancy`, `babies`, `journa
 | `names` | name, sex, votes {me, partner} (−1/0/1), favorite |
 | `bets` | guesserName, dueDateGuess, weightGuess, sexGuess, nameGuess |
 | `badges` | badgeId, earnedAt, seenAt |
-| `settings` | theme, seenSurprises[], disclaimerAcceptedAt, schemaVersion |
+| `settings` | seenSurprises[], disclaimerAcceptedAt, schemaVersion (the theme is a device preference in localStorage) |
 
 **Backup:** export all tables to `willbaby-backup-YYYY-MM-DD.json` (photos as Base64, or ZIP when large). Import checks `schemaVersion` and runs migrations. Until sync exists, this is also how data moves to the partner's phone.
 
