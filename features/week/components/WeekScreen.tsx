@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { ShareableCard } from "@/components/ShareableCard";
 import { Card } from "@/components/ui/Card";
 import { WeekFruit } from "@/components/ui/WeekFruit";
 import { useContentText } from "@/features/pregnancy/useContentText";
@@ -30,7 +31,7 @@ export function WeekScreen({ week }: { week: number }) {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <Card className="flex flex-col gap-3">
-      <h2 className="font-semibold text-brand">{title}</h2>
+      <h2 className="font-semibold text-brand-text">{title}</h2>
       {children}
     </Card>
   );
@@ -98,9 +99,7 @@ function WeekContentView({ week, data }: { week: number; data: PregnancyData }) 
               <p>{render(content.twinsNote)}</p>
             </Section>
           )}
-          <Section title={t("pregnancy.funFact")}>
-            <p>{render(content.funFact)}</p>
-          </Section>
+          <ShareableCard title={t("pregnancy.funFact")} text={render(content.funFact)} />
         </>
       ) : (
         <Card>

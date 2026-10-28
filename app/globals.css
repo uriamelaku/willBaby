@@ -10,6 +10,8 @@
   --text: #3b3344;
   /* Text on brand-colored surfaces; dark in both themes for AA contrast. */
   --on-brand: #3b3344;
+  /* Brand color for small text: --brand itself is below AA contrast on light backgrounds. */
+  --brand-text: #b4483a;
   --danger: #b3261e;
   color-scheme: light;
 }
@@ -22,6 +24,7 @@
     --bg: #1e1b24;
     --card: #2a2633;
     --text: #f3eef6;
+    --brand-text: #ff9e90;
     --danger: #ffb4ab;
     color-scheme: dark;
   }
@@ -34,6 +37,7 @@
   --bg: #1e1b24;
   --card: #2a2633;
   --text: #f3eef6;
+  --brand-text: #ff9e90;
   --danger: #ffb4ab;
   color-scheme: dark;
 }
@@ -46,6 +50,7 @@
   --color-card: var(--card);
   --color-text: var(--text);
   --color-on-brand: var(--on-brand);
+  --color-brand-text: var(--brand-text);
   --color-danger: var(--danger);
   --font-sans: var(--font-rubik), system-ui, sans-serif;
 }

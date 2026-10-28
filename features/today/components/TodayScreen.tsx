@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { ShareableCard } from "@/components/ShareableCard";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { WeekFruit } from "@/components/ui/WeekFruit";
@@ -77,17 +78,11 @@ function TodayContent({ data }: { data: PregnancyData }) {
       </Card>
 
       {dailyItem && dailyText && (
-        <Card className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-brand">{t(`today.daily.${dailyItem.type}`)}</h2>
-          <p className="text-lg">{render(dailyText)}</p>
-        </Card>
+        <ShareableCard title={t(`today.daily.${dailyItem.type}`)} text={render(dailyText)} large />
       )}
 
       {weekContent && (
-        <Card className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-brand">{t("pregnancy.funFact")}</h2>
-          <p>{render(weekContent.funFact)}</p>
-        </Card>
+        <ShareableCard title={t("pregnancy.funFact")} text={render(weekContent.funFact)} />
       )}
 
       <MedicalDisclaimer />

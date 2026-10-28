@@ -29,7 +29,7 @@ export function BottomNav() {
               <Link
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs ${active ? "font-semibold text-brand" : "opacity-75"}`}
+                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs ${active ? "font-semibold text-brand-text" : "opacity-75"}`}
               >
                 <span aria-hidden className="text-xl leading-none">
                   {tab.icon}
