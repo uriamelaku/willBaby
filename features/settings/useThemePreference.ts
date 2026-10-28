@@ -1,7 +1,12 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { readThemePreference, saveThemePreference, type ThemePreference } from "@/lib/theme";
+import {
+  DEFAULT_THEME,
+  readThemePreference,
+  saveThemePreference,
+  type ThemePreference,
+} from "@/lib/theme";
 
 const listeners = new Set<() => void>();
 
@@ -10,9 +15,9 @@ const subscribe = (listener: () => void) => {
   return () => listeners.delete(listener);
 };
 
-/** The saved theme preference; "auto" during prerender, the stored value in the browser. */
+/** The saved theme preference; the default during prerender, the stored value in the browser. */
 export function useThemePreference() {
-  const preference = useSyncExternalStore(subscribe, readThemePreference, () => "auto" as const);
+  const preference = useSyncExternalStore(subscribe, readThemePreference, () => DEFAULT_THEME);
 
   const setPreference = (next: ThemePreference) => {
     saveThemePreference(next);

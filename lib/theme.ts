@@ -3,17 +3,20 @@
 
 export type ThemePreference = "light" | "dark" | "auto";
 
+/** Used until the user picks a theme in More. */
+export const DEFAULT_THEME: ThemePreference = "light";
+
 export const THEME_STORAGE_KEY = "willbaby-theme";
 
 export const parseThemePreference = (value: string | null): ThemePreference =>
-  value === "light" || value === "dark" ? value : "auto";
+  value === "light" || value === "dark" || value === "auto" ? value : DEFAULT_THEME;
 
 export function readThemePreference(): ThemePreference {
   try {
     return parseThemePreference(localStorage.getItem(THEME_STORAGE_KEY));
   } catch (error) {
     console.error("Reading the theme preference failed", error);
-    return "auto";
+    return DEFAULT_THEME;
   }
 }
 
@@ -26,12 +29,12 @@ export function applyThemePreference(preference: ThemePreference): void {
 export function saveThemePreference(preference: ThemePreference): void {
   applyThemePreference(preference);
   try {
-    if (preference === "auto") localStorage.removeItem(THEME_STORAGE_KEY);
-    else localStorage.setItem(THEME_STORAGE_KEY, preference);
+    localStorage.setItem(THEME_STORAGE_KEY, preference);
   } catch (error) {
     console.error("Saving the theme preference failed", error);
   }
 }
 
-// Runs in <head> before paint; if storage is unavailable the page simply follows the OS theme.
-export const themeInitScript = `try{var t=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+// Runs in <head> before paint: light unless the user chose dark or auto (same rule as
+// parseThemePreference). If storage is unavailable, the page stays light.
+export const themeInitScript = `(function(){var t;try{t=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)})}catch(e){}if(t!=="auto")document.documentElement.dataset.theme=t==="dark"?"dark":"light"})()`;

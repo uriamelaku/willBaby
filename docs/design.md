@@ -24,7 +24,7 @@ Colors are gender-neutral on purpose; after a sex reveal the user may add a colo
 Rubik (Google Fonts, Hebrew support). Headings 600, body 400, base size 17px.
 
 ## Theme
-`prefers-color-scheme` by default, with a manual toggle in settings (light / dark / auto).
+Light by default, with a manual toggle in settings (light / dark / auto); "auto" follows `prefers-color-scheme`.
 
 ## Accessibility
 AA contrast at least, touch targets ≥ 44px, `aria-label` for emoji, respect `prefers-reduced-motion` (no confetti for reduced motion).

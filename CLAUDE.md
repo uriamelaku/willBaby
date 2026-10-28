@@ -31,7 +31,7 @@ Name and logo: **will·B·aby** — the shared "B" reads as both "will Be" and "
 - **No analytics** for now.
 - **No "stop tracking" screen** in the MVP (later phase). Until then, data can be deleted from settings.
 - **Platform:** PWA, installable to the home screen and working offline.
-- **Design:** illustrated and cute, fruit emoji for the baby's size, automatic dark mode + manual toggle, font Rubik.
+- **Design:** illustrated and cute, fruit emoji for the baby's size, light theme by default with a manual toggle (light / dark / auto), font Rubik.
 - **Budget:** free only. Deploy to Vercel at `willbaby.vercel.app` (or the closest free name).
 
 - **Developer:** the user is an experienced developer; explanations can be technical and concise.
