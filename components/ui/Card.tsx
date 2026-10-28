@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from "react";
 
 export function Card({ className = "", ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={`rounded-3xl bg-card p-6 shadow-sm ${className}`} {...props} />;
+  return <div className={`rounded-card bg-card p-5 ${className}`} {...props} />;
 }

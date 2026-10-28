@@ -80,7 +80,7 @@ function JournalEntries({ data }: { data: PregnancyData }) {
       )}
 
       {deleteFailed && <StorageError />}
-      {entries.length === 0 && !editing && <p className="text-center opacity-75">{t("journal.empty")}</p>}
+      {entries.length === 0 && !editing && <p className="text-center text-muted">{t("journal.empty")}</p>}
 
       <ul className="flex flex-col gap-3">
         {entries.map((entry) => (
@@ -91,7 +91,7 @@ function JournalEntries({ data }: { data: PregnancyData }) {
                   <p className="font-semibold">
                     {format.dateTime(parseLocalDate(entry.date), { dateStyle: "long" })}
                   </p>
-                  <p className="text-sm opacity-75">{t("week.title", { week: entry.week })}</p>
+                  <p className="text-sm text-muted">{t("week.title", { week: entry.week })}</p>
                 </div>
                 {entry.mood && (
                   <span role="img" aria-label={t(`journal.moods.${entry.mood}`)} className="text-3xl">

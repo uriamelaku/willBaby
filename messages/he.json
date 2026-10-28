@@ -7,7 +7,6 @@
     "back": "חזרה",
     "optional": "לא חובה",
     "storageError": "לא הצלחנו לגשת לנתונים במכשיר. אם הדפדפן במצב גלישה פרטית, כדאי לנסות במצב רגיל.",
-    "comingSoon": "בקרוב כאן",
     "disclaimer": "מידע כללי בלבד. האפליקציה לא מאבחנת ולא מחליפה ייעוץ רפואי.",
     "save": "שמירה",
     "cancel": "ביטול",
@@ -82,25 +81,46 @@
     }
   },
   "today": {
-    "greeting": "היי {name}",
+    "greeting": {
+      "morning": "בוקר טוב, {name}",
+      "noon": "צהריים טובים, {name}",
+      "evening": "ערב טוב, {name}",
+      "night": "לילה טוב, {name}"
+    },
+    "fruit": "{babiesCount, plural, one {בגודל של {fruit}} other {כל אחד בגודל של {fruit}}}",
+    "size": "{cm} ס״מ · כ-{grams} גרם",
+    "week": "השבוע ה-{week} להיריון",
+    "daysLeft": "{status, select, today {היום התאריך המשוער!} after {התאריך המשוער עבר} other {{days, plural, one {עוד יום אחד ללידה} other {עוד # ימים ללידה}}}}",
+    "weeks": "שבועות",
+    "ring": "שבוע {weekAndDay}, {trimester}",
     "daily": {
       "tip": "טיפ להיום",
       "fact": "עובדה להיום",
       "funny": "חיוך להיום",
       "emotional": "רגע להיום",
       "partner": "לזוג"
+    },
+    "upcoming": {
+      "title": "בקרוב",
+      "all": "כל הבדיקות",
+      "empty": "אין בדיקות או תורים קרובים.",
+      "week": "שבוע {week}",
+      "now": "זה הזמן",
+      "inDays": "{days, plural, =0 {היום} one {מחר} other {עוד # ימים}}"
+    },
+    "photo": {
+      "take": "לצלם עכשיו",
+      "label": "תמונת בטן",
+      "week": "שבוע {week}"
     }
   },
   "pregnancy": {
-    "weekAndDay": "שבוע {weekAndDay}",
     "contentWeek": "השבוע ה-{week} של ההיריון",
     "early": "עוד ממש מוקדם, אבל זה כבר קורה",
     "daysLeft": "{status, select, today {התאריך המשוער הוא היום!} after {התאריך המשוער כבר עבר. כל יום עכשיו!} other {{days, plural, one {עוד יום אחד לתאריך המשוער} other {עוד # ימים לתאריך המשוער}}}}",
     "fruit": "{babiesCount, plural, one {{baby} בגודל של {fruit}} other {כל אחד מ{baby} בגודל של {fruit}}}",
     "size": "בערך {cm} ס״מ ו-{grams} גרם",
     "trimester": "{trimester, plural, =1 {שליש ראשון} =2 {שליש שני} other {שליש שלישי}}",
-    "progress": "{percent}% מהדרך",
-    "progressLabel": "התקדמות ההיריון",
     "outOfRange": "לפי התאריך שנשמר עברו יותר מ-300 ימים מתחילת ההיריון.",
     "funFact": "הידעת?"
   },
@@ -116,10 +136,12 @@
   "nav": {
     "label": "ניווט ראשי",
     "today": "היום",
-    "week": "שבוע",
+    "week": "השבוע",
     "journal": "יומן",
     "tools": "כלים",
-    "more": "עוד"
+    "more": "עוד",
+    "profile": "הפרופיל של {name}",
+    "backupDue": "יש תזכורת לגיבוי"
   },
   "week": {
     "title": "השבוע ה-{week}",
@@ -149,7 +171,6 @@
     "medicalBody": "המידע באפליקציה כללי בלבד. האפליקציה לא מאבחנת ולא מחליפה ייעוץ רפואי. בכל שאלה, או אם משהו מרגיש לא בסדר, כדאי לפנות לצוות הרפואי או לחדר הלידה."
   },
   "share": {
-    "button": "שיתוף",
     "label": "שיתוף: {title}",
     "signature": "מתוך will·B·aby"
   },
@@ -222,8 +243,6 @@
     },
     "done": "בוצע",
     "deleteTitle": "למחוק את התור?",
-    "upcoming": "תורים קרובים",
-    "seeAll": "לכל התורים",
     "errors": {
       "titleRequired": "צריך לכתוב מה התור",
       "invalidDate": "צריך לבחור תאריך",
@@ -247,8 +266,7 @@
       "notWillbaby": "זה לא קובץ גיבוי של will·B·aby.",
       "newerVersion": "הגיבוי נוצר בגרסה חדשה יותר של האפליקציה. כדאי לרענן את האפליקציה ולנסות שוב."
     },
-    "reminder": "עברו כמה שבועות מאז הגיבוי האחרון. שתי דקות, וכל הזיכרונות שמורים.",
-    "reminderAction": "לגיבוי"
+    "reminder": "עברו כמה שבועות מאז הגיבוי האחרון. שתי דקות, וכל הזיכרונות שמורים."
   },
   "pregnancyDetails": {
     "title": "פרטי ההיריון",

@@ -34,7 +34,7 @@ export function StepLayout({
   return (
     <form onSubmit={handleSubmit} className="flex flex-1 flex-col gap-6" noValidate>
       <header className="flex flex-col gap-2">
-        <p className="text-sm opacity-75">
+        <p className="text-sm text-muted">
           {t("onboarding.progress", { step, total: totalSteps })}
         </p>
         <h1 className="text-3xl font-semibold">{title}</h1>

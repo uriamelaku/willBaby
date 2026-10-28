@@ -24,7 +24,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-      <Logo />
+      <Logo className="text-5xl" />
       <p role={failed ? "alert" : "status"} className={failed ? "text-danger" : undefined}>
         {failed ? t("common.storageError") : t("home.loading")}
       </p>

@@ -39,7 +39,7 @@ export function ConfirmDialog({
         event.preventDefault();
         onCancel();
       }}
-      className="m-auto w-[min(90vw,24rem)] rounded-3xl bg-card p-6 text-text backdrop:bg-black/40"
+      className="m-auto w-[min(90vw,24rem)] rounded-card bg-card p-6 text-text backdrop:bg-black/40"
     >
       <h2 className="text-xl font-semibold">{title}</h2>
       {message && <p className="mt-2">{message}</p>}

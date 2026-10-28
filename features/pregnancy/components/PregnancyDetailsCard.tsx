@@ -28,12 +28,12 @@ export function PregnancyDetailsCard() {
     <Card className="flex flex-col gap-3">
       <h2 className="font-semibold">{t("title")}</h2>
       <p>{t("dueDate", { date: formatDate(pregnancy.dueDate) })}</p>
-      <p className="text-sm opacity-75">{t("lmpDate", { date: formatDate(pregnancy.lmpDate) })}</p>
+      <p className="text-sm text-muted">{t("lmpDate", { date: formatDate(pregnancy.lmpDate) })}</p>
       <DueDateEditor pregnancy={pregnancy} onSaved={reload} />
       {pregnancy.dueDateHistory.length > 1 && (
         <div className="flex flex-col gap-1">
           <h3 className="text-sm font-semibold">{t("history")}</h3>
-          <ul className="text-sm opacity-75">
+          <ul className="text-sm text-muted">
             {pregnancy.dueDateHistory.map((change) => (
               <li key={change.changedAt}>
                 {t("historyItem", {

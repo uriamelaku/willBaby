@@ -1,9 +1,12 @@
+import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 
 export default function MainLayout({ children }: LayoutProps<"/">) {
   return (
     <>
-      <div className="flex flex-1 flex-col pb-20">{children}</div>
+      <AppHeader />
+      {/* Bottom padding keeps content clear of the fixed navigation. */}
+      <div className="flex flex-1 flex-col pb-[calc(74px+env(safe-area-inset-bottom))]">{children}</div>
       <BottomNav />
     </>
   );

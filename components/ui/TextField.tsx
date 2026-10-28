@@ -28,7 +28,7 @@ export function TextField({ label, hint, error, className = "", ...props }: Text
         <p
           id={messageId}
           role={error ? "alert" : undefined}
-          className={`text-sm ${error ? "text-danger" : "opacity-75"}`}
+          className={`text-sm ${error ? "text-danger" : "text-muted"}`}
         >
           {message}
         </p>

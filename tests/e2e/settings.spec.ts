@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { completeOnboarding } from "./helpers";
+import { completeOnboarding, weekRing } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await completeOnboarding(page);
   await page.getByRole("button", { name: "קדימה" }).click();
-  await expect(page.getByText("שבוע 15+2")).toBeVisible();
+  await expect(weekRing(page, "15+2")).toBeVisible();
 });
 
 test("updating the due date moves the pregnancy week and keeps a history", async ({ page }) => {
@@ -19,7 +19,7 @@ test("updating the due date moves the pregnancy week and keeps a history", async
   await expect(page.getByText("היסטוריית תאריכים")).toBeVisible();
 
   await page.getByRole("link", { name: "היום" }).click();
-  await expect(page.getByText("שבוע 16+2")).toBeVisible();
+  await expect(weekRing(page, "16+2")).toBeVisible();
 });
 
 test("saving the same due date again is rejected", async ({ page }) => {

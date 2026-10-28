@@ -16,20 +16,20 @@ export function ToolsScreen() {
           <li key={tool.href}>
             <Link
               href={tool.href}
-              className="flex min-h-11 items-center gap-4 rounded-3xl bg-card p-5 shadow-sm"
+              className="flex min-h-11 items-center gap-4 rounded-card bg-card p-5"
             >
               <span aria-hidden className="text-3xl">
                 {tool.icon}
               </span>
               <span className="flex flex-col">
                 <span className="font-semibold">{t(tool.title)}</span>
-                <span className="text-sm opacity-75">{t(tool.description)}</span>
+                <span className="text-sm text-muted">{t(tool.description)}</span>
               </span>
             </Link>
           </li>
         ))}
       </ul>
-      <p className="text-sm opacity-75">{t("more")}</p>
+      <p className="text-sm text-muted">{t("more")}</p>
     </Screen>
   );
 }

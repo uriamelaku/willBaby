@@ -1,40 +1,47 @@
 "use client";
 
+import type { ComponentType, SVGProps } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { CalendarIcon, HomeIcon, JournalIcon, MoreIcon, ToolsIcon } from "@/components/icons";
+import { useBackupDue } from "@/features/backup/useBackupDue";
 
-const tabs = [
-  { href: "/today", key: "today", icon: "🏠" },
-  { href: "/week", key: "week", icon: "📅" },
-  { href: "/journal", key: "journal", icon: "📔" },
-  { href: "/tools", key: "tools", icon: "🧰" },
-  { href: "/more", key: "more", icon: "⋯" },
-] as const;
+const tabs: { href: string; key: "today" | "week" | "journal" | "tools" | "more"; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
+  { href: "/today", key: "today", Icon: HomeIcon },
+  { href: "/week", key: "week", Icon: CalendarIcon },
+  { href: "/journal", key: "journal", Icon: JournalIcon },
+  { href: "/tools", key: "tools", Icon: ToolsIcon },
+  { href: "/more", key: "more", Icon: MoreIcon },
+];
 
 export function BottomNav() {
   const t = useTranslations("nav");
   const pathname = usePathname();
+  const backupDue = useBackupDue();
 
   return (
     <nav
       aria-label={t("label")}
-      className="fixed inset-x-0 bottom-0 border-t border-text/10 bg-card pb-[env(safe-area-inset-bottom)]"
+      className="fixed inset-x-0 bottom-0 rounded-t-card bg-card px-2 pt-2 pb-[max(env(safe-area-inset-bottom),12px)] shadow-nav"
     >
-      <ul className="mx-auto flex max-w-md">
-        {tabs.map((tab) => {
-          const active = pathname === tab.href || pathname.startsWith(`${tab.href}/`);
+      <ul className="mx-auto grid max-w-md grid-cols-5">
+        {tabs.map(({ href, key, Icon }) => {
+          const active = pathname === href || pathname.startsWith(`${href}/`);
+          const showDot = key === "more" && backupDue;
           return (
-            <li key={tab.key} className="flex-1">
+            <li key={key}>
               <Link
-                href={tab.href}
+                href={href}
                 aria-current={active ? "page" : undefined}
-                className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs ${active ? "font-semibold text-brand-text" : "opacity-75"}`}
+                aria-label={showDot ? `${t(key)} (${t("backupDue")})` : undefined}
+                className={`relative flex min-h-12 flex-col items-center justify-center gap-1 py-1 text-xs ${active ? "font-semibold text-brand-text" : "text-muted"}`}
               >
-                <span aria-hidden className="text-xl leading-none">
-                  {tab.icon}
-                </span>
-                {t(tab.key)}
+                <Icon />
+                {t(key)}
+                {showDot && (
+                  <span aria-hidden className="absolute top-1 left-1/2 ms-2 size-2.5 rounded-full bg-brand" />
+                )}
               </Link>
             </li>
           );

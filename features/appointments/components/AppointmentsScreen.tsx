@@ -27,7 +27,7 @@ import { AppointmentSummary } from "./AppointmentItem";
 const timingStyles = {
   now: "bg-accent/30 font-semibold",
   upcoming: "bg-text/10",
-  past: "bg-text/5 opacity-75",
+  past: "bg-bg text-muted",
 } as const;
 
 export function AppointmentsScreen() {
@@ -109,7 +109,7 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
           <Button onClick={() => book({})}>{t("appointments.new")}</Button>
         )}
         {actionFailed && <StorageError />}
-        {records.length === 0 && !editing && <p className="opacity-75">{t("appointments.empty")}</p>}
+        {records.length === 0 && !editing && <p className="text-muted">{t("appointments.empty")}</p>}
         <ul className="flex flex-col gap-3">
           {sortAppointments(records).map((appointment) => (
             <li key={appointment.id}>
@@ -147,7 +147,7 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
 
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">{t("appointments.testsTitle")}</h2>
-        <p className="text-sm opacity-75">{t("appointments.testsIntro")}</p>
+        <p className="text-sm text-muted">{t("appointments.testsIntro")}</p>
         <ul className="flex flex-col gap-3">
           {getMedicalTests().map((test) => {
             const timing = week ? testTiming(test, week) : "past";
@@ -157,7 +157,7 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <h3 className="font-semibold">{test.name}</h3>
-                      <p className="text-sm opacity-75">
+                      <p className="text-sm text-muted">
                         {t("appointments.weeks", { from: test.weekFrom, to: test.weekTo })}
                         {test.isOptional && ` · ${t("appointments.optional")}`}
                       </p>

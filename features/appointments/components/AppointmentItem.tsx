@@ -18,12 +18,12 @@ export function AppointmentSummary({ appointment }: { appointment: Appointment }
 
   return (
     <div className="flex flex-col gap-0.5">
-      <p className={`font-semibold ${appointment.done ? "line-through opacity-60" : ""}`}>
+      <p className={`font-semibold ${appointment.done ? "line-through text-muted" : ""}`}>
         {appointment.title}
       </p>
-      <p className="text-sm opacity-75">{details.join(" · ")}</p>
+      <p className="text-sm text-muted">{details.join(" · ")}</p>
       {linkedTest && linkedTest.name !== appointment.title && (
-        <p className="text-sm opacity-75">
+        <p className="text-sm text-muted">
           {t("fields.linkedTest")}: {linkedTest.name}
         </p>
       )}

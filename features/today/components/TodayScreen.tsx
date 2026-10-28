@@ -2,23 +2,21 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { Screen, StorageError } from "@/components/Screen";
 import { ShareableCard } from "@/components/ShareableCard";
-import { Card } from "@/components/ui/Card";
-import { ProgressBar } from "@/components/ui/ProgressBar";
 import { WeekFruit } from "@/components/ui/WeekFruit";
-import { BackupReminder } from "@/features/backup/components/BackupReminder";
-import { UpcomingAppointments } from "@/features/appointments/components/UpcomingAppointments";
-import { DaysLeft } from "@/features/pregnancy/components/DaysLeft";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
+import { greetingFor } from "@/features/today/today";
 import { getDailyItem, getWeekContent } from "@/lib/content";
 import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
+import { BellyPhotoPrompt } from "./BellyPhotoPrompt";
+import { TrimesterRing } from "./TrimesterRing";
+import { UpcomingCard } from "./UpcomingCard";
 
+// Layout per docs/design/today-screen.md; it must fit a 390x844 screen without scrolling.
 export function TodayScreen() {
   const state = usePregnancy();
-
   return (
     <Screen>
       {state.kind === "error" && <StorageError />}
@@ -27,67 +25,64 @@ export function TodayScreen() {
   );
 }
 
+const daysLeftStatus = (daysLeft: number) =>
+  daysLeft > 0 ? "before" : daysLeft === 0 ? "today" : "after";
+
 function TodayContent({ data }: { data: PregnancyData }) {
   const t = useTranslations();
-  const { render, babyNoun } = useContentText(data.profile, data.babies);
-  const [today] = useState(() => new Date());
-  const status = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), today);
+  const { render } = useContentText(data.profile, data.babies);
+  const [now] = useState(() => new Date());
+  const status = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), now);
 
   if (!status) return <p>{t("pregnancy.outOfRange")}</p>;
 
   const weekContent = getWeekContent(status.contentWeek);
   const dailyItem = getDailyItem(status.daysPregnant);
-  const dailyText = dailyItem && (data.profile.role === "partner" ? dailyItem.partnerText : dailyItem.text);
+  const dailyText =
+    dailyItem && (data.profile.role === "partner" ? dailyItem.partnerText : dailyItem.text);
 
   return (
     <>
-      <h1 className="text-2xl font-semibold">{t("today.greeting", { name: data.profile.name })}</h1>
-
-      <Card className="flex flex-col items-center gap-3 text-center">
-        {weekContent && <WeekFruit fruit={weekContent.fruit} className="text-7xl" />}
-        <p className="text-4xl font-semibold">
-          {t("pregnancy.weekAndDay", { weekAndDay: `${status.week}+${status.dayOfWeek}` })}
-        </p>
-        <p>
-          {t("pregnancy.contentWeek", { week: status.contentWeek })} ·{" "}
-          {t("pregnancy.trimester", { trimester: status.trimester })}
-        </p>
-        {status.week < EARLY_WEEKS && <p>{t("pregnancy.early")}</p>}
-        {weekContent && (
-          <p>
-            {t("pregnancy.fruit", {
-              babiesCount: data.babies.length,
-              baby: babyNoun,
-              fruit: weekContent.fruit.name,
-            })}
-            <span className="block text-sm opacity-75">
-              {t("pregnancy.size", weekContent.size)}
+      <section className="flex flex-col gap-1.5 rounded-card bg-card px-[18px] py-3 shadow-hero">
+        <h1 className="text-[15px] text-muted">
+          {t(`today.greeting.${greetingFor(now.getHours())}`, { name: data.profile.name })}
+        </h1>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-col gap-1">
+            {weekContent && (
+              <>
+                <WeekFruit fruit={weekContent.fruit} className="text-[44px]" />
+                <p className="text-lg font-bold">
+                  {t("today.fruit", { babiesCount: data.babies.length, fruit: weekContent.fruit.name })}
+                </p>
+                <p className="text-sm text-muted">{t("today.size", weekContent.size)}</p>
+              </>
+            )}
+            <p className="text-sm text-muted">{t("today.week", { week: status.contentWeek })}</p>
+            {status.week < EARLY_WEEKS && <p className="text-sm">{t("pregnancy.early")}</p>}
+            <span className="mt-1 self-start rounded-full bg-peach-soft px-3 py-1 text-[13px] font-semibold">
+              {t("today.daysLeft", {
+                status: daysLeftStatus(status.daysLeft),
+                days: Math.abs(status.daysLeft),
+              })}
             </span>
-          </p>
-        )}
-      </Card>
+          </div>
+          <TrimesterRing status={status} />
+        </div>
+      </section>
 
-      <Card className="flex flex-col gap-3">
-        <DaysLeft daysLeft={status.daysLeft} className="font-semibold" />
-        <ProgressBar value={status.progress} label={t("pregnancy.progressLabel")} />
-        <p className="text-sm opacity-75">
-          {t("pregnancy.progress", { percent: Math.round(status.progress * 100) })}
-        </p>
-      </Card>
+      <UpcomingCard daysPregnant={status.daysPregnant} />
+
+      <BellyPhotoPrompt week={status.contentWeek} />
 
       {dailyItem && dailyText && (
-        <ShareableCard title={t(`today.daily.${dailyItem.type}`)} text={render(dailyText)} large />
+        <ShareableCard
+          tone="sun"
+          title={t(`today.daily.${dailyItem.type}`)}
+          text={render(dailyText)}
+          footnote={<p className="text-[11px] leading-tight text-sun-text">{t("common.disclaimer")}</p>}
+        />
       )}
-
-      <UpcomingAppointments />
-
-      <BackupReminder onboardedAt={data.pregnancy.createdAt} />
-
-      {weekContent && (
-        <ShareableCard title={t("pregnancy.funFact")} text={render(weekContent.funFact)} />
-      )}
-
-      <MedicalDisclaimer />
     </>
   );
 }

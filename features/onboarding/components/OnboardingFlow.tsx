@@ -75,7 +75,7 @@ export function OnboardingFlow() {
       case "welcome":
         return (
           <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
-            <Logo />
+            <Logo className="text-5xl" />
             <h1 className="text-3xl font-semibold">{t("onboarding.welcome.title")}</h1>
             <p className="text-lg">{t("onboarding.welcome.body")}</p>
             <Button onClick={goNext} className="mt-6 w-full">

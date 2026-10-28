@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { exportBackupFile } from "@/features/backup/backupActions";
+import { useBackupDue } from "@/features/backup/useBackupDue";
 import { parseBackup, type BackupError } from "@/lib/backup";
 import { storage } from "@/lib/storage";
 import type { StorageSnapshot } from "@/lib/storage/types";
@@ -29,6 +30,7 @@ export function BackupCard() {
   const [pending, setPending] = useState<PendingRestore | null>(null);
   const [failed, setFailed] = useState(false);
   const lastBackupAt = settings?.[0]?.lastBackupAt;
+  const backupDue = useBackupDue();
 
   const handleExport = async () => {
     setFailed(false);
@@ -70,8 +72,11 @@ export function BackupCard() {
   return (
     <Card className="flex flex-col gap-3">
       <h2 className="font-semibold">{t("backup.title")}</h2>
+      {backupDue && (
+        <p className="rounded-2xl bg-sun-soft px-4 py-3 text-sm text-sun-text">{t("backup.reminder")}</p>
+      )}
       <p className="text-sm">{t("backup.intro")}</p>
-      <p className="text-sm opacity-75">{t("backup.ios")}</p>
+      <p className="text-sm text-muted">{t("backup.ios")}</p>
       <p className="text-sm font-semibold">
         {lastBackupAt ? t("backup.last", { date: formatTimestamp(lastBackupAt) }) : t("backup.never")}
       </p>

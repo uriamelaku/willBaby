@@ -76,6 +76,8 @@ export const medicalTestSchema = z
   .strictObject({
     id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use a kebab-case id"),
     name: text,
+    /** Compact name for tight spots like the Today timeline. */
+    shortName: text.optional(),
     weekFrom: contentWeek,
     weekTo: contentWeek,
     description: text,

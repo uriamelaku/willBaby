@@ -72,7 +72,7 @@ function WeekContentView({ week, data }: { week: number; data: PregnancyData }) 
         {content && (
           <>
             <p className="text-lg">{render(content.headline)}</p>
-            <p className="text-sm opacity-75">{t("pregnancy.size", content.size)}</p>
+            <p className="text-sm text-muted">{t("pregnancy.size", content.size)}</p>
           </>
         )}
       </header>

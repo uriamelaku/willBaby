@@ -22,3 +22,10 @@ Approved by the user on 2026-10-28 after comparing six directions ("1ד · הש�
 ## Not on this screen (decided)
 - No separate countdown tile (days left is in the hero chip).
 - No trimester tiles under the ring.
+
+## Implementation notes (2026-10-28)
+- Built in `features/today/` (`today.ts` holds greeting, ring geometry and the upcoming list; tested).
+- The medical disclaimer (required by CLAUDE.md on medical screens) is a small line inside the daily-tip card.
+- The week's fun fact stays on the Week screen. The backup reminder is a dot on the More tab plus a note in the backup card, so Today never needs to scroll.
+- The upcoming timeline uses each test's optional `shortName`; titles are clamped to one line.
+- The belly-photo square is 140×120 so the screen still fits with the longest (three-line) tip; `tests/e2e/today.spec.ts` checks there is no vertical overflow at 390×844.

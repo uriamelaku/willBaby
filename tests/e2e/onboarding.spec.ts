@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { completeOnboarding, freezeTime } from "./helpers";
+import { completeOnboarding, freezeTime, weekRing } from "./helpers";
 
 test("asks for a name before continuing", async ({ page }) => {
   await freezeTime(page);
@@ -32,9 +32,10 @@ test("onboarding shows the wow screen, then Today with the week's content", asyn
   await page.getByRole("button", { name: "קדימה" }).click();
 
   await expect(page).toHaveURL(/\/today$/);
-  await expect(page.getByRole("heading", { name: "היי בדיקה" })).toBeVisible();
-  await expect(page.getByText("שבוע 15+2")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "בוקר טוב, בדיקה" })).toBeVisible();
+  await expect(weekRing(page, "15+2")).toBeVisible();
   await expect(page.getByRole("img", { name: "אבוקדו" })).toBeVisible();
+  await expect(page.getByText("בגודל של אבוקדו", { exact: true })).toBeVisible();
   await expect(page.getByText("סוף סוף מישהו בבית שמבין בטוסט אבוקדו")).toBeVisible();
 
   // Onboarding runs once: the start page and /onboarding now go to Today.
@@ -45,13 +46,14 @@ test("onboarding shows the wow screen, then Today with the week's content", asyn
 test("twins get plural wording", async ({ page }) => {
   await completeOnboarding(page, { twins: true });
   await page.getByRole("button", { name: "קדימה" }).click();
-  await expect(page.getByText("התאומים כבר מתחילים לשמוע צלילים")).toBeVisible();
+  await expect(page.getByText("כל אחד בגודל של אבוקדו", { exact: true })).toBeVisible();
+  await expect(page.getByText("התאומים בגודל של אבוקדו")).toBeVisible();
 });
 
 test("the Week tab opens the current week", async ({ page }) => {
   await completeOnboarding(page);
   await page.getByRole("button", { name: "קדימה" }).click();
-  await page.getByRole("link", { name: "שבוע", exact: true }).click();
+  await page.getByRole("link", { name: "השבוע", exact: true }).click();
   await expect(page).toHaveURL(/\/week\/16$/);
   await expect(page.getByRole("heading", { name: "השבוע ה-16" })).toBeVisible();
   await expect(page.getByText("השבוע שלכם")).toBeVisible();

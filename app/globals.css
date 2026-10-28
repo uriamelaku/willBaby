@@ -8,10 +8,23 @@
   --bg: #fff8f3;
   --card: #ffffff;
   --text: #3b3344;
+  /* Secondary text (AA on --bg and --card). */
+  --muted: #6e6377;
   /* Text on brand-colored surfaces; dark in both themes for AA contrast. */
   --on-brand: #3b3344;
-  /* Brand color for small text: --brand itself is below AA contrast on light backgrounds. */
-  --brand-text: #b4483a;
+  /* Brand color for small text and links: --brand itself is below AA on light backgrounds. */
+  --brand-text: #c4483a;
+  /* Soft tints for rings, chips and highlighted cards, each with a text color that passes AA on it. */
+  --brand-soft: #ffe4dd;
+  --peach-soft: #fff1ec;
+  --peach-text: #8a3a2c;
+  --mint: #5fbfa5;
+  --mint-soft: #ddf2ec;
+  --mint-text: #1f6b57;
+  --sun-soft: #ffe9c2;
+  --sun-text: #6b4e14;
+  --line: #f4ece7;
+  --hero-shadow: 0 6px 24px rgb(232 96 79 / 0.1);
   --danger: #b3261e;
   color-scheme: light;
 }
@@ -24,7 +37,18 @@
     --bg: #1e1b24;
     --card: #2a2633;
     --text: #f3eef6;
+    --muted: #b9afc1;
     --brand-text: #ff9e90;
+    --brand-soft: #4a3238;
+    --peach-soft: #3d2f35;
+    --peach-text: #ffc2b6;
+    --mint: #6fc2ad;
+    --mint-soft: #23443c;
+    --mint-text: #a6e3d2;
+    --sun-soft: #3d3424;
+    --sun-text: #f2d493;
+    --line: #3a3443;
+    --hero-shadow: none;
     --danger: #ffb4ab;
     color-scheme: dark;
   }
@@ -37,7 +61,18 @@
   --bg: #1e1b24;
   --card: #2a2633;
   --text: #f3eef6;
+  --muted: #b9afc1;
   --brand-text: #ff9e90;
+  --brand-soft: #4a3238;
+  --peach-soft: #3d2f35;
+  --peach-text: #ffc2b6;
+  --mint: #6fc2ad;
+  --mint-soft: #23443c;
+  --mint-text: #a6e3d2;
+  --sun-soft: #3d3424;
+  --sun-text: #f2d493;
+  --line: #3a3443;
+  --hero-shadow: none;
   --danger: #ffb4ab;
   color-scheme: dark;
 }
@@ -49,10 +84,23 @@
   --color-bg: var(--bg);
   --color-card: var(--card);
   --color-text: var(--text);
+  --color-muted: var(--muted);
   --color-on-brand: var(--on-brand);
   --color-brand-text: var(--brand-text);
+  --color-brand-soft: var(--brand-soft);
+  --color-peach-soft: var(--peach-soft);
+  --color-peach-text: var(--peach-text);
+  --color-mint: var(--mint);
+  --color-mint-soft: var(--mint-soft);
+  --color-mint-text: var(--mint-text);
+  --color-sun-soft: var(--sun-soft);
+  --color-sun-text: var(--sun-text);
+  --color-line: var(--line);
   --color-danger: var(--danger);
   --font-sans: var(--font-rubik), system-ui, sans-serif;
+  --radius-card: 28px;
+  --shadow-hero: var(--hero-shadow);
+  --shadow-nav: 0 -4px 20px rgb(59 51 68 / 0.06);
 }
 
 html {

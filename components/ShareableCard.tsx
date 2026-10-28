@@ -1,30 +1,39 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { Card } from "@/components/ui/Card";
+import { ShareIcon } from "@/components/icons";
 import { shareText, withSignature } from "@/lib/share";
 
+const tones = {
+  sun: { card: "bg-sun-soft", title: "text-sun-text", button: "text-sun-text" },
+  plain: { card: "bg-card", title: "text-brand-text", button: "text-muted" },
+} as const;
+
 /** A titled text card (tip, fact) with a share button. */
-export function ShareableCard({ title, text, large }: {
+export function ShareableCard({ title, text, tone = "plain", footnote }: {
   title: string;
   text: string;
-  large?: boolean;
+  tone?: keyof typeof tones;
+  footnote?: ReactNode;
 }) {
   const t = useTranslations("share");
+  const style = tones[tone];
   return (
-    <Card className="flex flex-col gap-2">
-      <div className="flex items-center justify-between gap-2">
-        <h2 className="text-sm font-semibold text-brand-text">{title}</h2>
+    <section className={`flex flex-col gap-1 rounded-card px-5 py-3 ${style.card}`}>
+      <div className="flex items-center justify-between">
+        <h2 className={`text-sm font-semibold ${style.title}`}>{title}</h2>
         <button
           type="button"
           onClick={() => shareText(withSignature(text, t("signature")))}
           aria-label={t("label", { title })}
-          className="-my-2 -me-2 flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-text/80 hover:bg-text/5"
+          className={`-my-3 -me-2.5 flex size-11 items-center justify-center rounded-full ${style.button}`}
         >
-          {t("button")}
+          <ShareIcon />
         </button>
       </div>
-      <p className={large ? "text-lg" : undefined}>{text}</p>
-    </Card>
+      <p className="leading-relaxed">{text}</p>
+      {footnote}
+    </section>
   );
 }

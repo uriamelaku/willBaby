@@ -114,7 +114,7 @@ function BellyPhotos({ data }: { data: PregnancyData }) {
 
       <h2 className="text-xl font-semibold">{t("photos.gallery")}</h2>
       {records.length === 0 ? (
-        <p className="opacity-75">{t("photos.empty")}</p>
+        <p className="text-muted">{t("photos.empty")}</p>
       ) : (
         <ul className="grid grid-cols-2 gap-3">
           {sortPhotosByWeek(records).map((photo) => (
