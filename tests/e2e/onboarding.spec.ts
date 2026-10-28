@@ -58,3 +58,16 @@ test("the Week tab opens the current week", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "השבוע ה-16" })).toBeVisible();
   await expect(page.getByText("השבוע שלכם")).toBeVisible();
 });
+
+test("future weeks stay locked until the pregnancy gets there", async ({ page }) => {
+  await completeOnboarding(page);
+  await enterApp(page);
+  await page.goto("/week/16");
+  await expect(page.getByRole("link", { name: /שבוע 15/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /שבוע 17/ })).toHaveCount(0);
+
+  await page.goto("/week/17");
+  await expect(page.getByText("השבוע הזה נפתח בעוד 5 ימים. בלי ספוילרים!")).toBeVisible();
+  await page.getByRole("link", { name: "לשבוע הנוכחי" }).click();
+  await expect(page).toHaveURL(/\/week\/16$/);
+});

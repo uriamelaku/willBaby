@@ -3,6 +3,7 @@ import type { MedicalTest } from "@/content/schema";
 import {
   RING_SEGMENT,
   greetingFor,
+  shortcutsFor,
   trimesterRing,
   upcomingItems,
 } from "@/features/today/today";
@@ -85,5 +86,12 @@ describe("upcomingItems", () => {
       today,
     );
     expect(items.map((item) => item.id)).toEqual(["early", "screen", "late"]);
+  });
+});
+
+describe("shortcutsFor", () => {
+  it("leads with kicks and contractions from week 28", () => {
+    expect(shortcutsFor(27)).toEqual(["weight", "names", "hospitalBag", "bets"]);
+    expect(shortcutsFor(28)).toEqual(["kicks", "contractions", "hospitalBag", "weight"]);
   });
 });

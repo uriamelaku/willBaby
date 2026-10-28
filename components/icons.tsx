@@ -65,3 +65,9 @@ export const CameraIcon = (props: SVGProps<SVGSVGElement>) => (
     <circle cx="12" cy="13" r="4" />
   </svg>
 );
+
+export const CheckIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg {...base} strokeWidth={3} {...props}>
+    <path d="M5 12.5l4.5 4.5L19 7.5" />
+  </svg>
+);

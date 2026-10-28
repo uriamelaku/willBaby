@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
@@ -10,8 +10,10 @@ import { Card } from "@/components/ui/Card";
 import { WeekFruit } from "@/components/ui/WeekFruit";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
+import { daysUntilWeek, isWeekOpen } from "@/features/week/week";
 import { getWeekContent } from "@/lib/content";
 import { MAX_CONTENT_WEEK, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
+import { useToday } from "@/lib/useToday";
 
 export function WeekScreen({ week }: { week: number }) {
   const state = usePregnancy();
@@ -46,8 +48,23 @@ function TextList({ items }: { items: string[] }) {
 function WeekContentView({ week, data }: { week: number; data: PregnancyData }) {
   const t = useTranslations();
   const { render, babyNoun } = useContentText(data.profile, data.babies);
-  const [today] = useState(() => new Date());
-  const currentWeek = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), today)?.contentWeek;
+  const today = useToday();
+  const status = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), today);
+  const currentWeek = status?.contentWeek;
+
+  if (status && !isWeekOpen(week, status)) {
+    return (
+      <Card className="flex flex-col items-center gap-4 text-center">
+        <span aria-hidden className="text-6xl">
+          🔒
+        </span>
+        <h1 className="text-2xl font-semibold">{t("week.title", { week })}</h1>
+        <p>{t("week.locked", { days: daysUntilWeek(week, status) })}</p>
+        <WeekLink week={status.contentWeek} label={t("week.backToCurrent")} />
+      </Card>
+    );
+  }
+
   const content = getWeekContent(week);
   const isPartner = data.profile.role === "partner";
 
@@ -109,7 +126,7 @@ function WeekContentView({ week, data }: { week: number; data: PregnancyData }) 
         ) : (
           <span />
         )}
-        {week < MAX_CONTENT_WEEK && (
+        {week < MAX_CONTENT_WEEK && isWeekOpen(week + 1, status) && (
           <WeekLink week={week + 1} label={`${t("week.next", { week: week + 1 })} ←`} />
         )}
       </nav>

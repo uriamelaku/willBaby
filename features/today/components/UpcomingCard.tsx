@@ -1,33 +1,28 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
+import { CheckIcon } from "@/components/icons";
 import { upcomingItems, type UpcomingItem } from "@/features/today/today";
 import { getMedicalTests } from "@/lib/content";
 import { parseLocalDate } from "@/lib/pregnancy";
 import { useRecords } from "@/lib/storage/useRecords";
 
-/** Chip colors by position: the nearest item stands out. */
-const chipStyles = [
-  "bg-mint-soft text-mint-text",
-  "bg-peach-soft text-peach-text",
-  "bg-bg text-muted",
-];
-
-/** A small timeline of the next three tests and appointments. */
-export function UpcomingCard({ daysPregnant }: { daysPregnant: number }) {
+/**
+ * A small timeline of the next three tests and appointments. Booked appointments (mint, with a
+ * check) look different from tests that still need an appointment (dashed, "to book").
+ */
+export function UpcomingCard({ daysPregnant, today }: { daysPregnant: number; today: Date }) {
   const t = useTranslations("today.upcoming");
   const format = useFormatter();
   const { records } = useRecords("appointments");
-  const [today] = useState(() => new Date());
 
   if (!records) return null;
   const items = upcomingItems(records, getMedicalTests(), daysPregnant, today);
 
   const detail = (item: UpcomingItem) =>
     item.kind === "test"
-      ? t("week", { week: item.week })
+      ? t("toBook")
       : [
           format.dateTime(parseLocalDate(item.date), { weekday: "short", day: "numeric", month: "numeric" }),
           item.time,
@@ -54,23 +49,30 @@ export function UpcomingCard({ daysPregnant }: { daysPregnant: number }) {
       ) : (
         <ol className="relative grid grid-cols-3 gap-2">
           <span aria-hidden className="absolute inset-x-4 top-[7px] h-0.5 bg-line" />
-          {items.map((item, index) => (
-            <li key={`${item.kind}-${item.id}`} className="relative flex flex-col items-start gap-1">
-              <span
-                aria-hidden
-                className={
-                  index === 0
-                    ? "size-4 rounded-full bg-mint ring-4 ring-mint-soft"
-                    : "size-4 rounded-full border-2 border-muted/50 bg-card"
-                }
-              />
-              <span className="line-clamp-1 text-sm leading-tight font-semibold">{item.title}</span>
-              <span className="text-[13px] text-muted">{detail(item)}</span>
-              <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${chipStyles[index]}`}>
-                {chip(item)}
-              </span>
-            </li>
-          ))}
+          {items.map((item) => {
+            const booked = item.kind === "appointment";
+            return (
+              <li key={`${item.kind}-${item.id}`} className="relative flex flex-col items-start gap-1">
+                {booked ? (
+                  <span aria-hidden className="flex size-4 items-center justify-center rounded-full bg-mint ring-4 ring-mint-soft">
+                    <CheckIcon className="size-3 text-white" />
+                  </span>
+                ) : (
+                  <span aria-hidden className="size-4 rounded-full border-2 border-dashed border-brand bg-card" />
+                )}
+                <span className="line-clamp-1 text-sm leading-tight font-semibold">{item.title}</span>
+                <span className={`text-[13px] ${booked ? "text-muted" : "font-semibold text-brand-text"}`}>
+                  <span className="sr-only">{booked ? t("booked") : ""} </span>
+                  {detail(item)}
+                </span>
+                <span
+                  className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${booked ? "bg-mint-soft text-mint-text" : "bg-peach-soft text-peach-text"}`}
+                >
+                  {chip(item)}
+                </span>
+              </li>
+            );
+          })}
         </ol>
       )}
     </section>

@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import {
   RING_CENTER,
   RING_RADIUS,
@@ -10,9 +10,11 @@ import type { PregnancyStatus } from "@/lib/pregnancy";
 
 const STROKE = 12;
 
-/** Three trimester arcs; done ones filled, the current one by its progress, with a dot at "now". */
+/** Three trimester arcs; done ones filled, the current one by its progress, with a dot at "now" and the overall percent. */
 export function TrimesterRing({ status }: { status: PregnancyStatus }) {
   const t = useTranslations();
+  const format = useFormatter();
+  const percent = format.number(Math.floor(status.progress * 100) / 100, { style: "percent" });
   const ring = trimesterRing(status.daysPregnant);
   const arc = (start: number, length: number, className: string) => (
     <circle
@@ -34,6 +36,7 @@ export function TrimesterRing({ status }: { status: PregnancyStatus }) {
       aria-label={t("today.ring", {
         weekAndDay: `${status.week}+${status.dayOfWeek}`,
         trimester: t("pregnancy.trimester", { trimester: status.trimester }),
+        percent,
       })}
       className="relative size-[170px] flex-none"
     >
@@ -54,6 +57,9 @@ export function TrimesterRing({ status }: { status: PregnancyStatus }) {
           <span className="text-2xl font-medium text-muted">+{status.dayOfWeek}</span>
         </span>
         <span className="text-sm text-muted">{t("today.weeks")}</span>
+        <span dir="ltr" className="mt-0.5 rounded-full bg-brand-soft px-2 text-[13px] font-semibold text-text">
+          {percent}
+        </span>
       </div>
     </div>
   );

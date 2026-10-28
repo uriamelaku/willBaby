@@ -93,7 +93,7 @@
     "week": "השבוע ה-{week} להיריון",
     "daysLeft": "{status, select, today {היום התאריך המשוער!} after {התאריך המשוער עבר} other {{days, plural, one {עוד יום אחד ללידה} other {עוד # ימים ללידה}}}}",
     "weeks": "שבועות",
-    "ring": "שבוע {weekAndDay}, {trimester}",
+    "ring": "שבוע {weekAndDay}, {trimester}, {percent} מההיריון",
     "daily": {
       "tip": "טיפ להיום",
       "fact": "עובדה להיום",
@@ -105,9 +105,10 @@
       "title": "בקרוב",
       "all": "כל הבדיקות",
       "empty": "אין בדיקות או תורים קרובים.",
-      "week": "שבוע {week}",
       "now": "זה הזמן",
-      "inDays": "{days, plural, =0 {היום} one {מחר} other {עוד # ימים}}"
+      "inDays": "{days, plural, =0 {היום} one {מחר} other {עוד # ימים}}",
+      "toBook": "לקבוע תור",
+      "booked": "נקבע:"
     },
     "photo": {
       "take": "לצלם עכשיו",
@@ -156,7 +157,9 @@
     "previous": "שבוע {week}",
     "next": "שבוע {week}",
     "weeksNav": "מעבר בין שבועות",
-    "noContent": "התוכן לשבוע הזה עוד בכתיבה. אפשר לחזור בקרוב."
+    "noContent": "התוכן לשבוע הזה עוד בכתיבה. אפשר לחזור בקרוב.",
+    "locked": "{days, plural, one {השבוע הזה נפתח מחר. בלי ספוילרים!} other {השבוע הזה נפתח בעוד # ימים. בלי ספוילרים!}}",
+    "backToCurrent": "לשבוע הנוכחי"
   },
   "more": {
     "title": "עוד",
@@ -229,7 +232,9 @@
     "bets": "הימורים משפחתיים",
     "betsDescription": "מתי, כמה ומה? כל המשפחה מנחשת",
     "reveal": "חשיפת המין",
-    "revealDescription": "רגע מיוחד לגלות, או לספר, מה בדרך"
+    "revealDescription": "רגע מיוחד לגלות, או לספר, מה בדרך",
+    "shortcuts": "קיצורי דרך לכלים",
+    "betsShort": "הימורים"
   },
   "appointments": {
     "title": "בדיקות ותורים",

@@ -46,3 +46,29 @@ test("a special week shows its surprise once", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /בוקר טוב/ })).toBeVisible();
   await expect(page.getByRole("dialog", { name: "חצי הדרך!" })).toHaveCount(0);
 });
+
+test("Today shows the progress percent and tells booked appointments from tests to book", async ({ page }) => {
+  await completeOnboarding(page);
+  await enterApp(page);
+  // Day 107 of 280.
+  await expect(page.getByRole("img", { name: /38% מההיריון/ })).toBeVisible();
+
+  const upcoming = page.locator("section").filter({ hasText: "בקרוב" });
+  await expect(upcoming.getByText("לקבוע תור").first()).toBeVisible();
+
+  await upcoming.getByRole("link", { name: "כל הבדיקות" }).click();
+  await page.getByRole("button", { name: "הוספת תור" }).first().click();
+  await page.getByLabel("תאריך").fill("2026-11-02");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await page.getByRole("link", { name: "היום" }).click();
+  await expect(upcoming.getByText(/נקבע:/)).toHaveCount(1);
+  await expect(upcoming.getByText("עוד 5 ימים")).toBeVisible();
+
+  // Moving the appointment updates Today.
+  await upcoming.getByRole("link", { name: "כל הבדיקות" }).click();
+  await page.getByRole("button", { name: "עריכה" }).click();
+  await page.getByLabel("תאריך").fill("2026-11-09");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await page.getByRole("link", { name: "היום" }).click();
+  await expect(upcoming.getByText("עוד 12 ימים")).toBeVisible();
+});

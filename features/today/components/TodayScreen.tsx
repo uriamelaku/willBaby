@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Screen, StorageError } from "@/components/Screen";
 import { ShareableCard } from "@/components/ShareableCard";
@@ -11,7 +10,9 @@ import { SurpriseOverlay } from "@/features/surprises/components/SurpriseOverlay
 import { greetingFor } from "@/features/today/today";
 import { getDailyItem, getWeekContent } from "@/lib/content";
 import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
+import { useToday } from "@/lib/useToday";
 import { BellyPhotoPrompt } from "./BellyPhotoPrompt";
+import { ToolShortcuts } from "./ToolShortcuts";
 import { TrimesterRing } from "./TrimesterRing";
 import { UpcomingCard } from "./UpcomingCard";
 
@@ -32,7 +33,7 @@ const daysLeftStatus = (daysLeft: number) =>
 function TodayContent({ data }: { data: PregnancyData }) {
   const t = useTranslations();
   const { render } = useContentText(data.profile, data.babies);
-  const [now] = useState(() => new Date());
+  const now = useToday();
   const status = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), now);
 
   if (!status) return <p>{t("pregnancy.outOfRange")}</p>;
@@ -72,9 +73,12 @@ function TodayContent({ data }: { data: PregnancyData }) {
         </div>
       </section>
 
-      <UpcomingCard daysPregnant={status.daysPregnant} />
+      <UpcomingCard daysPregnant={status.daysPregnant} today={now} />
 
-      <BellyPhotoPrompt week={status.contentWeek} />
+      <div className="flex gap-3">
+        <BellyPhotoPrompt week={status.contentWeek} />
+        <ToolShortcuts contentWeek={status.contentWeek} />
+      </div>
 
       {dailyItem && dailyText && (
         <ShareableCard
