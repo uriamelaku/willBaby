@@ -52,3 +52,30 @@ describe("updateDueDate", () => {
     expect(updateDueDate(pregnancy, dueDate, today, now)).toEqual({ ok: false, error });
   });
 });
+
+describe("updateDueDate by last period", () => {
+  it("sets day 0 to the new last-period date and recomputes the due date", () => {
+    const result = updateDueDate(pregnancy, "2026-01-08", today, now, "lmp");
+    expect(result).toEqual({
+      ok: true,
+      pregnancy: {
+        ...pregnancy,
+        lmpDate: "2026-01-08",
+        dueDate: "2026-10-15",
+        dueDateHistory: [
+          ...pregnancy.dueDateHistory,
+          { dueDate: "2026-10-15", changedAt: "2026-03-01T10:00:00.000Z" },
+        ],
+      },
+    });
+  });
+
+  it.each([
+    ["2026-01-01", "unchanged"],
+    ["2026-03-02", "inFuture"],
+    ["2025-04-01", "tooFarInPast"],
+    ["nope", "invalidDate"],
+  ] as const)("rejects %j as %s", (lmpDate, error) => {
+    expect(updateDueDate(pregnancy, lmpDate, today, now, "lmp")).toEqual({ ok: false, error });
+  });
+});

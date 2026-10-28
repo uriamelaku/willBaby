@@ -11,7 +11,7 @@ test("updating the due date moves the pregnancy week and keeps a history", async
   await page.goto("/more");
   await expect(page.getByText("תאריך לידה משוער: 19 באפריל 2027")).toBeVisible();
 
-  await page.getByRole("button", { name: "עדכון תאריך הלידה" }).click();
+  await page.getByRole("button", { name: "עדכון התאריכים" }).click();
   await page.getByLabel("תאריך לידה משוער חדש").fill("2027-04-12");
   await page.getByRole("button", { name: "שמירה" }).click();
 
@@ -24,7 +24,7 @@ test("updating the due date moves the pregnancy week and keeps a history", async
 
 test("saving the same due date again is rejected", async ({ page }) => {
   await page.goto("/more");
-  await page.getByRole("button", { name: "עדכון תאריך הלידה" }).click();
+  await page.getByRole("button", { name: "עדכון התאריכים" }).click();
   await page.getByLabel("תאריך לידה משוער חדש").fill("2027-04-19");
   await page.getByRole("button", { name: "שמירה" }).click();
   await expect(page.getByText("זה כבר התאריך השמור.")).toBeVisible();
@@ -39,4 +39,17 @@ test("deleting all data starts over at onboarding", async ({ page }) => {
   await expect(page).toHaveURL(/\/onboarding$/);
   await page.goto("/");
   await expect(page).toHaveURL(/\/onboarding$/);
+});
+
+test("updating the last period date recomputes the due date", async ({ page }) => {
+  await page.goto("/more");
+  await page.getByRole("button", { name: "עדכון התאריכים" }).click();
+  await page.getByText("תאריך הווסת האחרונה", { exact: true }).click();
+  await expect(page.getByLabel("תאריך הווסת האחרונה המעודכן")).toHaveValue("2026-07-13");
+  await page.getByLabel("תאריך הווסת האחרונה המעודכן").fill("2026-07-06");
+  await page.getByRole("button", { name: "שמירה" }).click();
+
+  await expect(page.getByText("תאריך לידה משוער: 12 באפריל 2027")).toBeVisible();
+  await page.getByRole("link", { name: "היום" }).click();
+  await expect(weekRing(page, "16+2")).toBeVisible();
 });

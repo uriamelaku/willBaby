@@ -92,7 +92,7 @@ test("the bag reminder shows from week 32", async ({ page }) => {
   await expect(page.getByText(/הגיע הזמן לארוז/)).toHaveCount(0);
   await page.goto("/more");
   // Moving the due date earlier puts the pregnancy in week 33.
-  await page.getByRole("button", { name: "עדכון תאריך הלידה" }).click();
+  await page.getByRole("button", { name: "עדכון התאריכים" }).click();
   await page.getByLabel("תאריך לידה משוער חדש").fill("2026-12-20");
   await page.getByRole("button", { name: "שמירה" }).click();
   await page.goto("/tools");

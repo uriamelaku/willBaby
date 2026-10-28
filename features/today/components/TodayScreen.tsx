@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { Screen, StorageError } from "@/components/Screen";
 import { ShareableCard } from "@/components/ShareableCard";
 import { WeekFruit } from "@/components/ui/WeekFruit";
@@ -32,6 +32,7 @@ const daysLeftStatus = (daysLeft: number) =>
 
 function TodayContent({ data }: { data: PregnancyData }) {
   const t = useTranslations();
+  const format = useFormatter();
   const { render } = useContentText(data.profile, data.babies);
   const now = useToday();
   const status = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), now);
@@ -46,9 +47,17 @@ function TodayContent({ data }: { data: PregnancyData }) {
   return (
     <>
       <section className="flex flex-col gap-1.5 rounded-card bg-card px-[18px] py-3 shadow-hero">
-        <h1 className="text-[15px] text-muted">
-          {t(`today.greeting.${greetingFor(now.getHours())}`, { name: data.profile.name })}
-        </h1>
+        {/* The due date shares the greeting's line so the hero card does not grow. */}
+        <div className="flex items-baseline justify-between gap-2">
+          <h1 className="text-[15px] text-muted">
+            {t(`today.greeting.${greetingFor(now.getHours())}`, { name: data.profile.name })}
+          </h1>
+          <span className="text-[13px] text-muted">
+            {t("today.dueDate", {
+              date: format.dateTime(parseLocalDate(data.pregnancy.dueDate), { dateStyle: "medium" }),
+            })}
+          </span>
+        </div>
         <div className="flex items-center justify-between gap-2">
           <div className="flex flex-col gap-1">
             {weekContent?.fruit && weekContent.size && (
@@ -68,6 +77,7 @@ function TodayContent({ data }: { data: PregnancyData }) {
                 days: Math.abs(status.daysLeft),
               })}
             </span>
+
           </div>
           <TrimesterRing status={status} />
         </div>

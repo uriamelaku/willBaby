@@ -14,6 +14,7 @@ test("Today shows the approved layout and fits the screen without scrolling", as
 
   await expect(page.getByRole("img", { name: /שבוע 15\+2, שליש שני/ })).toBeVisible();
   await expect(page.getByText("עוד 173 ימים ללידה")).toBeVisible();
+  await expect(page.getByText("תאריך משוער: 19 באפר׳ 2027")).toBeVisible();
   const upcoming = page.getByRole("region").or(page.locator("section")).filter({ hasText: "בקרוב" });
   await expect(upcoming.getByText("סקירה מוקדמת")).toBeVisible();
   await expect(upcoming.getByText("זה הזמן").first()).toBeVisible();
