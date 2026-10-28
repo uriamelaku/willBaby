@@ -1,7 +1,5 @@
-import { useTranslations } from "next-intl";
-import { ComingSoon } from "@/components/ComingSoon";
+import { CurrentWeekRedirect } from "@/features/week/components/CurrentWeekRedirect";
 
-export default function Page() {
-  const t = useTranslations("nav");
-  return <ComingSoon title={t("week")} />;
+export default function WeekIndexPage() {
+  return <CurrentWeekRedirect />;
 }

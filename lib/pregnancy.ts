@@ -139,3 +139,8 @@ export function getPregnancyStatus(lmpDate: Date, today: Date): PregnancyStatus 
     dueDate: dueDateFromLmp(lmpDate),
   };
 }
+
+/** Like `getPregnancyStatus`, but returns null when day 0 is out of range (e.g. long after the due date). */
+export function findPregnancyStatus(lmpDate: Date, today: Date): PregnancyStatus | null {
+  return validateLmp(lmpDate, today).valid ? getPregnancyStatus(lmpDate, today) : null;
+}

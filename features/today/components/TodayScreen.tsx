@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { WeekFruit } from "@/components/ui/WeekFruit";
@@ -9,12 +10,7 @@ import { DaysLeft } from "@/features/pregnancy/components/DaysLeft";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
 import { getDailyItem, getWeekContent } from "@/lib/content";
-import {
-  EARLY_WEEKS,
-  getPregnancyStatus,
-  parseLocalDate,
-  validateLmp,
-} from "@/lib/pregnancy";
+import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
 
 export function TodayScreen() {
   const t = useTranslations();
@@ -36,13 +32,10 @@ function TodayContent({ data }: { data: PregnancyData }) {
   const t = useTranslations();
   const { render, babyNoun } = useContentText(data.profile, data.babies);
   const [today] = useState(() => new Date());
-  const lmp = parseLocalDate(data.pregnancy.lmpDate);
+  const status = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), today);
 
-  if (!validateLmp(lmp, today).valid) {
-    return <p>{t("pregnancy.outOfRange")}</p>;
-  }
+  if (!status) return <p>{t("pregnancy.outOfRange")}</p>;
 
-  const status = getPregnancyStatus(lmp, today);
   const weekContent = getWeekContent(status.contentWeek);
   const dailyItem = getDailyItem(status.daysPregnant);
   const dailyText = dailyItem && (data.profile.role === "partner" ? dailyItem.partnerText : dailyItem.text);
@@ -92,12 +85,12 @@ function TodayContent({ data }: { data: PregnancyData }) {
 
       {weekContent && (
         <Card className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold text-brand">{t("today.funFact")}</h2>
+          <h2 className="text-sm font-semibold text-brand">{t("pregnancy.funFact")}</h2>
           <p>{render(weekContent.funFact)}</p>
         </Card>
       )}
 
-      <p className="mt-auto pt-4 text-center text-xs opacity-75">{t("today.disclaimer")}</p>
+      <MedicalDisclaimer />
     </>
   );
 }

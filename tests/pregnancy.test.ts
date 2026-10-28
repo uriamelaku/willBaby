@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   FULL_TERM_DAYS,
   dueDateFromLmp,
+  findPregnancyStatus,
   formatLocalDate,
   getInputDateRange,
   getPregnancyStatus,
@@ -237,6 +238,14 @@ describe("getPregnancyStatus", () => {
   it("throws outside the valid range", () => {
     expect(() => statusOnDay(-1)).toThrow(RangeError);
     expect(() => statusOnDay(301)).toThrow(RangeError);
+  });
+});
+
+describe("findPregnancyStatus", () => {
+  it("returns the status in range and null outside it", () => {
+    expect(findPregnancyStatus(lmp, date(2026, 1, 8))?.week).toBe(1);
+    expect(findPregnancyStatus(lmp, date(2025, 12, 31))).toBeNull();
+    expect(findPregnancyStatus(lmp, date(2026, 10, 29))).toBeNull();
   });
 });
 
