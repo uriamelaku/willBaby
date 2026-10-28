@@ -1,26 +1,54 @@
 @import "tailwindcss";
 
+/* Color tokens: see docs/design.md. Theme follows the OS unless data-theme is set on <html>. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --brand: #ff8a7a;
+  --accent: #8fd3c1;
+  --sun: #ffd36e;
+  --bg: #fff8f3;
+  --card: #ffffff;
+  --text: #3b3344;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --brand: #ff9e90;
+    --accent: #6fc2ad;
+    --sun: #f2c55c;
+    --bg: #1e1b24;
+    --card: #2a2633;
+    --text: #f3eef6;
+    color-scheme: dark;
   }
 }
 
+:root[data-theme="dark"] {
+  --brand: #ff9e90;
+  --accent: #6fc2ad;
+  --sun: #f2c55c;
+  --bg: #1e1b24;
+  --card: #2a2633;
+  --text: #f3eef6;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-accent: var(--accent);
+  --color-sun: var(--sun);
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --font-sans: var(--font-rubik), system-ui, sans-serif;
+}
+
+html {
+  font-size: 17px;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
 }
