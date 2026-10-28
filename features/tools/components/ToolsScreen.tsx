@@ -9,6 +9,7 @@ const tools = [
   { href: "/tools/contractions", icon: "⏱️", title: "contractions", description: "contractionsDescription" },
   { href: "/tools/weight", icon: "⚖️", title: "weight", description: "weightDescription" },
   { href: "/tools/hospital-bag", icon: "🧳", title: "hospitalBag", description: "hospitalBagDescription" },
+  { href: "/tools/names", icon: "📝", title: "names", description: "namesDescription" },
 ] as const;
 
 export function ToolsScreen() {

@@ -98,3 +98,29 @@ test("the bag reminder shows from week 32", async ({ page }) => {
   await page.goto("/tools");
   await expect(page.getByRole("link", { name: /הגיע הזמן לארוז את תיק הלידה \(0 מתוך 23\)/ })).toBeVisible();
 });
+
+test("names: both people vote in turn on one phone", async ({ page }) => {
+  await page.getByRole("link", { name: /שמות/ }).click();
+  for (const name of ["נגה", "ליה"]) {
+    await page.getByLabel("שם חדש").fill(name);
+    await page.getByRole("button", { name: "הוספה לרשימה" }).click();
+  }
+  await page.getByLabel("שם חדש").fill("נגה");
+  await page.getByRole("button", { name: "הוספה לרשימה" }).click();
+  await expect(page.getByText("השם הזה כבר ברשימה")).toBeVisible();
+
+  const voting = page.getByRole("group", { name: /הצבעה על/ });
+  await expect(page.getByText("התור של בדיקה")).toBeVisible();
+  await voting.getByRole("button", { name: "כן" }).click();
+  await voting.getByRole("button", { name: "לא" }).click();
+  await expect(page.getByText(/סיימת להצביע על כל השמות/)).toBeVisible();
+
+  await page.getByText("בן או בת הזוג", { exact: true }).click();
+  await voting.getByRole("button", { name: "כן" }).click();
+  await voting.getByRole("button", { name: "כן" }).click();
+
+  await expect(page.getByRole("img", { name: "שניכם אוהבים" })).toHaveCount(1);
+  await page.getByRole("button", { name: "מועדף: ליה" }).click();
+  await expect(page.getByRole("button", { name: "מועדף: ליה" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("main li").first()).toContainText("ליה");
+});
