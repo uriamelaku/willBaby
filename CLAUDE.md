@@ -41,7 +41,7 @@ Name and logo: **will·B·aby** — the shared "B" reads as both "will Be" and "
 - Tailwind CSS with RTL (`dir="rtl"`, logical classes `ms-`/`me-`), own UI components.
 - Zustand (state), Dexie.js (IndexedDB), localStorage only for small preferences.
 - date-fns (dates), Recharts (weight chart), Framer Motion (animations).
-- Serwist (PWA / service worker), Zod (content and backup validation), next-intl (texts).
+- PWA: hand-written service worker generated after build (`scripts/build-sw.mjs`; Serwist was evaluated but needs a Turbopack workaround plus esbuild/swc), Zod (content and backup validation), next-intl (texts).
 - Vitest (logic) + Playwright (main flows).
 - Git/GitHub; Vercel connected to the repository.
 

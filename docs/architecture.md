@@ -81,7 +81,7 @@ willbaby/
 │  ├─ tools/                 # kicks, contractions, weight, bag, names, appointments, bets
 │  ├─ more/                  # settings, badges, backup, about
 │  ├─ manifest.ts
-│  └─ sw.ts                  # service worker (Serwist)
+│  └─ icon.svg               # app icon (PNGs in public/icons via scripts/render-icons.mjs)
 ├─ features/                 # logic + UI per feature
 ├─ components/ui/            # Button, Card, Sheet, Tabs, BottomNav, WeekFruit
 ├─ lib/                      # pregnancy, db, storage/, achievements, text, backup
@@ -90,7 +90,8 @@ willbaby/
 ├─ messages/he.json          # UI texts (next-intl)
 ├─ public/icons/             # PWA icons 192/512 + maskable
 ├─ tests/                    # Vitest + Playwright
-└─ next.config.ts            # output: "export" + Serwist
+├─ scripts/                 # build-sw.mjs + sw-template.js (offline service worker), render-icons.mjs
+└─ next.config.ts            # output: "export"
 ```
 
 ## Risks

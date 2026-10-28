@@ -23,7 +23,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Tests by week + appointments linked to tests; upcoming ones on "Today"
 - ✅ WhatsApp share (Web Share API, `wa.me` fallback)
 - ✅ Backup and restore (JSON file) + backup reminder every 4 weeks + `navigator.storage.persist()`
-- ⬜ PWA: manifest, icons, offline support (Serwist)
+- ✅ PWA: manifest, icons, offline support (hand-written service worker)
 - ✅ Dark mode (automatic + manual toggle) and medical disclaimer
 - ⬜ Playwright tests for onboarding, Today, backup/restore
 

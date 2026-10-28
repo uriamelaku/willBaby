@@ -12,7 +12,7 @@ A mobile-first Hebrew pregnancy-tracking PWA: a daily tip or fact, a weekly summ
 - [`docs/design.md`](docs/design.md) — branding, colors, typography
 
 ## Stack
-Next.js (static export) · TypeScript · Tailwind CSS · Dexie (IndexedDB) · Serwist (PWA) · Vercel
+Next.js (static export) · TypeScript · Tailwind CSS · Dexie (IndexedDB) · PWA (service worker) · Vercel
 
 ## Disclaimer
 willBaby provides general information only and is not a substitute for medical advice.

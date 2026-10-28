@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Rubik } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { locale } from "@/i18n/request";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
@@ -14,8 +15,20 @@ const rubik = Rubik({
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("metadata");
-  return { title: "will·B·aby", description: t("description") };
+  return {
+    title: "will·B·aby",
+    description: t("description"),
+    icons: { apple: "/icons/apple-touch-icon.png" },
+    appleWebApp: { capable: true, title: "willBaby", statusBarStyle: "default" },
+  };
 }
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFF8F3" },
+    { media: "(prefers-color-scheme: dark)", color: "#1E1B24" },
+  ],
+};
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -32,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );

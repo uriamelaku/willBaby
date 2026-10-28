@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Service worker template with build-time placeholders (see scripts/build-sw.mjs).
+    "scripts/sw-template.js",
   ]),
 ]);
 
