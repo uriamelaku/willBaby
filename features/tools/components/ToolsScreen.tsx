@@ -6,6 +6,7 @@ const tools = [
   { href: "/tools/appointments", icon: "🩺", title: "appointments", description: "appointmentsDescription" },
   { href: "/tools/kicks", icon: "👣", title: "kicks", description: "kicksDescription" },
   { href: "/tools/contractions", icon: "⏱️", title: "contractions", description: "contractionsDescription" },
+  { href: "/tools/weight", icon: "⚖️", title: "weight", description: "weightDescription" },
 ] as const;
 
 export function ToolsScreen() {

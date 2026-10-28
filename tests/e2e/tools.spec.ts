@@ -48,3 +48,24 @@ test("contraction timer records contractions and their interval", async ({ page 
   await expect(rows.nth(2)).toContainText("0:45");
   await expect(page.getByText("אם משהו מרגיש לא בסדר")).toBeVisible();
 });
+
+test("weight tracking saves weights, shows the change and the chart", async ({ page }) => {
+  await page.getByRole("link", { name: /מעקב משקל/ }).click();
+
+  await page.getByLabel("תאריך").fill("2026-07-13");
+  await page.getByLabel("משקל (ק״ג)").fill("61");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await page.getByLabel("תאריך").fill("2026-10-28");
+  await page.getByLabel("משקל (ק״ג)").fill("20");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await expect(page.getByText("המשקל צריך להיות בין 30 ל-250 ק״ג")).toBeVisible();
+
+  await page.getByLabel("משקל (ק״ג)").fill("64.5");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await expect(page.getByText("עלייה של 3.5 ק״ג מהשקילה הראשונה")).toBeVisible();
+  await expect(page.getByRole("img", { name: "גרף המשקל לפי שבוע היריון" })).toBeVisible();
+  await expect(page.locator(".recharts-line-dot")).toHaveCount(2);
+  // Local dates show as entered, in the device's time zone.
+  await expect(page.getByText("28 באוק׳ 2026")).toBeVisible();
+  await expect(page.getByText("13 ביולי 2026")).toBeVisible();
+});
