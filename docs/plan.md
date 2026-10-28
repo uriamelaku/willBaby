@@ -19,7 +19,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Bottom navigation: Today · Week · Journal · Tools · More
 - ⬜ Content: 42 weekly summaries + 294 daily items (pregnant + partner versions); then set `REQUIRE_COMPLETE_CONTENT = true` in `tests/content.test.ts`
 - ✅ Journal + mood (1–5)
-- ⬜ Belly photos: one per week, compression, timeline gallery
+- ✅ Belly photos: one per week, compression, timeline gallery
 - ⬜ Tests by week + appointments linked to tests; upcoming ones on "Today"
 - ✅ WhatsApp share (Web Share API, `wa.me` fallback)
 - ⬜ Backup and restore (JSON file) + backup reminder every 4 weeks + `navigator.storage.persist()`
