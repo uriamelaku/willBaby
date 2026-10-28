@@ -67,5 +67,6 @@ One-time full-screen moments in weeks 12, 20, 24, 30, 37 and 40 (confetti, ballo
   - `{you}`: the user's name. `{partnerName}`: the partner's name, or "בן או בת הזוג" (pregnant user) / "בת הזוג" (partner user) when not set.
   - Words that agree with the baby use a selector `[masculine|feminine|plural]`, e.g. `{baby} כבר [שומע|שומעת|שומעים]`. Unknown sex uses the masculine form; two or more babies use the plural.
   - The pregnant version addresses a woman; the partner version uses wording that fits any gender.
+  - Weekly summaries have one version, so `baby`, `body`, `tips` and `funFact` are written impersonally (fit both roles); only `partner` addresses the partner.
   - All of the above is checked at build time (`content/schema.ts`).
 - Sensitive tools (kicks, contractions) always show: "If something feels wrong, contact your doctor or the delivery room."
