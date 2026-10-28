@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Rubik } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { DeviceTimeZone } from "@/components/DeviceTimeZone";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { locale } from "@/i18n/request";
 import { themeInitScript } from "@/lib/theme";
@@ -44,7 +45,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <DeviceTimeZone>{children}</DeviceTimeZone>
+        </NextIntlClientProvider>
         <ServiceWorkerRegistration />
       </body>
     </html>
