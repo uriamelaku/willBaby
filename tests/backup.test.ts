@@ -36,7 +36,18 @@ async function seed(target: StorageAdapter) {
   await target.save("babies", { index: 0, sex: "girl" });
   await target.save("journal", { date: "2026-04-01", week: 13, text: "שלום", mood: 5, tags: [] });
   await target.save("appointments", { title: "סקירה", date: "2026-06-10", time: "09:30", done: false });
-  await target.save("settings", { schemaVersion: SCHEMA_VERSION });
+  await target.save("settings", { schemaVersion: SCHEMA_VERSION, seenSurprises: [12] });
+  await target.save("weights", { date: "2026-04-01", kg: 62.5 });
+  await target.save("kickSessions", {
+    startedAt: now.toISOString(),
+    endedAt: now.toISOString(),
+    kicks: [now.toISOString()],
+  });
+  await target.save("contractions", { sessionId: "s1", startedAt: now.toISOString() });
+  await target.save("checklist", { listType: "hospitalBag", itemId: "id-card", checked: true });
+  await target.save("names", { name: "נגה", sex: "girl", votes: { me: 1 }, favorite: true });
+  await target.save("bets", { guesserName: "סבתא", dueDateGuess: "2026-10-01", weightGuess: 3.2 });
+  await target.save("badges", { badgeId: "welcome", earnedAt: now.toISOString() });
   await target.save("photos", {
     week: 13,
     blob: new Blob([new Uint8Array([255, 216, 255, 0, 1, 2, 3])], { type: "image/jpeg" }),
@@ -82,6 +93,22 @@ describe("backup round trip", () => {
     await storage.replaceAll(parsed.snapshot);
 
     expect((await storage.list("journal")).map((entry) => entry.text)).toEqual(["שלום"]);
+  });
+
+  it("restores a version 1 file, which has no phase 2 tables", async () => {
+    await seed(storage);
+    const backup = await createBackup(await storage.exportAll(), now);
+    const { profile, pregnancy, babies, journal, photos, appointments, settings } = backup.tables;
+    const v1File = {
+      ...backup,
+      schemaVersion: 1,
+      tables: { profile, pregnancy, babies, journal, photos, appointments, settings },
+    };
+    const parsed = parseBackup(JSON.stringify(v1File));
+    if (!parsed.ok) throw new Error("expected a valid backup");
+    expect(parsed.snapshot.journal).toHaveLength(1);
+    expect(parsed.snapshot.weights).toEqual([]);
+    expect(parsed.snapshot.badges).toEqual([]);
   });
 
   it("stores the schema version and app id in the file", async () => {

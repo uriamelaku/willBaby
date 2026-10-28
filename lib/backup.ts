@@ -4,12 +4,19 @@ import { SCHEMA_VERSION } from "@/lib/db";
 import type {
   Appointment,
   Baby,
+  BabyName,
+  Bet,
+  ChecklistItem,
+  Contraction,
+  EarnedBadge,
   JournalEntry,
+  KickSession,
   Photo,
   Pregnancy,
   Profile,
   Settings,
   StorageSnapshot,
+  WeightEntry,
 } from "@/lib/storage/types";
 
 // Backup file: every table as JSON, photos as Base64. Imports are validated before anything is replaced.
@@ -80,9 +87,64 @@ const appointmentSchema: z.ZodType<Appointment> = z.object({
 
 const settingsSchema: z.ZodType<Settings> = z.object({
   ...base,
+  seenSurprises: z.array(week).optional(),
   disclaimerAcceptedAt: timestamp.optional(),
   lastBackupAt: timestamp.optional(),
   schemaVersion: z.int().min(1),
+});
+
+const weightSchema: z.ZodType<WeightEntry> = z.object({
+  ...base,
+  date: calendarDate,
+  kg: z.number().positive().max(500),
+});
+
+const kickSessionSchema: z.ZodType<KickSession> = z.object({
+  ...base,
+  startedAt: timestamp,
+  endedAt: timestamp.optional(),
+  kicks: z.array(timestamp).max(1000),
+});
+
+const contractionSchema: z.ZodType<Contraction> = z.object({
+  ...base,
+  sessionId: z.string().min(1),
+  startedAt: timestamp,
+  endedAt: timestamp.optional(),
+});
+
+const checklistSchema: z.ZodType<ChecklistItem> = z.object({
+  ...base,
+  listType: z.literal("hospitalBag"),
+  itemId: shortText.optional(),
+  customText: shortText.optional(),
+  checked: z.boolean(),
+});
+
+const vote = z.union([z.literal(-1), z.literal(0), z.literal(1)]);
+
+const nameSchema: z.ZodType<BabyName> = z.object({
+  ...base,
+  name: shortText,
+  sex: z.enum(["boy", "girl", "any"]),
+  votes: z.object({ me: vote.optional(), partner: vote.optional() }),
+  favorite: z.boolean(),
+});
+
+const betSchema: z.ZodType<Bet> = z.object({
+  ...base,
+  guesserName: shortText,
+  dueDateGuess: calendarDate,
+  weightGuess: z.number().positive().max(10),
+  sexGuess: z.enum(["boy", "girl", "mixed"]).optional(),
+  nameGuess: shortText.optional(),
+});
+
+const badgeSchema: z.ZodType<EarnedBadge> = z.object({
+  ...base,
+  badgeId: shortText,
+  earnedAt: timestamp,
+  seenAt: timestamp.optional(),
 });
 
 const backupFileSchema = z.object({
@@ -97,6 +159,14 @@ const backupFileSchema = z.object({
     photos: z.array(serializedPhotoSchema),
     appointments: z.array(appointmentSchema),
     settings: z.array(settingsSchema),
+    // Added in schema version 2; missing in version 1 files.
+    weights: z.array(weightSchema).default([]),
+    kickSessions: z.array(kickSessionSchema).default([]),
+    contractions: z.array(contractionSchema).default([]),
+    checklist: z.array(checklistSchema).default([]),
+    names: z.array(nameSchema).default([]),
+    bets: z.array(betSchema).default([]),
+    badges: z.array(badgeSchema).default([]),
   }),
 });
 
@@ -158,7 +228,7 @@ export function parseBackup(text: string): ParsedBackup {
     console.error("Backup file failed validation", result.error.issues);
     return { ok: false, error: "invalidFile" };
   }
-  // Older schema versions would be migrated here; version 1 is the only one so far.
+  // Version 1 files only lack the version 2 tables, which the schema defaults to empty.
   const { tables, exportedAt } = result.data;
   const photos: Photo[] = tables.photos.map(({ image, ...photo }) => ({
     ...photo,

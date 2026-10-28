@@ -72,7 +72,69 @@ export interface Appointment extends BaseRecord {
   notes?: string;
 }
 
+export interface WeightEntry extends BaseRecord {
+  date: CalendarDate;
+  kg: number;
+}
+
+export interface KickSession extends BaseRecord {
+  startedAt: Timestamp;
+  /** Missing while the session is running. */
+  endedAt?: Timestamp;
+  kicks: Timestamp[];
+}
+
+export interface Contraction extends BaseRecord {
+  /** Contractions close together share a session (see features/contractions). */
+  sessionId: string;
+  startedAt: Timestamp;
+  /** Missing while the contraction is running. */
+  endedAt?: Timestamp;
+}
+
+export type ChecklistType = "hospitalBag";
+
+export interface ChecklistItem extends BaseRecord {
+  listType: ChecklistType;
+  /** A default item from content; missing for a custom item. */
+  itemId?: string;
+  /** The text of a custom item. */
+  customText?: string;
+  checked: boolean;
+}
+
+export type NameSex = "boy" | "girl" | "any";
+/** -1 no, 0 maybe, 1 yes; missing until that person votes. */
+export type Vote = -1 | 0 | 1;
+export type Voter = "me" | "partner";
+
+export interface BabyName extends BaseRecord {
+  name: string;
+  sex: NameSex;
+  votes: Partial<Record<Voter, Vote>>;
+  favorite: boolean;
+}
+
+/** "mixed" is for multiples with both boys and girls. */
+export type SexGuess = "boy" | "girl" | "mixed";
+
+export interface Bet extends BaseRecord {
+  guesserName: string;
+  dueDateGuess: CalendarDate;
+  weightGuess: number;
+  sexGuess?: SexGuess;
+  nameGuess?: string;
+}
+
+export interface EarnedBadge extends BaseRecord {
+  badgeId: string;
+  earnedAt: Timestamp;
+  seenAt?: Timestamp;
+}
+
 export interface Settings extends BaseRecord {
+  /** Weeks whose one-time surprise was shown. */
+  seenSurprises?: number[];
   disclaimerAcceptedAt?: Timestamp;
   lastBackupAt?: Timestamp;
   schemaVersion: number;
@@ -86,6 +148,13 @@ export interface StorageRecords {
   photos: Photo;
   appointments: Appointment;
   settings: Settings;
+  weights: WeightEntry;
+  kickSessions: KickSession;
+  contractions: Contraction;
+  checklist: ChecklistItem;
+  names: BabyName;
+  bets: Bet;
+  badges: EarnedBadge;
 }
 
 export type TableName = keyof StorageRecords;
@@ -98,6 +167,13 @@ export const TABLE_NAMES = [
   "photos",
   "appointments",
   "settings",
+  "weights",
+  "kickSessions",
+  "contractions",
+  "checklist",
+  "names",
+  "bets",
+  "badges",
 ] as const satisfies readonly TableName[];
 
 /** Every record of every table, e.g. for backup and restore. */

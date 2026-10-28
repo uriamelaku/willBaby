@@ -1,4 +1,5 @@
 import "fake-indexeddb/auto";
+import Dexie from "dexie";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SCHEMA_VERSION, WillBabyDb } from "../lib/db";
 import { createIndexedDbStorage } from "../lib/storage/indexedDb";
@@ -26,18 +27,50 @@ afterEach(async () => {
 });
 
 describe("WillBabyDb schema", () => {
-  it("opens at the current schema version with the MVP tables", async () => {
+  it("opens at the current schema version with all tables", async () => {
     await db.open();
     expect(db.verno).toBe(SCHEMA_VERSION);
     expect(db.tables.map((table) => table.name).sort()).toEqual([
       "appointments",
       "babies",
+      "badges",
+      "bets",
+      "checklist",
+      "contractions",
       "journal",
+      "kickSessions",
+      "names",
       "photos",
       "pregnancy",
       "profile",
       "settings",
+      "weights",
     ]);
+  });
+
+  it("upgrades a version 1 database, keeping its data", async () => {
+    const name = `test-${crypto.randomUUID()}`;
+    const v1 = new Dexie(name);
+    v1.version(1).stores({
+      profile: "id",
+      pregnancy: "id, status",
+      babies: "id, index",
+      journal: "id, date",
+      photos: "id, week",
+      appointments: "id, date",
+      settings: "id",
+    });
+    const stamp = "2026-03-15T10:00:00.000Z";
+    await v1.table("journal").put({ ...journalEntry, id: "j1", createdAt: stamp, updatedAt: stamp });
+    await v1.table("settings").put({ id: "s1", schemaVersion: 1, createdAt: stamp, updatedAt: stamp });
+    v1.close();
+
+    const upgraded = new WillBabyDb(name);
+    const upgradedStorage = createIndexedDbStorage(upgraded);
+    expect((await upgradedStorage.list("journal")).map((entry) => entry.id)).toEqual(["j1"]);
+    expect((await upgradedStorage.get("settings", "s1"))?.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(await upgradedStorage.list("weights")).toEqual([]);
+    await upgraded.delete();
   });
 });
 
