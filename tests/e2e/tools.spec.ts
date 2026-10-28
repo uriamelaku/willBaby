@@ -109,6 +109,8 @@ test("names: both people vote in turn on one phone", async ({ page }) => {
   await page.getByRole("button", { name: "הוספה לרשימה" }).click();
   await expect(page.getByText("השם הזה כבר ברשימה")).toBeVisible();
 
+  await expect(page.getByRole("heading", { name: "השמות שלנו" })).toBeVisible();
+  await page.getByText("רוצים להצביע יחד?").click();
   const voting = page.getByRole("group", { name: /הצבעה על/ });
   await expect(page.getByText("התור של בדיקה")).toBeVisible();
   await voting.getByRole("button", { name: "כן" }).click();

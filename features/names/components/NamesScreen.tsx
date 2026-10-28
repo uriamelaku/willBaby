@@ -121,33 +121,6 @@ function NamesList({ data }: { data: PregnancyData }) {
       </Card>
       {actionFailed && <StorageError />}
 
-      {records.length > 0 && (
-        <Card className="flex flex-col gap-4">
-          <ChoiceGroup
-            legend={t("names.whoVotes")}
-            value={voter}
-            onChange={setVoter}
-            options={VOTERS.map((value) => ({ value, label: voterNames[value] }))}
-          />
-          {next ? (
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-sm text-muted">{t("names.turn", { name: voterNames[voter] })}</p>
-              <p className="text-4xl font-bold">{next.name}</p>
-              <div className="flex gap-3" role="group" aria-label={t("names.voteFor", { name: next.name })}>
-                {VOTES.map((value) => (
-                  <Button key={value} variant="secondary" onClick={() => vote(next, value)} className="flex items-center gap-1">
-                    <span aria-hidden>{VOTE_EMOJI[value]}</span>
-                    {t(`names.votes.${VOTE_KEY[value]}`)}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className="text-center">{t("names.allVoted", { name: voterNames[other] })}</p>
-          )}
-        </Card>
-      )}
-
       {records.length === 0 ? (
         <p className="text-center text-muted">{t("names.empty")}</p>
       ) : (
@@ -170,7 +143,7 @@ function NamesList({ data }: { data: PregnancyData }) {
                       {t(`names.sexes.${name.sex}`)}
                       {VOTERS.map((person) => {
                         const value = name.votes[person];
-                        return ` · ${voterNames[person]}: ${value === undefined ? t("names.notVoted") : `${VOTE_EMOJI[value]} ${t(`names.votes.${VOTE_KEY[value]}`)}`}`;
+                        return value === undefined ? "" : ` · ${voterNames[person]}: ${VOTE_EMOJI[value]}`;
                       })}
                     </p>
                   </div>
@@ -194,6 +167,46 @@ function NamesList({ data }: { data: PregnancyData }) {
           </ul>
         </section>
       )}
+
+      {records.length > 0 && (
+        <details className="group rounded-card bg-card p-5">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 font-semibold">
+            <span>
+              <span aria-hidden>💞 </span>
+              {t("names.votingTitle")}
+            </span>
+            <span aria-hidden className="text-muted transition group-open:rotate-180 motion-reduce:transition-none">
+              ⌄
+            </span>
+          </summary>
+          <div className="mt-3 flex flex-col gap-4">
+            <p className="text-sm text-muted">{t("names.votingIntro")}</p>
+            <ChoiceGroup
+              legend={t("names.whoVotes")}
+              value={voter}
+              onChange={setVoter}
+              options={VOTERS.map((value) => ({ value, label: voterNames[value] }))}
+            />
+            {next ? (
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-sm text-muted">{t("names.turn", { name: voterNames[voter] })}</p>
+                <p className="text-4xl font-bold">{next.name}</p>
+                <div className="flex gap-3" role="group" aria-label={t("names.voteFor", { name: next.name })}>
+                  {VOTES.map((value) => (
+                    <Button key={value} variant="secondary" onClick={() => vote(next, value)} className="flex items-center gap-1">
+                      <span aria-hidden>{VOTE_EMOJI[value]}</span>
+                      {t(`names.votes.${VOTE_KEY[value]}`)}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-center">{t("names.allVoted", { name: voterNames[other] })}</p>
+            )}
+          </div>
+        </details>
+      )}
+
 
       <ConfirmDialog
         open={deleting !== null}
