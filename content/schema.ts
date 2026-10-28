@@ -70,11 +70,36 @@ const uniqueBy = <T extends z.ZodType>(item: T, key: keyof z.infer<T> & string) 
     });
   });
 
+const contentWeek = z.int().min(1).max(MAX_CONTENT_WEEK);
+
+export const medicalTestSchema = z
+  .strictObject({
+    id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Use a kebab-case id"),
+    name: text,
+    weekFrom: contentWeek,
+    weekTo: contentWeek,
+    description: text,
+    isOptional: z.boolean(),
+    source: text,
+  })
+  .refine((test) => test.weekFrom <= test.weekTo, {
+    error: "weekFrom must not be after weekTo",
+    path: ["weekTo"],
+  });
+
 export const weeksSchema = uniqueBy(weekSchema, "week");
 export const dailySchema = uniqueBy(dailyItemSchema, "day");
+export const testsSchema = uniqueBy(medicalTestSchema, "id");
 
 export type WeekContent = z.infer<typeof weekSchema>;
 export type DailyItem = z.infer<typeof dailyItemSchema>;
+export type MedicalTest = z.infer<typeof medicalTestSchema>;
+
+/** testIds in weekly summaries that do not exist in tests.json. */
+export const findUnknownTestIds = (weeks: WeekContent[], tests: MedicalTest[]) => {
+  const known = new Set(tests.map((test) => test.id));
+  return [...new Set(weeks.flatMap((week) => week.testIds))].filter((id) => !known.has(id));
+};
 
 const missingNumbers = (present: number[], from: number, to: number) => {
   const presentSet = new Set(present);

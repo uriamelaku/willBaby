@@ -8,6 +8,7 @@ import { ShareableCard } from "@/components/ShareableCard";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { WeekFruit } from "@/components/ui/WeekFruit";
+import { UpcomingAppointments } from "@/features/appointments/components/UpcomingAppointments";
 import { DaysLeft } from "@/features/pregnancy/components/DaysLeft";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
@@ -76,6 +77,8 @@ function TodayContent({ data }: { data: PregnancyData }) {
       {dailyItem && dailyText && (
         <ShareableCard title={t(`today.daily.${dailyItem.type}`)} text={render(dailyText)} large />
       )}
+
+      <UpcomingAppointments />
 
       {weekContent && (
         <ShareableCard title={t("pregnancy.funFact")} text={render(weekContent.funFact)} />

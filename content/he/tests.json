@@ -1,0 +1,74 @@
+[
+  {
+    "id": "first-ultrasound",
+    "name": "אולטרסאונד ראשון",
+    "weekFrom": 6,
+    "weekTo": 9,
+    "description": "בדיקה שמאשרת דופק ומתארכת את ההיריון. לפיה לפעמים מעדכנים את תאריך הלידה המשוער.",
+    "isOptional": false,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  },
+  {
+    "id": "nuchal-translucency",
+    "name": "שקיפות עורפית וסקר שליש ראשון",
+    "weekFrom": 11,
+    "weekTo": 14,
+    "description": "אולטרסאונד ובדיקת דם שמעריכים יחד את הסיכון לתסמונת דאון ולמומים מסוימים.",
+    "isOptional": true,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  },
+  {
+    "id": "early-anatomy-scan",
+    "name": "סקירת מערכות מוקדמת",
+    "weekFrom": 14,
+    "weekTo": 16,
+    "description": "אולטרסאונד מפורט שבודק את התפתחות האיברים בשלב מוקדם.",
+    "isOptional": true,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  },
+  {
+    "id": "second-trimester-screening",
+    "name": "סקר שליש שני (תבחין משולש)",
+    "weekFrom": 16,
+    "weekTo": 20,
+    "description": "בדיקת דם שמעריכה סיכון לתסמונות מסוימות ולמומים בתעלה העצבית.",
+    "isOptional": true,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  },
+  {
+    "id": "late-anatomy-scan",
+    "name": "סקירת מערכות מאוחרת",
+    "weekFrom": 20,
+    "weekTo": 24,
+    "description": "אולטרסאונד מפורט שבודק את מבנה האיברים, הגדילה, השליה ומי השפיר.",
+    "isOptional": false,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  },
+  {
+    "id": "glucose-challenge",
+    "name": "העמסת סוכר",
+    "weekFrom": 24,
+    "weekTo": 28,
+    "description": "בדיקת דם אחרי שתייה מתוקה, לאיתור סוכרת היריון.",
+    "isOptional": false,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  },
+  {
+    "id": "gbs",
+    "name": "תרבית GBS",
+    "weekFrom": 35,
+    "weekTo": 37,
+    "description": "משטח לאיתור חיידק סטרפטוקוק מקבוצה B, כדי להחליט אם צריך טיפול בזמן הלידה.",
+    "isOptional": true,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  },
+  {
+    "id": "monitoring",
+    "name": "מוניטור",
+    "weekFrom": 40,
+    "weekTo": 42,
+    "description": "מעקב אחרי דופק העובר והתכווצויות, כשמגיעים לתאריך המשוער ואחריו.",
+    "isOptional": false,
+    "source": "משרד הבריאות – בדיקות במהלך ההיריון"
+  }
+]

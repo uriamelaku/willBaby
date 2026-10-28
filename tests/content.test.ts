@@ -3,11 +3,14 @@ import {
   dailySchema,
   findMissingDays,
   findMissingWeeks,
+  findUnknownTestIds,
+  testsSchema,
   weeksSchema,
   type DailyItem,
   type WeekContent,
 } from "@/content/schema";
 import daily from "@/content/he/daily.json";
+import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
 
 // Turn on once all 42 weeks and 294 daily items are written (tracked in docs/plan.md).
@@ -46,6 +49,15 @@ describe("content files (build gate)", () => {
   it("daily.json is valid", () => {
     const result = dailySchema.safeParse(daily);
     expect(issuesOf(result)).toEqual([]);
+  });
+
+  it("tests.json is valid", () => {
+    const result = testsSchema.safeParse(tests);
+    expect(issuesOf(result)).toEqual([]);
+  });
+
+  it("weekly testIds all exist in tests.json", () => {
+    expect(findUnknownTestIds(weeksSchema.parse(weeks), testsSchema.parse(tests))).toEqual([]);
   });
 
   it.runIf(REQUIRE_COMPLETE_CONTENT)("has all 42 weeks and 294 daily items", () => {
@@ -133,6 +145,37 @@ describe("dailySchema", () => {
   it("rejects duplicate days", () => {
     const result = dailySchema.safeParse([validDailyItem, validDailyItem]);
     expect(issuesOf(result)).toEqual(["Duplicate day 0"]);
+  });
+});
+
+describe("testsSchema", () => {
+  const validTest = {
+    id: "glucose-challenge",
+    name: "העמסת סוכר",
+    weekFrom: 24,
+    weekTo: 28,
+    description: "בדיקת דם",
+    isOptional: false,
+    source: "משרד הבריאות",
+  };
+
+  it("accepts a valid test", () => {
+    expect(testsSchema.safeParse([validTest]).success).toBe(true);
+  });
+
+  it("rejects reversed weeks, bad ids and duplicates", () => {
+    expect(issuesOf(testsSchema.safeParse([{ ...validTest, weekFrom: 30 }]))).toEqual([
+      "weekFrom must not be after weekTo",
+    ]);
+    expect(testsSchema.safeParse([{ ...validTest, id: "Glucose Test" }]).success).toBe(false);
+    expect(issuesOf(testsSchema.safeParse([validTest, validTest]))).toEqual([
+      "Duplicate id glucose-challenge",
+    ]);
+  });
+
+  it("finds unknown test ids in weeks", () => {
+    const week = { testIds: ["glucose-challenge", "nope"] } as WeekContent;
+    expect(findUnknownTestIds([week], [validTest])).toEqual(["nope"]);
   });
 });
 

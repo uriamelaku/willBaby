@@ -1,10 +1,17 @@
 import daily from "@/content/he/daily.json";
+import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
-import { TOTAL_DAILY_ITEMS, type DailyItem, type WeekContent } from "@/content/schema";
+import {
+  TOTAL_DAILY_ITEMS,
+  type DailyItem,
+  type MedicalTest,
+  type WeekContent,
+} from "@/content/schema";
 
 // Content JSON is validated at build time (tests/content.test.ts), so it is typed here without parsing.
 const weekContents = weeks as WeekContent[];
 const dailyItems = daily as DailyItem[];
+const medicalTests = tests as MedicalTest[];
 
 export const findWeekContent = (contents: WeekContent[], week: number) =>
   contents.find((content) => content.week === week);
@@ -18,3 +25,7 @@ export const findDailyItem = (items: DailyItem[], daysPregnant: number) => {
 export const getWeekContent = (week: number) => findWeekContent(weekContents, week);
 
 export const getDailyItem = (daysPregnant: number) => findDailyItem(dailyItems, daysPregnant);
+
+export const getMedicalTests = () => medicalTests;
+
+export const getMedicalTest = (id: string) => medicalTests.find((test) => test.id === id);
