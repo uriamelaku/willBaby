@@ -1,6 +1,7 @@
 import {
   addDays,
   differenceInCalendarDays,
+  format,
   isValid,
   parse,
   startOfDay,
@@ -58,6 +59,12 @@ export function parseLocalDate(value: string): Date {
     throw new RangeError(`Expected a valid YYYY-MM-DD date, got "${value}"`);
   }
   return date;
+}
+
+/** Formats a date as its local calendar date, `YYYY-MM-DD`. */
+export function formatLocalDate(date: Date): string {
+  assertValidDate(date);
+  return format(date, "yyyy-MM-dd");
 }
 
 /** Converts any input method to day 0 (LMP). */

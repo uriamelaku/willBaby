@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   FULL_TERM_DAYS,
   dueDateFromLmp,
+  formatLocalDate,
   getPregnancyStatus,
   lmpFromInput,
   parseLocalDate,
@@ -38,6 +39,21 @@ describe("parseLocalDate", () => {
   it("accepts Feb 29 in a leap year only", () => {
     expect(parseLocalDate("2028-02-29")).toEqual(date(2028, 2, 29));
     expect(() => parseLocalDate("2027-02-29")).toThrow(RangeError);
+  });
+});
+
+describe("formatLocalDate", () => {
+  it("formats the local calendar date, not the UTC one", () => {
+    // 00:30 local on Jan 2 is still Jan 1 in UTC.
+    expect(formatLocalDate(date(2026, 1, 2, 0, 30))).toBe("2026-01-02");
+  });
+
+  it("round-trips with parseLocalDate", () => {
+    expect(formatLocalDate(parseLocalDate("2028-02-29"))).toBe("2028-02-29");
+  });
+
+  it("throws on an invalid date", () => {
+    expect(() => formatLocalDate(new Date(NaN))).toThrow(RangeError);
   });
 });
 
