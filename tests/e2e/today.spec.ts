@@ -30,3 +30,19 @@ test("Today still fits with the longest daily tip (three lines)", async ({ page 
   await expect(page.getByText("הבחילות נרגעות? זה הזמן להחזיר לתפריט")).toBeVisible();
   expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
 });
+
+test("a special week shows its surprise once", async ({ page }) => {
+  // LMP 2026-06-17 is day 133 on the frozen date: 19+0, the 20th week.
+  await completeOnboarding(page, { lmpDate: "2026-06-17" });
+  await page.getByRole("button", { name: "קדימה" }).click();
+  const surprise = page.getByRole("dialog", { name: "חצי הדרך!" });
+  await expect(surprise).toBeVisible();
+  await expect(surprise).toContainText("הבייבי כבר שומע קולות מבחוץ");
+  await surprise.getByRole("button", { name: "איזה כיף, ממשיכים" }).click();
+  await expect(surprise).toHaveCount(0);
+  await page.getByRole("button", { name: "יופי!" }).click();
+
+  await page.reload();
+  await expect(page.getByRole("heading", { name: /בוקר טוב/ })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "חצי הדרך!" })).toHaveCount(0);
+});

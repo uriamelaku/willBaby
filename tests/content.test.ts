@@ -6,6 +6,7 @@ import {
   findUnknownTestIds,
   badgesSchema,
   hospitalBagSchema,
+  surprisesSchema,
   testsSchema,
   weeksSchema,
   type DailyItem,
@@ -14,6 +15,7 @@ import {
 import badges from "@/content/he/badges.json";
 import daily from "@/content/he/daily.json";
 import hospitalBag from "@/content/he/hospitalBag.json";
+import surprises from "@/content/he/surprises.json";
 import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
 
@@ -63,6 +65,11 @@ describe("content files (build gate)", () => {
 
   it("badges.json is valid", () => {
     expect(issuesOf(badgesSchema.safeParse(badges))).toEqual([]);
+  });
+
+  it("surprises.json is valid and covers the special weeks", () => {
+    expect(issuesOf(surprisesSchema.safeParse(surprises))).toEqual([]);
+    expect(surprises.map((surprise) => surprise.week)).toEqual([12, 20, 24, 30, 37, 40]);
   });
 
   it("weekly testIds all exist in tests.json", () => {
@@ -219,6 +226,17 @@ describe("badgesSchema", () => {
     expect(badgesSchema.safeParse([{ ...badge, rule: { type: "week" } }]).success).toBe(false);
     expect(badgesSchema.safeParse([{ ...badge, rule: { type: "week", min: 50 } }]).success).toBe(false);
     expect(issuesOf(badgesSchema.safeParse([badge, badge]))).toEqual(["Duplicate id halfway"]);
+  });
+});
+
+describe("surprisesSchema", () => {
+  const surprise = { week: 20, emoji: "⛰️", effect: "balloons", title: "חצי הדרך!", text: "{baby} [שומע|שומעת|שומעים]", source: "משרד הבריאות" };
+
+  it("accepts a valid surprise and rejects bad effects, unknown variables and duplicate weeks", () => {
+    expect(surprisesSchema.safeParse([surprise]).success).toBe(true);
+    expect(surprisesSchema.safeParse([{ ...surprise, effect: "fireworks" }]).success).toBe(false);
+    expect(surprisesSchema.safeParse([{ ...surprise, text: "{babby}" }]).success).toBe(false);
+    expect(issuesOf(surprisesSchema.safeParse([surprise, surprise]))).toEqual(["Duplicate week 20"]);
   });
 });
 

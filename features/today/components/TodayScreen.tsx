@@ -7,6 +7,7 @@ import { ShareableCard } from "@/components/ShareableCard";
 import { WeekFruit } from "@/components/ui/WeekFruit";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
+import { SurpriseOverlay } from "@/features/surprises/components/SurpriseOverlay";
 import { greetingFor } from "@/features/today/today";
 import { getDailyItem, getWeekContent } from "@/lib/content";
 import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
@@ -83,6 +84,8 @@ function TodayContent({ data }: { data: PregnancyData }) {
           footnote={<p className="text-[11px] leading-tight text-sun-text">{t("common.disclaimer")}</p>}
         />
       )}
+
+      <SurpriseOverlay data={data} contentWeek={status.contentWeek} />
     </>
   );
 }

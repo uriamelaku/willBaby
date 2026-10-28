@@ -124,11 +124,24 @@ export const badgeSchema = z.strictObject({
   rule: badgeRuleSchema,
 });
 
+export const surpriseEffects = ["confetti", "balloons", "heartbeat"] as const;
+
+export const surpriseSchema = z.strictObject({
+  week: contentWeek,
+  emoji: z.string().min(1),
+  effect: z.enum(surpriseEffects),
+  title: text,
+  text,
+  /** Internal source for the fact in the text (not shown). */
+  source: text,
+});
+
 export const weeksSchema = uniqueBy(weekSchema, "week");
 export const dailySchema = uniqueBy(dailyItemSchema, "day");
 export const testsSchema = uniqueBy(medicalTestSchema, "id");
 export const hospitalBagSchema = uniqueBy(hospitalBagItemSchema, "id").min(1);
 export const badgesSchema = uniqueBy(badgeSchema, "id").min(1);
+export const surprisesSchema = uniqueBy(surpriseSchema, "week").min(1);
 
 export type WeekContent = z.infer<typeof weekSchema>;
 export type DailyItem = z.infer<typeof dailyItemSchema>;
@@ -136,6 +149,7 @@ export type MedicalTest = z.infer<typeof medicalTestSchema>;
 export type HospitalBagItem = z.infer<typeof hospitalBagItemSchema>;
 export type BadgeRule = z.infer<typeof badgeRuleSchema>;
 export type Badge = z.infer<typeof badgeSchema>;
+export type Surprise = z.infer<typeof surpriseSchema>;
 
 /** testIds in weekly summaries that do not exist in tests.json. */
 export const findUnknownTestIds = (weeks: WeekContent[], tests: MedicalTest[]) => {

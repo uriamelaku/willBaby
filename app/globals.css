@@ -119,3 +119,38 @@ body {
     transform: translateY(-12px);
   }
 }
+
+/* Weekly surprise effects; the pieces are hidden for reduced motion. */
+@keyframes confetti-fall {
+  from {
+    transform: translateY(-10vh) rotate(0deg);
+  }
+  to {
+    transform: translateY(110vh) rotate(720deg);
+  }
+}
+
+@keyframes balloon-rise {
+  from {
+    transform: translateY(110vh);
+  }
+  to {
+    transform: translateY(-20vh);
+  }
+}
+
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.25);
+  }
+  30% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.15);
+  }
+}
