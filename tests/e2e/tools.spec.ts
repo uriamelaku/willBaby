@@ -142,3 +142,29 @@ test("finishing the first kick session earns a badge, shown once", async ({ page
   await page.goto("/more");
   await expect(page.getByRole("heading", { name: "תגים (3/10)" })).toBeVisible();
 });
+
+test("family bets are added, edited and deleted", async ({ page }) => {
+  await page.getByRole("link", { name: /הימורים משפחתיים/ }).click();
+  await page.getByRole("button", { name: "הימור חדש" }).click();
+  // The date starts at the due date.
+  await expect(page.getByLabel("תאריך הלידה")).toHaveValue("2027-04-19");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await expect(page.getByText("צריך לכתוב מי מנחש")).toBeVisible();
+
+  await page.getByLabel("מי מנחש?").fill("סבתא רותי");
+  await page.getByLabel("משקל לידה (ק״ג)").fill("3.25");
+  await page.getByText("בת", { exact: true }).click();
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await expect(page.getByRole("heading", { name: "סבתא רותי" })).toBeVisible();
+  await expect(page.getByText("משקל: 3.25 ק״ג")).toBeVisible();
+  await expect(page.getByText("מין: בת")).toBeVisible();
+
+  await page.getByRole("button", { name: "עריכה" }).click();
+  await page.getByLabel("משקל לידה (ק״ג)").fill("3.4");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await expect(page.getByText("משקל: 3.4 ק״ג")).toBeVisible();
+
+  await page.getByRole("button", { name: "מחיקה" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "מחיקה" }).click();
+  await expect(page.getByText("עוד אין הימורים. מי ראשון?")).toBeVisible();
+});
