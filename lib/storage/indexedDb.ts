@@ -1,5 +1,11 @@
 import type { WillBabyDb } from "@/lib/db";
-import type { StorageAdapter, StorageRecords, TableName } from "@/lib/storage/types";
+import {
+  TABLE_NAMES,
+  type StorageAdapter,
+  type StorageRecords,
+  type StorageSnapshot,
+  type TableName,
+} from "@/lib/storage/types";
 
 export function createIndexedDbStorage(db: WillBabyDb): StorageAdapter {
   const tableOf = <T extends TableName>(table: T) =>
@@ -27,5 +33,21 @@ export function createIndexedDbStorage(db: WillBabyDb): StorageAdapter {
     },
 
     remove: (table, id) => tableOf(table).delete(id),
+
+    async exportAll() {
+      const entries = await Promise.all(
+        TABLE_NAMES.map(async (table) => [table, await tableOf(table).toArray()] as const),
+      );
+      return Object.fromEntries(entries) as StorageSnapshot;
+    },
+
+    replaceAll(snapshot) {
+      return db.transaction("rw", db.tables, async () => {
+        for (const table of TABLE_NAMES) {
+          await tableOf(table).clear();
+          await tableOf(table).bulkPut(snapshot[table]);
+        }
+      });
+    },
   };
 }

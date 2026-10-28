@@ -74,6 +74,7 @@ export interface Appointment extends BaseRecord {
 
 export interface Settings extends BaseRecord {
   disclaimerAcceptedAt?: Timestamp;
+  lastBackupAt?: Timestamp;
   schemaVersion: number;
 }
 
@@ -89,6 +90,19 @@ export interface StorageRecords {
 
 export type TableName = keyof StorageRecords;
 
+export const TABLE_NAMES = [
+  "profile",
+  "pregnancy",
+  "babies",
+  "journal",
+  "photos",
+  "appointments",
+  "settings",
+] as const satisfies readonly TableName[];
+
+/** Every record of every table, e.g. for backup and restore. */
+export type StorageSnapshot = { [T in TableName]: StorageRecords[T][] };
+
 /** Record data as passed to `save`: metadata is filled in, `id` is kept when given (update or restore). */
 export type RecordInput<T extends TableName> = Omit<StorageRecords[T], keyof BaseRecord> & {
   id?: string;
@@ -101,4 +115,7 @@ export interface StorageAdapter {
   /** Creates the record, or updates it when `id` exists; sets `createdAt` and `updatedAt`. */
   save<T extends TableName>(table: T, data: RecordInput<T>): Promise<StorageRecords[T]>;
   remove(table: TableName, id: string): Promise<void>;
+  exportAll(): Promise<StorageSnapshot>;
+  /** Replaces all data with the snapshot, keeping its ids and timestamps; all or nothing. */
+  replaceAll(snapshot: StorageSnapshot): Promise<void>;
 }

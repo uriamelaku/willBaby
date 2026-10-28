@@ -13,6 +13,7 @@ import {
   type OnboardingRecords,
 } from "@/features/onboarding/onboarding";
 import { storage } from "@/lib/storage";
+import { requestPersistentStorage } from "@/lib/storage/persist";
 import type { Role } from "@/lib/storage/types";
 import { BabiesStep, DateStep, NamesStep, RoleStep } from "./steps";
 import { WowStep } from "./WowStep";
@@ -59,6 +60,7 @@ export function OnboardingFlow() {
       if (!draft.role) throw new Error("Onboarding finished without a role");
       const records = buildOnboardingRecords({ ...draft, role: draft.role }, new Date());
       await saveOnboarding(storage, records);
+      await requestPersistentStorage();
       setSaved(records);
       setSaveState("idle");
       goNext();

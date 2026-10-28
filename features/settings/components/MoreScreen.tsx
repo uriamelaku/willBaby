@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Screen } from "@/components/Screen";
 import { Card } from "@/components/ui/Card";
 import { ChoiceGroup } from "@/components/ui/ChoiceGroup";
+import { BackupCard } from "@/features/backup/components/BackupCard";
 import { useThemePreference } from "@/features/settings/useThemePreference";
 import type { ThemePreference } from "@/lib/theme";
 
@@ -25,6 +26,9 @@ export function MoreScreen() {
           options={themes.map((value) => ({ value, label: t(`themes.${value}`) }))}
         />
       </Card>
+      <div id="backup" className="scroll-mt-4">
+        <BackupCard />
+      </div>
       <Card className="flex flex-col gap-2">
         <h2 className="font-semibold">{t("about")}</h2>
         <p>{t("aboutBody")}</p>

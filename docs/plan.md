@@ -22,7 +22,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Belly photos: one per week, compression, timeline gallery
 - ✅ Tests by week + appointments linked to tests; upcoming ones on "Today"
 - ✅ WhatsApp share (Web Share API, `wa.me` fallback)
-- ⬜ Backup and restore (JSON file) + backup reminder every 4 weeks + `navigator.storage.persist()`
+- ✅ Backup and restore (JSON file) + backup reminder every 4 weeks + `navigator.storage.persist()`
 - ⬜ PWA: manifest, icons, offline support (Serwist)
 - ✅ Dark mode (automatic + manual toggle) and medical disclaimer
 - ⬜ Playwright tests for onboarding, Today, backup/restore

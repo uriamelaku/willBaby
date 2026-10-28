@@ -8,6 +8,7 @@ import { ShareableCard } from "@/components/ShareableCard";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { WeekFruit } from "@/components/ui/WeekFruit";
+import { BackupReminder } from "@/features/backup/components/BackupReminder";
 import { UpcomingAppointments } from "@/features/appointments/components/UpcomingAppointments";
 import { DaysLeft } from "@/features/pregnancy/components/DaysLeft";
 import { useContentText } from "@/features/pregnancy/useContentText";
@@ -79,6 +80,8 @@ function TodayContent({ data }: { data: PregnancyData }) {
       )}
 
       <UpcomingAppointments />
+
+      <BackupReminder onboardedAt={data.pregnancy.createdAt} />
 
       {weekContent && (
         <ShareableCard title={t("pregnancy.funFact")} text={render(weekContent.funFact)} />
