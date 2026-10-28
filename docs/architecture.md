@@ -36,7 +36,9 @@ const trimester = week < 14 ? 1 : week < 28 ? 2 : 3;
 Edge cases: before week 4 → gentle "still early" content; after 40 → "any day now" content for weeks 41–42; after 42 → offer "is the baby born?"; validation: day 0 must be 0–300 days before today.
 
 ## Data model (Dexie / IndexedDB)
-Every record: `id` (UUID), `createdAt`, `updatedAt`.
+Every record: `id` (UUID), `createdAt`, `updatedAt` (ISO timestamps). Calendar dates (`lmpDate`, `dueDate`, journal and appointment dates) are stored as local `YYYY-MM-DD` strings so they never shift across time zones or in backups.
+
+Schema version 1 holds the MVP tables (`profile`, `pregnancy`, `babies`, `journal`, `photos`, `appointments`, `settings`); the other tables are added in later Dexie versions together with their features.
 
 | Table | Main fields |
 | --- | --- |
