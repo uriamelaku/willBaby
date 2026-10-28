@@ -120,12 +120,7 @@ export function OnboardingFlow() {
       case "wow":
         return (
           saved && (
-            <WowStep
-              role={saved.profile.role}
-              lmpDate={saved.pregnancy.lmpDate}
-              babiesCount={saved.pregnancy.babiesCount}
-              onContinue={() => router.replace("/today")}
-            />
+            <WowStep records={saved} onContinue={() => router.replace("/today")} />
           )
         );
     }

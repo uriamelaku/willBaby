@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { MAX_CONTENT_WEEK } from "@/lib/pregnancy";
+import { findUnknownVariables, hasMalformedSelector } from "@/lib/text";
 
 // Content rules: see docs/content.md. Validated at build time (`prebuild` runs tests/content.test.ts).
 
@@ -7,21 +8,17 @@ export const DAYS_PER_WEEK = 7;
 export const TOTAL_DAILY_ITEMS = MAX_CONTENT_WEEK * DAYS_PER_WEEK;
 export const MAX_DAILY_WORDS = 25;
 
-const ALLOWED_VARIABLES = new Set(["baby", "you", "partnerName"]);
-
-const unknownVariables = (text: string) =>
-  [...text.matchAll(/\{(\w*)\}/g)]
-    .map((match) => match[1])
-    .filter((name) => !ALLOWED_VARIABLES.has(name));
-
 const text = z
   .string()
   .trim()
   .min(1)
-  .refine((value) => unknownVariables(value).length === 0, {
+  .refine((value) => findUnknownVariables(value).length === 0, {
     error: (issue) =>
-      `Unknown variable(s): ${unknownVariables(issue.input as string).join(", ")}`,
-  });
+      `Unknown variable(s): ${findUnknownVariables(issue.input as string).join(", ")}`,
+  })
+  .refine((value) => !hasMalformedSelector(value), "A selector needs exactly 3 forms: [m|f|pl]")
+  // {baby} may be "הבייבי", so a prefix like ל{baby} would read "להבייבי".
+  .refine((value) => !/[א-ת]\{baby\}/.test(value), "No letter right before {baby}");
 
 const shortText = text.refine(
   (value) => value.split(/\s+/).length <= MAX_DAILY_WORDS,

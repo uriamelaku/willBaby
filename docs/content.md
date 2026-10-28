@@ -63,4 +63,9 @@ One-time full-screen moments in weeks 12, 20, 24, 30, 37 and 40 (confetti, ballo
 - General information only; the app never diagnoses or gives medical advice.
 - Partner content addresses the partner directly.
 - Variables instead of gender: `{baby}`, `{you}`, `{partnerName}`; plural forms for multiples.
+  - `{baby}`: the baby's name if set, otherwise "הבייבי"; "התאומים" for twins, "הבייביז" for 3+. Never attach a letter before it (ל{baby} would read "להבייבי"); rephrase instead.
+  - `{you}`: the user's name. `{partnerName}`: the partner's name, or "בן או בת הזוג" (pregnant user) / "בת הזוג" (partner user) when not set.
+  - Words that agree with the baby use a selector `[masculine|feminine|plural]`, e.g. `{baby} כבר [שומע|שומעת|שומעים]`. Unknown sex uses the masculine form; two or more babies use the plural.
+  - The pregnant version addresses a woman; the partner version uses wording that fits any gender.
+  - All of the above is checked at build time (`content/schema.ts`).
 - Sensitive tools (kicks, contractions) always show: "If something feels wrong, contact your doctor or the delivery room."

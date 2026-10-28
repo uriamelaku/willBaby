@@ -1,5 +1,5 @@
-import { TodayPlaceholder } from "@/features/today/components/TodayPlaceholder";
+import { TodayScreen } from "@/features/today/components/TodayScreen";
 
 export default function TodayPage() {
-  return <TodayPlaceholder />;
+  return <TodayScreen />;
 }

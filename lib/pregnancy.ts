@@ -15,6 +15,8 @@ export type CalculationMethod = "lmp" | "due" | "ivf3" | "ivf5";
 export const FULL_TERM_DAYS = 280;
 export const MAX_PREGNANCY_DAYS = 300;
 export const MAX_CONTENT_WEEK = 42;
+/** Before this week, screens show gentle "still early" wording. */
+export const EARLY_WEEKS = 4;
 
 /** Days from LMP (day 0) to the date entered for each method. */
 const INPUT_OFFSET_DAYS: Record<CalculationMethod, number> = {

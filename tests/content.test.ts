@@ -85,6 +85,18 @@ describe("weeksSchema", () => {
     expect(issuesOf(result)).toEqual(["Unknown variable(s): babby"]);
   });
 
+  it("accepts a selector and rejects a malformed one", () => {
+    const withSelector = { ...validWeek, headline: "{baby} [שומע|שומעת|שומעים] אותך" };
+    expect(weeksSchema.safeParse([withSelector]).success).toBe(true);
+    const result = weeksSchema.safeParse([{ ...validWeek, headline: "[שומע|שומעת]" }]);
+    expect(issuesOf(result)).toEqual(["A selector needs exactly 3 forms: [m|f|pl]"]);
+  });
+
+  it("rejects a letter attached to {baby}", () => {
+    const result = weeksSchema.safeParse([{ ...validWeek, headline: "שלום ל{baby}" }]);
+    expect(issuesOf(result)).toEqual(["No letter right before {baby}"]);
+  });
+
   it("rejects duplicate weeks", () => {
     const result = weeksSchema.safeParse([validWeek, validWeek]);
     expect(issuesOf(result)).toEqual(["Duplicate week 20"]);

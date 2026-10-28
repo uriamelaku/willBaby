@@ -71,14 +71,40 @@
     },
     "wow": {
       "title": "{role, select, pregnant {את בשבוע {weekAndDay}!} other {אתם בשבוע {weekAndDay}!}}",
-      "contentWeek": "השבוע ה-{week} של ההיריון",
-      "early": "עוד ממש מוקדם, אבל זה כבר קורה",
-      "daysLeft": "{status, select, today {התאריך המשוער הוא היום!} after {התאריך המשוער כבר עבר. כל יום עכשיו!} other {{days, plural, one {עוד יום אחד לתאריך המשוער} other {עוד # ימים לתאריך המשוער}}}}",
-      "fruit": "{babiesCount, plural, one {הבייבי בגודל של {fruit}} other {כל בייבי בגודל של {fruit}}}",
       "continue": "קדימה"
     }
   },
   "today": {
-    "comingSoon": "מסך היום בדרך. בינתיים: שבוע {weekAndDay}"
+    "greeting": "היי {name}",
+    "daily": {
+      "tip": "טיפ להיום",
+      "fact": "עובדה להיום",
+      "funny": "חיוך להיום",
+      "emotional": "רגע להיום",
+      "partner": "לזוג"
+    },
+    "funFact": "הידעת?",
+    "disclaimer": "מידע כללי בלבד. האפליקציה לא מאבחנת ולא מחליפה ייעוץ רפואי."
+  },
+  "pregnancy": {
+    "weekAndDay": "שבוע {weekAndDay}",
+    "contentWeek": "השבוע ה-{week} של ההיריון",
+    "early": "עוד ממש מוקדם, אבל זה כבר קורה",
+    "daysLeft": "{status, select, today {התאריך המשוער הוא היום!} after {התאריך המשוער כבר עבר. כל יום עכשיו!} other {{days, plural, one {עוד יום אחד לתאריך המשוער} other {עוד # ימים לתאריך המשוער}}}}",
+    "fruit": "{babiesCount, plural, one {{baby} בגודל של {fruit}} other {כל אחד מ{baby} בגודל של {fruit}}}",
+    "size": "בערך {cm} ס״מ ו-{grams} גרם",
+    "trimester": "{trimester, plural, =1 {שליש ראשון} =2 {שליש שני} other {שליש שלישי}}",
+    "progress": "{percent}% מהדרך",
+    "progressLabel": "התקדמות ההיריון",
+    "outOfRange": "לפי התאריך שנשמר עברו יותר מ-300 ימים מתחילת ההיריון."
+  },
+  "text": {
+    "baby": "הבייבי",
+    "twins": "התאומים",
+    "multiples": "הבייביז",
+    "partnerFallback": {
+      "pregnant": "בן או בת הזוג",
+      "partner": "בת הזוג"
+    }
   }
 }
