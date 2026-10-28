@@ -29,7 +29,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Playwright tests for onboarding, Today, backup/restore
 
 ## Phase 2 — Tools & gamification
-- ⬜ Kick counter
+- ✅ Kick counter
 - ⬜ Contraction timer
 - ⬜ Weight tracking with chart
 - ⬜ Hospital bag checklist (default + custom items, in-app reminder from week 32)
