@@ -218,7 +218,9 @@
     "appointmentsDescription": "הבדיקות המקובלות לפי שבוע, והתורים שלכם",
     "more": "כלים נוספים בדרך: מונה בעיטות, צירים, משקל, תיק לידה ושמות.",
     "kicks": "מונה בעיטות",
-    "kicksDescription": "סופרים את התזוזות בבטן"
+    "kicksDescription": "סופרים את התזוזות בבטן",
+    "contractions": "טיימר צירים",
+    "contractionsDescription": "כמה זמן כל ציר, וכמה זמן ביניהם"
   },
   "appointments": {
     "title": "בדיקות ותורים",
@@ -309,5 +311,21 @@
     "summary": "{count, plural, one {תזוזה אחת} other {# תזוזות}} ב-{time}",
     "timeToGoal": "{goal} תזוזות תוך {time}",
     "deleteTitle": "למחוק את הספירה?"
+  },
+  "contractions": {
+    "title": "טיימר צירים",
+    "intro": "לוחצים כשציר מתחיל, ושוב כשהוא נגמר. הטיימר מחשב את משך הצירים ואת הזמן ביניהם.",
+    "start": "ציר התחיל",
+    "stop": "הציר נגמר",
+    "lastHour": "בשעה האחרונה",
+    "averageDuration": "משך ממוצע",
+    "averageInterval": "מרווח ממוצע",
+    "startedAt": "התחלה",
+    "duration": "משך",
+    "interval": "מרווח",
+    "clear": "מחיקת הרשימה",
+    "history": "רשימות קודמות",
+    "sessionCount": "{count, plural, one {ציר אחד} other {# צירים}}",
+    "deleteTitle": "למחוק את רשימת הצירים?"
   }
 }

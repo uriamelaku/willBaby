@@ -30,7 +30,7 @@ Mark ✅ only after tests, lint and build actually passed.
 
 ## Phase 2 — Tools & gamification
 - ✅ Kick counter
-- ⬜ Contraction timer
+- ✅ Contraction timer
 - ⬜ Weight tracking with chart
 - ⬜ Hospital bag checklist (default + custom items, in-app reminder from week 32)
 - ⬜ Baby names list with two-person voting on one device ("whose turn")

@@ -5,6 +5,7 @@ import { Screen } from "@/components/Screen";
 const tools = [
   { href: "/tools/appointments", icon: "🩺", title: "appointments", description: "appointmentsDescription" },
   { href: "/tools/kicks", icon: "👣", title: "kicks", description: "kicksDescription" },
+  { href: "/tools/contractions", icon: "⏱️", title: "contractions", description: "contractionsDescription" },
 ] as const;
 
 export function ToolsScreen() {
