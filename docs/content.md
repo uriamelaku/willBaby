@@ -70,3 +70,12 @@ One-time full-screen moments in weeks 12, 20, 24, 30, 37 and 40 (confetti, ballo
   - Weekly summaries have one version, so `baby`, `body`, `tips` and `funFact` are written impersonally (fit both roles); only `partner` addresses the partner.
   - All of the above is checked at build time (`content/schema.ts`).
 - Sensitive tools (kicks, contractions) always show: "If something feels wrong, contact your doctor or the delivery room."
+
+## Review log
+**2026-10-28 – medical content checked against public sources** (Ministry of Health circular, Clalit, Maccabi, Kol-Zchut; the official pages could not be opened from the build environment, so ranges were checked through search results that quote them):
+- `gbs`: Ministry of Health circular 6/2023 (Dec 2023) recommends universal GBS screening for all pregnant women in weeks 35–37 → no longer optional; texts on days 238 and week 36 updated.
+- `early-anatomy-scan`: weeks 14–17 (Clalit, Maccabi; the Ministry cites 13–17) instead of 14–16; day 84, week 15 tip and week 17 `testIds` updated.
+- Confirmed: first ultrasound 6–9, nuchal translucency 11–14, second-trimester screening 16–20 (Maccabi 16–19/16–20), late anatomy scan 20–24 (some sources 19–25), glucose challenge 24–28, monitoring from 40.
+- Fruit sizes follow the common size table (crown–rump until week 19, crown–heel from week 20; the jump is explained on day 134).
+- Daily facts (development milestones, blood volume +40–50%, ~200 g/week late, few babies born on the due date) match general NHS week-by-week information; no errors found. Wording is general by design.
+- Still open: a line-by-line review by someone medical; checking test ranges directly on gov.il.
