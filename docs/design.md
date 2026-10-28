@@ -28,3 +28,9 @@ AA contrast at least, touch targets ≥ 44px, `aria-label` for emoji, respect `p
 
 ## Future
 Replace emoji with original SVG fruit illustrations with faces. `<WeekFruit week={n}/>` is isolated so the swap changes no screen.
+
+## Approved screens
+- **Today:** [`design/today-screen.md`](design/today-screen.md) + visual reference [`design/today-screen.html`](design/today-screen.html).
+
+## Accessibility note on brand color
+`--brand` (#FF8A7A) is for fills, the logo and the ring. Text on light backgrounds and primary-button text use a darker brand shade that passes AA, e.g. `#C4483A` (active nav tab, links).

@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SCHEMA_VERSION, WillBabyDb } from "../lib/db";
 import { createIndexedDbStorage } from "../lib/storage/indexedDb";
-import type { RecordInput, StorageAdapter } from "../lib/storage/types";
+import { emptySnapshot, type RecordInput, type StorageAdapter } from "../lib/storage/types";
 
 const journalEntry: RecordInput<"journal"> = {
   date: "2026-03-15",
@@ -109,5 +109,12 @@ describe("IndexedDB StorageAdapter", () => {
       status: "active",
     });
     expect((await storage.get("pregnancy", saved.id))?.lmpDate).toBe("2026-01-01");
+  });
+
+  it("replaceAll with an empty snapshot deletes all data", async () => {
+    await storage.save("journal", journalEntry);
+    await storage.save("settings", { schemaVersion: SCHEMA_VERSION });
+    await storage.replaceAll(emptySnapshot());
+    expect(await storage.exportAll()).toEqual(emptySnapshot());
   });
 });

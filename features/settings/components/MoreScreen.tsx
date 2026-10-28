@@ -5,6 +5,8 @@ import { Screen } from "@/components/Screen";
 import { Card } from "@/components/ui/Card";
 import { ChoiceGroup } from "@/components/ui/ChoiceGroup";
 import { BackupCard } from "@/features/backup/components/BackupCard";
+import { PregnancyDetailsCard } from "@/features/pregnancy/components/PregnancyDetailsCard";
+import { DeleteDataCard } from "@/features/settings/components/DeleteDataCard";
 import { useThemePreference } from "@/features/settings/useThemePreference";
 import type { ThemePreference } from "@/lib/theme";
 
@@ -17,6 +19,7 @@ export function MoreScreen() {
   return (
     <Screen>
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
+      <PregnancyDetailsCard />
       <Card>
         <ChoiceGroup
           legend={t("appearance")}
@@ -37,6 +40,7 @@ export function MoreScreen() {
         <h2 className="font-semibold">{t("medical")}</h2>
         <p>{t("medicalBody")}</p>
       </Card>
+      <DeleteDataCard />
     </Screen>
   );
 }

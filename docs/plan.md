@@ -25,6 +25,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Backup and restore (JSON file) + backup reminder every 4 weeks + `navigator.storage.persist()`
 - ✅ PWA: manifest, icons, offline support (hand-written service worker)
 - ✅ Dark mode (automatic + manual toggle) and medical disclaimer
+- ✅ Update the due date (e.g. after an ultrasound) with history, and delete all data from More
 - ✅ Playwright tests for onboarding, Today, backup/restore
 
 ## Phase 2 — Tools & gamification

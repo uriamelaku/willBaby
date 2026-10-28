@@ -103,6 +103,10 @@ export const TABLE_NAMES = [
 /** Every record of every table, e.g. for backup and restore. */
 export type StorageSnapshot = { [T in TableName]: StorageRecords[T][] };
 
+/** A snapshot with no records; `replaceAll(emptySnapshot())` deletes all user data. */
+export const emptySnapshot = () =>
+  Object.fromEntries(TABLE_NAMES.map((table) => [table, []])) as unknown as StorageSnapshot;
+
 /** Record data as passed to `save`: metadata is filled in, `id` is kept when given (update or restore). */
 export type RecordInput<T extends TableName> = Omit<StorageRecords[T], keyof BaseRecord> & {
   id?: string;
