@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Screen } from "@/components/Screen";
 import { Card } from "@/components/ui/Card";
 import { ChoiceGroup } from "@/components/ui/ChoiceGroup";
 import { useThemePreference } from "@/features/settings/useThemePreference";
@@ -13,7 +14,7 @@ export function MoreScreen() {
   const [theme, setTheme] = useThemePreference();
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-4 px-4 py-6">
+    <Screen>
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
       <Card>
         <ChoiceGroup
@@ -32,6 +33,6 @@ export function MoreScreen() {
         <h2 className="font-semibold">{t("medical")}</h2>
         <p>{t("medicalBody")}</p>
       </Card>
-    </main>
+    </Screen>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { Screen, StorageError } from "@/components/Screen";
 import { ShareableCard } from "@/components/ShareableCard";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
@@ -14,18 +15,13 @@ import { getDailyItem, getWeekContent } from "@/lib/content";
 import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
 
 export function TodayScreen() {
-  const t = useTranslations();
   const state = usePregnancy();
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-4 px-4 py-6">
-      {state.kind === "error" && (
-        <p role="alert" className="text-danger">
-          {t("common.storageError")}
-        </p>
-      )}
+    <Screen>
+      {state.kind === "error" && <StorageError />}
       {state.kind === "ready" && <TodayContent data={state.data} />}
-    </main>
+    </Screen>
   );
 }
 

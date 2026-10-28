@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { Screen, StorageError } from "@/components/Screen";
 import { ShareableCard } from "@/components/ShareableCard";
 import { Card } from "@/components/ui/Card";
 import { WeekFruit } from "@/components/ui/WeekFruit";
@@ -13,18 +14,13 @@ import { getWeekContent } from "@/lib/content";
 import { MAX_CONTENT_WEEK, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
 
 export function WeekScreen({ week }: { week: number }) {
-  const t = useTranslations();
   const state = usePregnancy();
 
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-4 px-4 py-6">
-      {state.kind === "error" && (
-        <p role="alert" className="text-danger">
-          {t("common.storageError")}
-        </p>
-      )}
+    <Screen>
+      {state.kind === "error" && <StorageError />}
       {state.kind === "ready" && <WeekContentView week={week} data={state.data} />}
-    </main>
+    </Screen>
   );
 }
 
