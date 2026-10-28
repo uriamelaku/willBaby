@@ -13,9 +13,6 @@ import daily from "@/content/he/daily.json";
 import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
 
-// Turn on once all 42 weeks and 294 daily items are written (tracked in docs/plan.md).
-const REQUIRE_COMPLETE_CONTENT = false;
-
 const validWeek: WeekContent = {
   week: 20,
   fruit: { emoji: "🍌", name: "בננה" },
@@ -60,7 +57,7 @@ describe("content files (build gate)", () => {
     expect(findUnknownTestIds(weeksSchema.parse(weeks), testsSchema.parse(tests))).toEqual([]);
   });
 
-  it.runIf(REQUIRE_COMPLETE_CONTENT)("has all 42 weeks and 294 daily items", () => {
+  it("has all 42 weeks and 294 daily items (missing content fails the build)", () => {
     expect(findMissingWeeks(weeksSchema.parse(weeks))).toEqual([]);
     expect(findMissingDays(dailySchema.parse(daily))).toEqual([]);
   });
