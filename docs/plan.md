@@ -13,7 +13,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ⬜ GitHub repository + first Vercel deployment (only with explicit approval)
 
 ## Phase 1 — MVP (core + basic tools)
-- ⬜ Onboarding: role, names, calculation method, number of babies, optional sex and name, "wow" screen
+- ✅ Onboarding: role, names, calculation method, number of babies, optional sex and name, "wow" screen
 - ⬜ "Today" screen: week+day, fruit, countdown, progress bar, daily item, fact card, shortcuts
 - ⬜ Weekly summary with navigation between weeks and role-based version
 - ⬜ Bottom navigation: Today · Week · Journal · Tools · More

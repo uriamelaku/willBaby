@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { locale } from "@/i18n/request";
 import "./globals.css";
 
 const rubik = Rubik({
@@ -8,15 +11,17 @@ const rubik = Rubik({
   weight: ["400", "600"],
 });
 
-export const metadata: Metadata = {
-  title: "will·B·aby",
-  description: "מעקב היריון יומי ושבועי, בחום ועם קורט הומור",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("metadata");
+  return { title: "will·B·aby", description: t("description") };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="he" dir="rtl" className={`${rubik.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang={locale} dir="rtl" className={`${rubik.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col">
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      </body>
     </html>
   );
 }

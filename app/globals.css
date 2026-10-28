@@ -8,6 +8,9 @@
   --bg: #fff8f3;
   --card: #ffffff;
   --text: #3b3344;
+  /* Text on brand-colored surfaces; dark in both themes for AA contrast. */
+  --on-brand: #3b3344;
+  --danger: #b3261e;
   color-scheme: light;
 }
 
@@ -19,6 +22,7 @@
     --bg: #1e1b24;
     --card: #2a2633;
     --text: #f3eef6;
+    --danger: #ffb4ab;
     color-scheme: dark;
   }
 }
@@ -30,6 +34,7 @@
   --bg: #1e1b24;
   --card: #2a2633;
   --text: #f3eef6;
+  --danger: #ffb4ab;
   color-scheme: dark;
 }
 
@@ -40,6 +45,8 @@
   --color-bg: var(--bg);
   --color-card: var(--card);
   --color-text: var(--text);
+  --color-on-brand: var(--on-brand);
+  --color-danger: var(--danger);
   --font-sans: var(--font-rubik), system-ui, sans-serif;
 }
 

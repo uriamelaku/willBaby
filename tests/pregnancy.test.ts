@@ -3,6 +3,7 @@ import {
   FULL_TERM_DAYS,
   dueDateFromLmp,
   formatLocalDate,
+  getInputDateRange,
   getPregnancyStatus,
   lmpFromInput,
   parseLocalDate,
@@ -103,6 +104,33 @@ describe("dueDateFromLmp", () => {
 
   it("crosses a leap day correctly", () => {
     expect(dueDateFromLmp(date(2027, 6, 1))).toEqual(date(2028, 3, 7));
+  });
+});
+
+describe("getInputDateRange", () => {
+  const today = date(2026, 6, 1, 15, 30);
+
+  it.each([
+    ["lmp", date(2025, 8, 5), date(2026, 6, 1)],
+    ["due", date(2026, 5, 12), date(2027, 3, 8)],
+    ["ivf3", date(2025, 8, 22), date(2026, 6, 18)],
+    ["ivf5", date(2025, 8, 24), date(2026, 6, 20)],
+  ] as const)("%s: %s to %s", (method, min, max) => {
+    expect(getInputDateRange(method, today)).toEqual({ min, max });
+  });
+
+  it("range edges convert to valid day-0 dates and one day past does not", () => {
+    for (const method of ["lmp", "due", "ivf3", "ivf5"] as const) {
+      const { min, max } = getInputDateRange(method, today);
+      expect(validateLmp(lmpFromInput(method, min), today).valid).toBe(true);
+      expect(validateLmp(lmpFromInput(method, max), today).valid).toBe(true);
+      const beforeMin = new Date(min);
+      beforeMin.setDate(beforeMin.getDate() - 1);
+      const afterMax = new Date(max);
+      afterMax.setDate(afterMax.getDate() + 1);
+      expect(validateLmp(lmpFromInput(method, beforeMin), today).valid).toBe(false);
+      expect(validateLmp(lmpFromInput(method, afterMax), today).valid).toBe(false);
+    }
   });
 });
 

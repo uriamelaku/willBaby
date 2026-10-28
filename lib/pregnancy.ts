@@ -16,8 +16,13 @@ export const FULL_TERM_DAYS = 280;
 export const MAX_PREGNANCY_DAYS = 300;
 export const MAX_CONTENT_WEEK = 42;
 
-/** Days from LMP (day 0) to the transfer date, per embryo age. */
-const IVF_TRANSFER_OFFSET_DAYS = { ivf3: 17, ivf5: 19 } as const;
+/** Days from LMP (day 0) to the date entered for each method. */
+const INPUT_OFFSET_DAYS: Record<CalculationMethod, number> = {
+  lmp: 0,
+  due: FULL_TERM_DAYS,
+  ivf3: 17,
+  ivf5: 19,
+};
 
 export type Trimester = 1 | 2 | 3;
 
@@ -70,16 +75,21 @@ export function formatLocalDate(date: Date): string {
 /** Converts any input method to day 0 (LMP). */
 export function lmpFromInput(method: CalculationMethod, inputDate: Date): Date {
   assertValidDate(inputDate);
-  const date = startOfDay(inputDate);
-  switch (method) {
-    case "lmp":
-      return date;
-    case "due":
-      return addDays(date, -FULL_TERM_DAYS);
-    case "ivf3":
-    case "ivf5":
-      return addDays(date, -IVF_TRANSFER_OFFSET_DAYS[method]);
-  }
+  return addDays(startOfDay(inputDate), -INPUT_OFFSET_DAYS[method]);
+}
+
+/** The input dates a method accepts, matching `validateLmp` (day 0 within 0..300 days before today). */
+export function getInputDateRange(
+  method: CalculationMethod,
+  today: Date,
+): { min: Date; max: Date } {
+  assertValidDate(today);
+  const offset = INPUT_OFFSET_DAYS[method];
+  const day = startOfDay(today);
+  return {
+    min: addDays(day, offset - MAX_PREGNANCY_DAYS),
+    max: addDays(day, offset),
+  };
 }
 
 export function dueDateFromLmp(lmpDate: Date): Date {
