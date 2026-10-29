@@ -119,7 +119,8 @@
     "shareProgress": "{role, select, pregnant {אני בשבוע {weekAndDay}} other {אנחנו בשבוע {weekAndDay}}} של ההיריון, {percent} מהדרך!",
     "shareProgressLabel": "שיתוף ההתקדמות של השבוע",
     "weekTip": "טיפ לשבוע",
-    "moreTips": "עוד טיפ"
+    "moreTips": "עוד טיפ",
+    "cardTitle": "{title} · שבוע {week}"
   },
   "pregnancy": {
     "contentWeek": "השבוע ה-{week} של ההיריון",

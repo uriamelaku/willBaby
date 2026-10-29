@@ -82,3 +82,5 @@ One-time full-screen moments in weeks 12, 20, 24, 30, 37 and 40 (confetti, ballo
 - Fruit sizes follow the common size table (crown–rump until week 19, crown–heel from week 20; the jump is explained on day 134).
 - Daily facts (development milestones, blood volume +40–50%, ~200 g/week late, few babies born on the due date) match general NHS week-by-week information; no errors found. Wording is general by design.
 - Still open: a line-by-line review by someone medical; checking test ranges directly on gov.il.
+
+**2026-10-29 – daily items reviewed for stage fit:** the emotional and partner items already follow the stage; 13 generic or repeated tips (days 6, 69, 118, 147, 167, 175, 196, 209, 217, 231, 244, 265, 279) were rewritten to fit their week (preconception check, iron, first movements, birth course, choosing a hospital, pertussis vaccine, maternity leave, paediatrician, delivery-room number, when to leave, car seat, waiting past the due date). Today's card title now shows the week.

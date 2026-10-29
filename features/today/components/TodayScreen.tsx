@@ -96,7 +96,10 @@ function TodayContent({ data }: { data: PregnancyData }) {
       {dailyItem && dailyText && (
         <ShareableCard
           tone="sun"
-          title={weekTip ? t("today.weekTip") : t(`today.daily.${dailyItem.type}`)}
+          title={t("today.cardTitle", {
+            title: weekTip ? t("today.weekTip") : t(`today.daily.${dailyItem.type}`),
+            week: status.contentWeek,
+          })}
           text={render(weekTip ?? dailyText)}
           footnote={<p className="text-[11px] leading-tight text-sun-text">{t("common.disclaimer")}</p>}
           action={
