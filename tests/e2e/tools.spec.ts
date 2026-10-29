@@ -189,3 +189,20 @@ test("the sex reveal sets the sex and the wording follows it", async ({ page }) 
   await page.goto("/reveal");
   await expect(page.getByRole("heading", { name: "כבר יודעים!" })).toBeVisible();
 });
+
+test("up to four tools can be pinned to Today", async ({ page }) => {
+  const pin = (tool: string) => page.getByRole("button", { name: `במסך הבית: ${tool}` });
+  // The defaults for week 16 are pinned until the user changes them.
+  await expect(pin("מעקב משקל")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByText(/אפשר עד 4 במסך הבית/)).toBeVisible();
+  await expect(pin("מונה בעיטות")).toBeDisabled();
+
+  await pin("הימורים משפחתיים").click();
+  await expect(pin("הימורים משפחתיים")).toHaveAttribute("aria-pressed", "false");
+  await pin("מונה בעיטות").click();
+  await expect(pin("מונה בעיטות")).toHaveAttribute("aria-pressed", "true");
+
+  await page.getByRole("link", { name: "היום" }).click();
+  const shortcuts = page.getByRole("navigation", { name: "קיצורי דרך לכלים" });
+  await expect(shortcuts.getByRole("link")).toHaveText([/מונה בעיטות/, /מעקב משקל/, /תיק לידה/, /שמות/]);
+});

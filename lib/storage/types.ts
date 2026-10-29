@@ -135,6 +135,8 @@ export interface EarnedBadge extends BaseRecord {
 export interface Settings extends BaseRecord {
   /** Weeks whose one-time surprise was shown. */
   seenSurprises?: number[];
+  /** Tool ids shown as shortcuts on Today (at most 4); missing until the user picks. */
+  homeShortcuts?: string[];
   disclaimerAcceptedAt?: Timestamp;
   lastBackupAt?: Timestamp;
   schemaVersion: number;

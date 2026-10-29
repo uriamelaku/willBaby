@@ -86,13 +86,3 @@ export function upcomingItems(
     .sort((a, b) => a.daysUntil - b.daysUntil || (a.kind === "appointment" ? -1 : 1))
     .slice(0, limit);
 }
-
-/** From this content week the kick counter and contraction timer lead the Today shortcuts. */
-export const LATE_SHORTCUTS_WEEK = 28;
-
-export type ShortcutTool = "kicks" | "contractions" | "weight" | "hospitalBag" | "names" | "bets";
-
-export const shortcutsFor = (contentWeek: number): ShortcutTool[] =>
-  contentWeek >= LATE_SHORTCUTS_WEEK
-    ? ["kicks", "contractions", "hospitalBag", "weight"]
-    : ["weight", "names", "hospitalBag", "bets"];

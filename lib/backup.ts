@@ -88,6 +88,7 @@ const appointmentSchema: z.ZodType<Appointment> = z.object({
 const settingsSchema: z.ZodType<Settings> = z.object({
   ...base,
   seenSurprises: z.array(week).optional(),
+  homeShortcuts: z.array(shortText).max(4).optional(),
   disclaimerAcceptedAt: timestamp.optional(),
   lastBackupAt: timestamp.optional(),
   schemaVersion: z.int().min(1),
