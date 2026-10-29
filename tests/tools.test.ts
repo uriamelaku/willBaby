@@ -17,9 +17,9 @@ const settings = (homeShortcuts?: string[]): Settings => ({
 });
 
 describe("home shortcuts", () => {
-  it("defaults by stage, leading with kicks and contractions from week 28", () => {
-    expect(defaultShortcuts(27)).toEqual(["weight", "names", "hospitalBag", "bets"]);
-    expect(defaultShortcuts(28)).toEqual(["kicks", "contractions", "hospitalBag", "weight"]);
+  it("defaults to the library and weight, adding kicks and contractions from week 28", () => {
+    expect(defaultShortcuts(27)).toEqual(["library", "weight", "hospitalBag", "names"]);
+    expect(defaultShortcuts(28)).toEqual(["library", "kicks", "contractions", "weight"]);
     expect(homeShortcuts(settings(), 20)).toEqual(defaultShortcuts(20));
     expect(homeShortcuts(undefined, 30)).toEqual(defaultShortcuts(30));
   });
@@ -35,7 +35,7 @@ describe("home shortcuts", () => {
     expect(toggleShortcut(["kicks", "weight"], "kicks")).toEqual(["weight"]);
     const full = defaultShortcuts(20);
     expect(full).toHaveLength(MAX_HOME_SHORTCUTS);
-    expect(toggleShortcut(full, "appointments")).toBeNull();
+    expect(toggleShortcut(full, "bets")).toBeNull();
   });
 
   it("stores the choice on the settings record", () => {

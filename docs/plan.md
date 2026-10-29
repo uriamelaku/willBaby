@@ -45,7 +45,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Week screen opens past weeks and the current one only
 - ✅ Correct the due date or the last period date (with history)
 - ✅ Names: a saved list first, couple voting optional
-- ✅ Knowledge library (`content/he/library.json`): topics, "what's normal?", rights in Israel
+- ✅ Knowledge library (`content/he/library.json`): 54 topics in pregnancy, birth, after birth, "what's normal?" and rights in Israel, with search; library and weight are default Today shortcuts
 - ✅ Content review of test windows (GBS, early anatomy scan); see `docs/content.md`
 
 ## Phase 3 — After birth

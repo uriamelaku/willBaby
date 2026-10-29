@@ -136,7 +136,7 @@ export const surpriseSchema = z.strictObject({
   source: text,
 });
 
-export const librarySections = ["topics", "normal", "rights"] as const;
+export const librarySections = ["pregnancy", "birth", "afterBirth", "normal", "rights"] as const;
 
 export const libraryEntrySchema = z.strictObject({
   title: text,

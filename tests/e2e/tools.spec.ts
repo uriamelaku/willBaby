@@ -197,14 +197,15 @@ test("up to four tools can be pinned to Today", async ({ page }) => {
   await expect(page.getByText(/אפשר עד 4 במסך הבית/)).toBeVisible();
   await expect(pin("מונה בעיטות")).toBeDisabled();
 
-  await pin("הימורים משפחתיים").click();
-  await expect(pin("הימורים משפחתיים")).toHaveAttribute("aria-pressed", "false");
+  await expect(pin("ספריית ידע")).toHaveAttribute("aria-pressed", "true");
+  await pin("שמות").click();
+  await expect(pin("שמות")).toHaveAttribute("aria-pressed", "false");
   await pin("מונה בעיטות").click();
   await expect(pin("מונה בעיטות")).toHaveAttribute("aria-pressed", "true");
 
   await page.getByRole("link", { name: "היום" }).click();
   const shortcuts = page.getByRole("navigation", { name: "קיצורי דרך לכלים" });
-  await expect(shortcuts.getByRole("link")).toHaveText([/מונה בעיטות/, /מעקב משקל/, /תיק לידה/, /שמות/]);
+  await expect(shortcuts.getByRole("link")).toHaveText([/ספריית ידע/, /מונה בעיטות/, /מעקב משקל/, /תיק לידה/]);
 });
 
 test("the knowledge library opens topics with when-to-call notes and official links", async ({ page }) => {
@@ -216,6 +217,15 @@ test("the knowledge library opens topics with when-to-call notes and official li
 
   await page.getByRole("link", { name: "לכל הנושאים" }).click();
   await page.getByRole("link", { name: /חופשת לידה ודמי לידה/ }).click();
-  await expect(page.getByRole("link", { name: /כל-זכות: חופשת לידה/ })).toHaveAttribute("href", /kolzchut\.org\.il/);
+  await expect(page.getByRole("link", { name: /כל-זכות: זכויות בהיריון ובלידה/ })).toHaveAttribute("href", /kolzchut\.org\.il/);
   await expect(page.getByRole("link", { name: "כלים" })).toHaveAttribute("aria-current", "page");
+});
+
+test("the library can be searched", async ({ page }) => {
+  await page.getByRole("link", { name: /ספריית ידע/ }).click();
+  await page.getByLabel("חיפוש בספרייה").fill("אפידורל");
+  await expect(page.getByRole("link", { name: /הקלה בכאב בלידה/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /צרבת/ })).toHaveCount(0);
+  await page.getByLabel("חיפוש בספרייה").fill("דינוזאור");
+  await expect(page.getByText("לא מצאנו נושא כזה.", { exact: false })).toBeVisible();
 });

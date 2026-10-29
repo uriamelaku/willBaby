@@ -76,7 +76,7 @@ describe("content files (build gate)", () => {
 
   it("library.json is valid and fills every section", () => {
     expect(issuesOf(librarySchema.safeParse(library))).toEqual([]);
-    expect(new Set(library.map((topic) => topic.section))).toEqual(new Set(["topics", "normal", "rights"]));
+    expect(new Set(library.map((topic) => topic.section))).toEqual(new Set(["pregnancy", "birth", "afterBirth", "normal", "rights"]));
   });
 
   it("weekly testIds all exist in tests.json", () => {
@@ -250,7 +250,7 @@ describe("surprisesSchema", () => {
 describe("librarySchema", () => {
   const topic = {
     id: "nutrition",
-    section: "topics",
+    section: "pregnancy",
     icon: "🥗",
     title: "תזונה",
     intro: "עקרונות",
