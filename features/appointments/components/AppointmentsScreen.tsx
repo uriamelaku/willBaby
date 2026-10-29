@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
 import { Screen, StorageError } from "@/components/Screen";
@@ -9,6 +10,7 @@ import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import {
   emptyAppointmentInput,
+  formFromLink,
   sortAppointments,
   testTiming,
   toAppointmentInput,
@@ -52,7 +54,10 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
   const t = useTranslations();
   const { records, failed, reload } = useRecords("appointments");
   const [today] = useState(() => new Date());
-  const [editing, setEditing] = useState<Editing | null>(null);
+  const query = useSearchParams();
+  const router = useRouter();
+  // undefined until the user opens or closes a form: until then a link from Today decides.
+  const [chosen, setChosen] = useState<Editing | null>();
   const [deleting, setDeleting] = useState<Appointment | null>(null);
   const [actionFailed, setActionFailed] = useState(false);
   const week = findPregnancyStatus(parseLocalDate(data.pregnancy.lmpDate), today)?.contentWeek;
@@ -66,6 +71,15 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
       console.error(description, error);
       setActionFailed(true);
     }
+  };
+
+  const editing =
+    chosen !== undefined ? chosen : records && formFromLink(new URLSearchParams(query), records, getMedicalTests());
+
+  const setEditing = (next: Editing | null) => {
+    setChosen(next);
+    // Drop ?book= / ?edit= so a reload does not reopen the form.
+    if (query.size > 0) router.replace("/tools/appointments");
   };
 
   const save = async (input: AppointmentInput) => {
@@ -101,6 +115,7 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
         <h2 className="text-xl font-semibold">{t("appointments.mine")}</h2>
         {editing ? (
           <AppointmentForm
+            key={editing.appointment?.id ?? editing.input.linkedTestId ?? "new"}
             initial={editing.input}
             onSave={save}
             onCancel={() => setEditing(null)}

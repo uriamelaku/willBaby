@@ -86,3 +86,10 @@ export function upcomingItems(
     .sort((a, b) => a.daysUntil - b.daysUntil || (a.kind === "appointment" ? -1 : 1))
     .slice(0, limit);
 }
+
+/** Overall progress as a fraction rounded down to whole percents (day 107 of 280 → 0.38). */
+export const progressFraction = (daysPregnant: number) =>
+  Math.min(Math.floor((daysPregnant / FULL_TERM_DAYS) * 100), 100) / 100;
+
+export const daysLeftStatus = (daysLeft: number) =>
+  daysLeft > 0 ? "before" : daysLeft === 0 ? "today" : "after";

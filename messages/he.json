@@ -115,7 +115,9 @@
       "label": "תמונת בטן",
       "week": "שבוע {week}"
     },
-    "dueDate": "תאריך משוער: {date}"
+    "dueDate": "תאריך משוער: {date}",
+    "shareProgress": "{role, select, pregnant {אני בשבוע {weekAndDay}} other {אנחנו בשבוע {weekAndDay}}} של ההיריון, {percent} מהדרך!",
+    "shareProgressLabel": "שיתוף ההתקדמות של השבוע"
   },
   "pregnancy": {
     "contentWeek": "השבוע ה-{week} של ההיריון",

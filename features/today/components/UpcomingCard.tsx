@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { CheckIcon } from "@/components/icons";
+import { bookTestHref, editAppointmentHref } from "@/features/appointments/appointments";
 import { upcomingItems, type UpcomingItem } from "@/features/today/today";
 import { getMedicalTests } from "@/lib/content";
 import { parseLocalDate } from "@/lib/pregnancy";
@@ -52,24 +53,29 @@ export function UpcomingCard({ daysPregnant, today }: { daysPregnant: number; to
           {items.map((item) => {
             const booked = item.kind === "appointment";
             return (
-              <li key={`${item.kind}-${item.id}`} className="relative flex flex-col items-start gap-1">
-                {booked ? (
-                  <span aria-hidden className="flex size-4 items-center justify-center rounded-full bg-mint ring-4 ring-mint-soft">
-                    <CheckIcon className="size-3 text-white" />
-                  </span>
-                ) : (
-                  <span aria-hidden className="size-4 rounded-full border-2 border-dashed border-brand bg-card" />
-                )}
-                <span className="line-clamp-1 text-sm leading-tight font-semibold">{item.title}</span>
-                <span className={`text-[13px] ${booked ? "text-muted" : "font-semibold text-brand-text"}`}>
-                  <span className="sr-only">{booked ? t("booked") : ""} </span>
-                  {detail(item)}
-                </span>
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${booked ? "bg-mint-soft text-mint-text" : "bg-peach-soft text-peach-text"}`}
+              <li key={`${item.kind}-${item.id}`} className="relative">
+                <Link
+                  href={booked ? editAppointmentHref(item.id) : bookTestHref(item.id)}
+                  className="flex flex-col items-start gap-1"
                 >
-                  {chip(item)}
-                </span>
+                  {booked ? (
+                    <span aria-hidden className="flex size-4 items-center justify-center rounded-full bg-mint ring-4 ring-mint-soft">
+                      <CheckIcon className="size-3 text-white" />
+                    </span>
+                  ) : (
+                    <span aria-hidden className="size-4 rounded-full border-2 border-dashed border-brand bg-card" />
+                  )}
+                  <span className="line-clamp-1 text-sm leading-tight font-semibold">{item.title}</span>
+                  <span className={`text-[13px] ${booked ? "text-muted" : "font-semibold text-brand-text"}`}>
+                    <span className="sr-only">{booked ? t("booked") : ""} </span>
+                    {detail(item)}
+                  </span>
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${booked ? "bg-mint-soft text-mint-text" : "bg-peach-soft text-peach-text"}`}
+                  >
+                    {chip(item)}
+                  </span>
+                </Link>
               </li>
             );
           })}

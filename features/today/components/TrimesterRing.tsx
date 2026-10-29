@@ -4,6 +4,7 @@ import {
   RING_RADIUS,
   RING_SEGMENT,
   RING_STARTS,
+  progressFraction,
   trimesterRing,
 } from "@/features/today/today";
 import type { PregnancyStatus } from "@/lib/pregnancy";
@@ -14,7 +15,7 @@ const STROKE = 12;
 export function TrimesterRing({ status }: { status: PregnancyStatus }) {
   const t = useTranslations();
   const format = useFormatter();
-  const percent = format.number(Math.floor(status.progress * 100) / 100, { style: "percent" });
+  const percent = format.number(progressFraction(status.daysPregnant), { style: "percent" });
   const ring = trimesterRing(status.daysPregnant);
   const arc = (start: number, length: number, className: string) => (
     <circle

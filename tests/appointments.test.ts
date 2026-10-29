@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  bookTestHref,
+  editAppointmentHref,
   emptyAppointmentInput,
+  formFromLink,
   sortAppointments,
   testTiming,
   toAppointmentInput,
@@ -90,5 +93,33 @@ describe("testTiming", () => {
     [15, "past"],
   ] as const)("week %i is %s", (week, timing) => {
     expect(testTiming(test, week)).toBe(timing);
+  });
+});
+
+describe("links from Today", () => {
+  const test = { id: "late-anatomy-scan", name: "סקירה מאוחרת" } as MedicalTest;
+  const appointment = {
+    id: "a1",
+    title: "סקירה",
+    date: "2026-11-02",
+    time: "09:30",
+    done: false,
+  } as Appointment;
+
+  it("builds the links", () => {
+    expect(bookTestHref("late-anatomy-scan")).toBe("/tools/appointments?book=late-anatomy-scan");
+    expect(editAppointmentHref("a1")).toBe("/tools/appointments?edit=a1");
+  });
+
+  it("opens a prefilled booking, an existing appointment, or nothing", () => {
+    expect(formFromLink(new URLSearchParams("book=late-anatomy-scan"), [], [test])).toEqual({
+      input: { ...emptyAppointmentInput, title: "סקירה מאוחרת", linkedTestId: "late-anatomy-scan" },
+    });
+    expect(formFromLink(new URLSearchParams("edit=a1"), [appointment], [test])).toEqual({
+      appointment,
+      input: toAppointmentInput(appointment),
+    });
+    expect(formFromLink(new URLSearchParams("edit=gone"), [appointment], [test])).toBeNull();
+    expect(formFromLink(new URLSearchParams(""), [appointment], [test])).toBeNull();
   });
 });
