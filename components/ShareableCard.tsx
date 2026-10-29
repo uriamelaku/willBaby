@@ -10,12 +10,13 @@ const tones = {
   plain: { card: "bg-card", title: "text-brand-text", button: "text-muted" },
 } as const;
 
-/** A titled text card (tip, fact) with a share button. */
-export function ShareableCard({ title, text, tone = "plain", footnote }: {
+/** A titled text card (tip, fact) with a share button, and an optional extra header action. */
+export function ShareableCard({ title, text, tone = "plain", footnote, action }: {
   title: string;
   text: string;
   tone?: keyof typeof tones;
   footnote?: ReactNode;
+  action?: ReactNode;
 }) {
   const t = useTranslations("share");
   const style = tones[tone];
@@ -23,14 +24,17 @@ export function ShareableCard({ title, text, tone = "plain", footnote }: {
     <section className={`flex flex-col gap-1 rounded-card px-5 py-3 ${style.card}`}>
       <div className="flex items-center justify-between">
         <h2 className={`text-sm font-semibold ${style.title}`}>{title}</h2>
-        <button
-          type="button"
-          onClick={() => shareText(withSignature(text, t("signature")))}
-          aria-label={t("label", { title })}
-          className={`-my-3 -me-2.5 flex size-11 items-center justify-center rounded-full ${style.button}`}
-        >
-          <ShareIcon />
-        </button>
+        <div className="flex items-center gap-1">
+          {action}
+          <button
+            type="button"
+            onClick={() => shareText(withSignature(text, t("signature")))}
+            aria-label={t("label", { title })}
+            className={`-my-3 -me-2.5 flex size-11 items-center justify-center rounded-full ${style.button}`}
+          >
+            <ShareIcon />
+          </button>
+        </div>
       </div>
       <p className="leading-relaxed">{text}</p>
       {footnote}

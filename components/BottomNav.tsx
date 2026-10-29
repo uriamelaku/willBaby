@@ -27,7 +27,9 @@ export function BottomNav() {
     >
       <ul className="mx-auto grid max-w-md grid-cols-5">
         {tabs.map(({ href, key, Icon }) => {
-          const active = pathname === href || pathname.startsWith(`${href}/`);
+          // The knowledge library is opened from Tools, so it counts as that tab.
+          const active =
+            pathname === href || pathname.startsWith(`${href}/`) || (key === "tools" && pathname.startsWith("/library"));
           const showDot = key === "more" && backupDue;
           return (
             <li key={key}>

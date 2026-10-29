@@ -136,12 +136,34 @@ export const surpriseSchema = z.strictObject({
   source: text,
 });
 
+export const librarySections = ["topics", "normal", "rights"] as const;
+
+export const libraryEntrySchema = z.strictObject({
+  title: text,
+  text,
+  /** For "what's normal": when to contact the doctor or the delivery room. */
+  whenToCall: text.optional(),
+  /** An official page to read more (opened only when the user taps it). */
+  link: z.strictObject({ label: text, url: z.url({ protocol: /^https$/ }) }).optional(),
+});
+
+export const libraryTopicSchema = z.strictObject({
+  id: contentId,
+  section: z.enum(librarySections),
+  icon: z.string().min(1),
+  title: text,
+  intro: text,
+  entries: z.array(libraryEntrySchema).min(1),
+  sources: textList,
+});
+
 export const weeksSchema = uniqueBy(weekSchema, "week");
 export const dailySchema = uniqueBy(dailyItemSchema, "day");
 export const testsSchema = uniqueBy(medicalTestSchema, "id");
 export const hospitalBagSchema = uniqueBy(hospitalBagItemSchema, "id").min(1);
 export const badgesSchema = uniqueBy(badgeSchema, "id").min(1);
 export const surprisesSchema = uniqueBy(surpriseSchema, "week").min(1);
+export const librarySchema = uniqueBy(libraryTopicSchema, "id").min(1);
 
 export type WeekContent = z.infer<typeof weekSchema>;
 export type DailyItem = z.infer<typeof dailyItemSchema>;
@@ -150,6 +172,7 @@ export type HospitalBagItem = z.infer<typeof hospitalBagItemSchema>;
 export type BadgeRule = z.infer<typeof badgeRuleSchema>;
 export type Badge = z.infer<typeof badgeSchema>;
 export type Surprise = z.infer<typeof surpriseSchema>;
+export type LibraryTopic = z.infer<typeof libraryTopicSchema>;
 
 /** testIds in weekly summaries that do not exist in tests.json. */
 export const findUnknownTestIds = (weeks: WeekContent[], tests: MedicalTest[]) => {

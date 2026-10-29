@@ -3,6 +3,7 @@ import type { RecordInput, Settings } from "@/lib/storage/types";
 /** Every tool on the Tools screen, in display order; `id` is also its message key in `tools`. */
 export const TOOLS = [
   { id: "appointments", href: "/tools/appointments", icon: "🩺" },
+  { id: "library", href: "/library", icon: "📚" },
   { id: "kicks", href: "/tools/kicks", icon: "👣" },
   { id: "contractions", href: "/tools/contractions", icon: "⏱️" },
   { id: "weight", href: "/tools/weight", icon: "⚖️" },

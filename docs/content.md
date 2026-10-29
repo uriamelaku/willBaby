@@ -56,6 +56,9 @@ The content bank: 42 weekly summaries and 294 daily items (42 × 7), each with a
 ## Surprises (`content/he/surprises.json`)
 One-time full-screen moments in weeks 12, 20, 24, 30, 37 and 40 (confetti, balloons, heartbeat). Seen ones are stored in `settings.seenSurprises`.
 
+## Knowledge library (`content/he/library.json`)
+`{ id, section, icon, title, intro, entries: [{ title, text, whenToCall?, link? }], sources }`, where `section` is `topics` (knowledge by subject), `normal` ("what's normal?": common symptoms, what helps, `whenToCall`) or `rights` (rights and benefits in Israel; general wording without amounts, which change every year, and a `link` to Kol-Zchut). Links must be `https`.
+
 ## Writing rules
 - Warm tone with a wink of humor; no scare tactics, no "must".
 - Short sentences, up to 25 words per daily item.

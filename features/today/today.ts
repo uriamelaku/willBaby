@@ -93,3 +93,12 @@ export const progressFraction = (daysPregnant: number) =>
 
 export const daysLeftStatus = (daysLeft: number) =>
   daysLeft > 0 ? "before" : daysLeft === 0 ? "today" : "after";
+
+/**
+ * "Another tip" on Today cycles from the daily item (null) through the week's tips and back.
+ * Returns the index of the week tip to show, or null for the daily item.
+ */
+export const nextTipIndex = (current: number | null, weekTipsCount: number): number | null => {
+  const next = current === null ? 0 : current + 1;
+  return next < weekTipsCount ? next : null;
+};

@@ -39,6 +39,15 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Family bets + winner scoring (the winner is shown on the phase 3 "baby is born" screen, which supplies the birth data)
 - ✅ Sex reveal screen
 
+## Between phases 2 and 3 — requested improvements
+- ✅ Today: live sync with appointments, booked vs to-book items (tap to book or edit), progress percent, due date, share progress, "another tip" from the week's tips
+- ✅ Up to 4 Today shortcuts, picked with 📌 on the Tools screen
+- ✅ Week screen opens past weeks and the current one only
+- ✅ Correct the due date or the last period date (with history)
+- ✅ Names: a saved list first, couple voting optional
+- ✅ Knowledge library (`content/he/library.json`): topics, "what's normal?", rights in Israel
+- ✅ Content review of test windows (GBS, early anatomy scan); see `docs/content.md`
+
 ## Phase 3 — After birth
 - ⬜ "The baby is born" screen (date, time, weights, name)
 - ⬜ Pregnancy summary and album (photos, journal, badges, bets winner)

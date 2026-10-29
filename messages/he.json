@@ -117,7 +117,9 @@
     },
     "dueDate": "תאריך משוער: {date}",
     "shareProgress": "{role, select, pregnant {אני בשבוע {weekAndDay}} other {אנחנו בשבוע {weekAndDay}}} של ההיריון, {percent} מהדרך!",
-    "shareProgressLabel": "שיתוף ההתקדמות של השבוע"
+    "shareProgressLabel": "שיתוף ההתקדמות של השבוע",
+    "weekTip": "טיפ לשבוע",
+    "moreTips": "עוד טיפ"
   },
   "pregnancy": {
     "contentWeek": "השבוע ה-{week} של ההיריון",
@@ -240,7 +242,9 @@
     "betsShort": "הימורים",
     "pin": "במסך הבית: {tool}",
     "pinHint": "📌 מוסיף כלי למסך הבית, עד {max} כלים ({count} מתוך {max} נבחרו).",
-    "pinFull": "אפשר עד {max} במסך הבית. כדי להוסיף, צריך להוריד אחד."
+    "pinFull": "אפשר עד {max} במסך הבית. כדי להוסיף, צריך להוריד אחד.",
+    "library": "ספריית ידע",
+    "libraryDescription": "תזונה, תסמינים נפוצים, הכנה ללידה וזכויות"
   },
   "appointments": {
     "title": "בדיקות ותורים",
@@ -485,5 +489,16 @@
     "wording": "מעכשיו הטקסטים באפליקציה יתאימו.",
     "alreadyTitle": "כבר יודעים!",
     "back": "חזרה להיום"
+  },
+  "library": {
+    "title": "ספריית ידע",
+    "intro": "מידע כללי וטיפים, מסודרים לפי נושא.",
+    "sections": {
+      "topics": "ידע לפי נושא",
+      "normal": "מה זה נורמלי?",
+      "rights": "זכויות והטבות"
+    },
+    "back": "לכל הנושאים",
+    "whenToCall": "מתי לפנות:"
   }
 }

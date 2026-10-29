@@ -6,6 +6,7 @@ import {
   findUnknownTestIds,
   badgesSchema,
   hospitalBagSchema,
+  librarySchema,
   surprisesSchema,
   testsSchema,
   weeksSchema,
@@ -15,6 +16,7 @@ import {
 import badges from "@/content/he/badges.json";
 import daily from "@/content/he/daily.json";
 import hospitalBag from "@/content/he/hospitalBag.json";
+import library from "@/content/he/library.json";
 import surprises from "@/content/he/surprises.json";
 import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
@@ -70,6 +72,11 @@ describe("content files (build gate)", () => {
   it("surprises.json is valid and covers the special weeks", () => {
     expect(issuesOf(surprisesSchema.safeParse(surprises))).toEqual([]);
     expect(surprises.map((surprise) => surprise.week)).toEqual([12, 20, 24, 30, 37, 40]);
+  });
+
+  it("library.json is valid and fills every section", () => {
+    expect(issuesOf(librarySchema.safeParse(library))).toEqual([]);
+    expect(new Set(library.map((topic) => topic.section))).toEqual(new Set(["topics", "normal", "rights"]));
   });
 
   it("weekly testIds all exist in tests.json", () => {
@@ -237,6 +244,26 @@ describe("surprisesSchema", () => {
     expect(surprisesSchema.safeParse([{ ...surprise, effect: "fireworks" }]).success).toBe(false);
     expect(surprisesSchema.safeParse([{ ...surprise, text: "{babby}" }]).success).toBe(false);
     expect(issuesOf(surprisesSchema.safeParse([surprise, surprise]))).toEqual(["Duplicate week 20"]);
+  });
+});
+
+describe("librarySchema", () => {
+  const topic = {
+    id: "nutrition",
+    section: "topics",
+    icon: "🥗",
+    title: "תזונה",
+    intro: "עקרונות",
+    entries: [{ title: "מים", text: "לשתות", link: { label: "כל-זכות", url: "https://www.kolzchut.org.il/" } }],
+    sources: ["משרד הבריאות"],
+  };
+
+  it("accepts a valid topic and rejects http links, unknown sections and empty entries", () => {
+    expect(librarySchema.safeParse([topic]).success).toBe(true);
+    const httpLink = { ...topic.entries[0], link: { label: "x", url: "http://example.com" } };
+    expect(librarySchema.safeParse([{ ...topic, entries: [httpLink] }]).success).toBe(false);
+    expect(librarySchema.safeParse([{ ...topic, section: "games" }]).success).toBe(false);
+    expect(librarySchema.safeParse([{ ...topic, entries: [] }]).success).toBe(false);
   });
 });
 

@@ -3,6 +3,7 @@ import type { MedicalTest } from "@/content/schema";
 import {
   RING_SEGMENT,
   greetingFor,
+  nextTipIndex,
   progressFraction,
   trimesterRing,
   upcomingItems,
@@ -95,5 +96,14 @@ describe("progressFraction", () => {
     expect(progressFraction(107)).toBe(0.38);
     expect(progressFraction(279)).toBe(0.99);
     expect(progressFraction(290)).toBe(1);
+  });
+});
+
+describe("nextTipIndex", () => {
+  it("cycles from the daily item through the week's tips and back", () => {
+    expect(nextTipIndex(null, 3)).toBe(0);
+    expect(nextTipIndex(1, 3)).toBe(2);
+    expect(nextTipIndex(2, 3)).toBeNull();
+    expect(nextTipIndex(null, 0)).toBeNull();
   });
 });

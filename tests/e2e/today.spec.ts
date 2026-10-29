@@ -105,3 +105,20 @@ test("the week's progress can be shared", async ({ page }) => {
   expect(text).toContain("🥑 הבייבי בגודל של אבוקדו");
   expect(text).toContain("עוד 173 ימים לתאריך המשוער");
 });
+
+test("'another tip' cycles through the week's tips and Today still fits", async ({ page }) => {
+  // Day 260 is in week 38, whose tips include the longest one in the content.
+  await completeOnboarding(page, { lmpDate: "2026-02-10" });
+  await enterApp(page);
+  const more = page.getByRole("button", { name: "עוד טיפ" });
+  const weekTip = page.getByRole("heading", { name: "טיפ לשבוע" });
+  expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
+  // Week 38 has two tips; after them the daily item comes back.
+  for (let i = 0; i < 2; i++) {
+    await more.click();
+    await expect(weekTip).toBeVisible();
+    expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
+  }
+  await more.click();
+  await expect(weekTip).toHaveCount(0);
+});

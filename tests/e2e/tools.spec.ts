@@ -206,3 +206,16 @@ test("up to four tools can be pinned to Today", async ({ page }) => {
   const shortcuts = page.getByRole("navigation", { name: "קיצורי דרך לכלים" });
   await expect(shortcuts.getByRole("link")).toHaveText([/מונה בעיטות/, /מעקב משקל/, /תיק לידה/, /שמות/]);
 });
+
+test("the knowledge library opens topics with when-to-call notes and official links", async ({ page }) => {
+  await page.getByRole("link", { name: /ספריית ידע/ }).click();
+  await expect(page.getByRole("heading", { name: "מה זה נורמלי?" })).toBeVisible();
+  await page.getByRole("link", { name: /נפיחות ברגליים/ }).click();
+  await expect(page.getByText("מתי לפנות:")).toBeVisible();
+  await expect(page.getByText("אם משהו מרגיש לא בסדר")).toBeVisible();
+
+  await page.getByRole("link", { name: "לכל הנושאים" }).click();
+  await page.getByRole("link", { name: /חופשת לידה ודמי לידה/ }).click();
+  await expect(page.getByRole("link", { name: /כל-זכות: חופשת לידה/ })).toHaveAttribute("href", /kolzchut\.org\.il/);
+  await expect(page.getByRole("link", { name: "כלים" })).toHaveAttribute("aria-current", "page");
+});
