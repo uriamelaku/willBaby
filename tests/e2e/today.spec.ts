@@ -102,3 +102,47 @@ test("Today shows the progress percent and tells booked appointments from tests 
   await page.getByRole("link", { name: "היום" }).click();
   await expect(upcoming.getByText("עוד 12 ימים")).toBeVisible();
 });
+
+test("tapping an upcoming item books the test or opens the appointment", async ({ page }) => {
+  await completeOnboarding(page);
+  await enterApp(page);
+  const upcoming = page.locator("section").filter({ hasText: "בקרוב" });
+
+  await upcoming.getByRole("link", { name: /סקירה מאוחרת/ }).click();
+  await expect(page.getByLabel("מה הבדיקה או הפגישה?")).toHaveValue("סקירת מערכות מאוחרת");
+  await page.getByLabel("תאריך").fill("2026-11-20");
+  await page.getByRole("button", { name: "שמירה" }).click();
+  await expect(page).toHaveURL(/\/tools\/appointments$/);
+
+  await page.getByRole("link", { name: "היום" }).click();
+  await upcoming.getByRole("link", { name: /סקירה מאוחרת|סקירת מערכות מאוחרת/ }).click();
+  await expect(page.getByLabel("תאריך")).toHaveValue("2026-11-20");
+});
+
+test("the week's progress can be shared", async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as unknown as { shared: string[] }).shared = [];
+    navigator.share = async (data?: ShareData) => {
+      (window as unknown as { shared: string[] }).shared.push(data?.text ?? "");
+    };
+  });
+  await completeOnboarding(page);
+  await enterApp(page);
+  await page.getByRole("button", { name: "שיתוף ההתקדמות של השבוע" }).click();
+  const [text] = await page.evaluate(() => (window as unknown as { shared: string[] }).shared);
+  expect(text).toContain("אני בשבוע 15+2 של ההיריון, 38% מהדרך!");
+  expect(text).toContain("🥑 הבייבי בגודל של אבוקדו");
+  expect(text).toContain("עוד 173 ימים לתאריך המשוער");
+});
+
+test("week 38 (long fruit name) still fits with each of the day's tips", async ({ page }) => {
+  // Day 260 is in week 38.
+  await completeOnboarding(page, { lmpDate: "2026-02-10" });
+  await enterApp(page);
+  expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
+  for (const current of [2, 3, 4]) {
+    await page.getByRole("button", { name: /טיפ נוסף/ }).click();
+    await expect(page.getByRole("button", { name: `טיפ נוסף (${current} מתוך 4)` })).toBeVisible();
+    expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
+  }
+});

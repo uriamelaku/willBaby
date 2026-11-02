@@ -1,6 +1,7 @@
 import badges from "@/content/he/badges.json";
 import daily from "@/content/he/daily.json";
 import hospitalBag from "@/content/he/hospitalBag.json";
+import library from "@/content/he/library.json";
 import surprises from "@/content/he/surprises.json";
 import tests from "@/content/he/tests.json";
 import weeks from "@/content/he/weeks.json";
@@ -9,6 +10,7 @@ import {
   type Badge,
   type DailyItem,
   type HospitalBagItem,
+  type LibraryTopic,
   type Surprise,
   type MedicalTest,
   type WeekContent,
@@ -21,6 +23,7 @@ const medicalTests = tests as MedicalTest[];
 const hospitalBagItems = hospitalBag as HospitalBagItem[];
 const badgeList = badges as Badge[];
 const surpriseList = surprises as Surprise[];
+const libraryTopics = library as LibraryTopic[];
 
 export const findWeekContent = (contents: WeekContent[], week: number) =>
   contents.find((content) => content.week === week);
@@ -44,3 +47,7 @@ export const getHospitalBagItems = () => hospitalBagItems;
 export const getBadges = () => badgeList;
 
 export const getSurprises = () => surpriseList;
+
+export const getLibraryTopics = () => libraryTopics;
+
+export const getLibraryTopic = (id: string) => libraryTopics.find((topic) => topic.id === id);

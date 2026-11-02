@@ -87,3 +87,24 @@ export type TestTiming = "past" | "now" | "upcoming";
 
 export const testTiming = (test: MedicalTest, contentWeek: number): TestTiming =>
   contentWeek < test.weekFrom ? "upcoming" : contentWeek > test.weekTo ? "past" : "now";
+
+/** Links from Today: book a test (a new appointment form linked to it) or open an appointment. */
+export const bookTestHref = (testId: string) => `/tools/appointments?book=${encodeURIComponent(testId)}`;
+export const editAppointmentHref = (id: string) => `/tools/appointments?edit=${encodeURIComponent(id)}`;
+
+/**
+ * The form to open for a link's query (`?book=<testId>` or `?edit=<appointmentId>`), or null when
+ * the link names nothing known.
+ */
+export function formFromLink(
+  query: URLSearchParams,
+  appointments: Appointment[],
+  tests: MedicalTest[],
+): { appointment?: Appointment; input: AppointmentInput } | null {
+  const editId = query.get("edit");
+  const appointment = editId ? appointments.find((item) => item.id === editId) : undefined;
+  if (appointment) return { appointment, input: toAppointmentInput(appointment) };
+  const test = tests.find((item) => item.id === query.get("book"));
+  if (test) return { input: { ...emptyAppointmentInput, title: test.name, linkedTestId: test.id } };
+  return null;
+}

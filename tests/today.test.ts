@@ -3,6 +3,7 @@ import type { MedicalTest } from "@/content/schema";
 import {
   RING_SEGMENT,
   greetingFor,
+  progressFraction,
   trimesterRing,
   upcomingItems,
 } from "@/features/today/today";
@@ -85,5 +86,14 @@ describe("upcomingItems", () => {
       today,
     );
     expect(items.map((item) => item.id)).toEqual(["early", "screen", "late"]);
+  });
+});
+
+describe("progressFraction", () => {
+  it("rounds down to whole percents and stops at 100%", () => {
+    expect(progressFraction(0)).toBe(0);
+    expect(progressFraction(107)).toBe(0.38);
+    expect(progressFraction(279)).toBe(0.99);
+    expect(progressFraction(290)).toBe(1);
   });
 });

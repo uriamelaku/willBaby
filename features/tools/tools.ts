@@ -3,6 +3,7 @@ import type { RecordInput, Settings } from "@/lib/storage/types";
 /** Every tool on the Tools screen, in display order; `id` is also its message key in `tools`. */
 export const TOOLS = [
   { id: "appointments", href: "/tools/appointments", icon: "🩺" },
+  { id: "library", href: "/library", icon: "📚" },
   { id: "kicks", href: "/tools/kicks", icon: "👣" },
   { id: "contractions", href: "/tools/contractions", icon: "⏱️" },
   { id: "weight", href: "/tools/weight", icon: "⚖️" },
@@ -22,11 +23,11 @@ export const LATE_SHORTCUTS_WEEK = 28;
 
 const isToolId = (id: string): id is ToolId => TOOLS.some((tool) => tool.id === id);
 
-/** The default shortcuts for a stage of the pregnancy, until the user picks their own. */
+/** The default shortcuts (library and weight always), until the user picks their own. */
 export const defaultShortcuts = (contentWeek: number): ToolId[] =>
   contentWeek >= LATE_SHORTCUTS_WEEK
-    ? ["kicks", "contractions", "hospitalBag", "weight"]
-    : ["weight", "names", "hospitalBag", "bets"];
+    ? ["library", "kicks", "contractions", "weight"]
+    : ["library", "weight", "hospitalBag", "names"];
 
 /** The tools shown on Today: the user's choice (even empty) once made, otherwise the defaults. */
 export function homeShortcuts(settings: Settings | undefined, contentWeek: number): ToolId[] {

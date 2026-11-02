@@ -6,12 +6,13 @@ import { WeekFruit } from "@/components/ui/WeekFruit";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
 import { SurpriseOverlay } from "@/features/surprises/components/SurpriseOverlay";
-import { greetingFor } from "@/features/today/today";
+import { daysLeftStatus, greetingFor } from "@/features/today/today";
 import { getWeekContent } from "@/lib/content";
 import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
 import { useToday } from "@/lib/useToday";
 import { BellyPhotoPrompt } from "./BellyPhotoPrompt";
 import { DailyTipCard } from "./DailyTipCard";
+import { ShareProgressButton } from "./ShareProgressButton";
 import { ToolShortcuts } from "./ToolShortcuts";
 import { TrimesterRing } from "./TrimesterRing";
 import { UpcomingCard } from "./UpcomingCard";
@@ -27,9 +28,6 @@ export function TodayScreen() {
   );
 }
 
-const daysLeftStatus = (daysLeft: number) =>
-  daysLeft > 0 ? "before" : daysLeft === 0 ? "today" : "after";
-
 function TodayContent({ data }: { data: PregnancyData }) {
   const t = useTranslations();
   const format = useFormatter();
@@ -44,15 +42,16 @@ function TodayContent({ data }: { data: PregnancyData }) {
   return (
     <>
       <section className="flex flex-col gap-1.5 rounded-card bg-card px-[18px] py-3 shadow-hero">
-        {/* The due date shares the greeting's line so the hero card does not grow. */}
+        {/* The due date and the share button share the greeting's line so the hero card does not grow. */}
         <div className="flex items-baseline justify-between gap-2">
           <h1 className="text-[15px] text-muted">
             {t(`today.greeting.${greetingFor(now.getHours())}`, { name: data.profile.name })}
           </h1>
-          <span className="text-[13px] text-muted">
+          <span className="flex items-center gap-1 text-[13px] text-muted">
             {t("today.dueDate", {
               date: format.dateTime(parseLocalDate(data.pregnancy.dueDate), { dateStyle: "medium" }),
             })}
+            <ShareProgressButton data={data} status={status} weekContent={weekContent} />
           </span>
         </div>
         <div className="flex items-center justify-between gap-2">
@@ -60,10 +59,10 @@ function TodayContent({ data }: { data: PregnancyData }) {
             {weekContent?.fruit && weekContent.size && (
               <>
                 <WeekFruit fruit={weekContent.fruit} className="text-[44px]" />
-                <p className="text-lg font-bold">
+                <p className="text-lg leading-tight font-bold">
                   {t("today.fruit", { babiesCount: data.babies.length, fruit: weekContent.fruit.name })}
                 </p>
-                <p className="text-sm text-muted">{t("today.size", weekContent.size)}</p>
+                <p className="text-[13px] whitespace-nowrap text-muted">{t("today.size", weekContent.size)}</p>
               </>
             )}
             <p className="text-sm text-muted">{t("today.week", { week: status.contentWeek })}</p>
@@ -87,7 +86,12 @@ function TodayContent({ data }: { data: PregnancyData }) {
         <ToolShortcuts contentWeek={status.contentWeek} />
       </div>
 
-      <DailyTipCard daysPregnant={status.daysPregnant} role={data.profile.role} render={render} />
+      <DailyTipCard
+        daysPregnant={status.daysPregnant}
+        contentWeek={status.contentWeek}
+        role={data.profile.role}
+        render={render}
+      />
 
       <SurpriseOverlay data={data} contentWeek={status.contentWeek} />
     </>

@@ -10,7 +10,7 @@ const tones = {
   plain: { card: "bg-card", title: "text-brand-text", button: "text-muted" },
 } as const;
 
-/** A titled text card (tip, fact) with a share button and an optional extra action beside it. */
+/** A titled text card (tip, fact) with a share button, and an optional extra header action. */
 export function ShareableCard({ title, text, tone = "plain", footnote, action }: {
   title: string;
   text: string;
@@ -24,7 +24,7 @@ export function ShareableCard({ title, text, tone = "plain", footnote, action }:
     <section className={`flex flex-col gap-1 rounded-card px-5 py-3 ${style.card}`}>
       <div className="flex items-center justify-between">
         <h2 className={`text-sm font-semibold ${style.title}`}>{title}</h2>
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           {action}
           <button
             type="button"

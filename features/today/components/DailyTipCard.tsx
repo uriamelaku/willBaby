@@ -8,8 +8,9 @@ import type { Role } from "@/lib/storage/types";
 import { useDailyTip } from "../useDailyTip";
 
 /** Today's daily item; each load (or the "another tip" button) shows the next of the day's items. */
-export function DailyTipCard({ daysPregnant, role, render }: {
+export function DailyTipCard({ daysPregnant, contentWeek, role, render }: {
   daysPregnant: number;
+  contentWeek: number;
   role: Role;
   render: (template: string) => string;
 }) {
@@ -22,7 +23,7 @@ export function DailyTipCard({ daysPregnant, role, render }: {
   return (
     <ShareableCard
       tone="sun"
-      title={t(`today.daily.${item.type}`)}
+      title={t("today.cardTitle", { title: t(`today.daily.${item.type}`), week: contentWeek })}
       text={render(role === "partner" ? item.partnerText : item.text)}
       footnote={<p className="text-[11px] leading-tight text-sun-text">{t("common.disclaimer")}</p>}
       action={

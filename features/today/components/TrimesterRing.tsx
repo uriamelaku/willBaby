@@ -4,6 +4,7 @@ import {
   RING_RADIUS,
   RING_SEGMENT,
   RING_STARTS,
+  progressFraction,
   trimesterRing,
 } from "@/features/today/today";
 import type { PregnancyStatus } from "@/lib/pregnancy";
@@ -14,7 +15,7 @@ const STROKE = 12;
 export function TrimesterRing({ status }: { status: PregnancyStatus }) {
   const t = useTranslations();
   const format = useFormatter();
-  const percent = format.number(Math.floor(status.progress * 100) / 100, { style: "percent" });
+  const percent = format.number(progressFraction(status.daysPregnant), { style: "percent" });
   const ring = trimesterRing(status.daysPregnant);
   const arc = (start: number, length: number, className: string) => (
     <circle
@@ -38,7 +39,7 @@ export function TrimesterRing({ status }: { status: PregnancyStatus }) {
         trimester: t("pregnancy.trimester", { trimester: status.trimester }),
         percent,
       })}
-      className="relative size-[170px] flex-none"
+      className="relative size-[156px] flex-none"
     >
       <svg viewBox="0 0 160 160" className="absolute inset-0 size-full" aria-hidden>
         {RING_STARTS.map((start) => (
@@ -52,7 +53,7 @@ export function TrimesterRing({ status }: { status: PregnancyStatus }) {
         <circle cx={ring.dot.x} cy={ring.dot.y} r={8} strokeWidth={4} className="fill-card stroke-brand" />
       </svg>
       <div aria-hidden className="absolute inset-0 flex flex-col items-center justify-center">
-        <span dir="ltr" className="text-[50px] leading-none font-bold">
+        <span dir="ltr" className="text-[46px] leading-none font-bold">
           {status.week}
           <span className="text-2xl font-medium text-muted">+{status.dayOfWeek}</span>
         </span>
