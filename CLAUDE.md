@@ -17,7 +17,7 @@ Name and logo: **will·B·aby** — the shared "B" reads as both "will Be" and "
   - Due date can be updated after an ultrasound; keep a history of changes.
   - All dates use the device's local calendar date (not UTC), so the day changes at local midnight.
 - **Multiples:** one baby, twins, or more, supported from the start (plural wording, `twinsNote` content).
-- **Content:** a fixed, curated content bank (no AI generation): 42 weekly summaries + 294 daily items (42 × 7), each with a pregnant and a partner version. The daily item is chosen by `daysPregnant`, so it is stable for the day.
+- **Content:** a fixed, curated content bank (no AI generation): 42 weekly summaries + 1,176 daily items (4 for each of the 294 days), each with a pregnant and a partner version. The day's items are chosen by `daysPregnant`; Today shows the next of them on every load and with an "another tip" button, starting from the first each new day (position kept in localStorage).
 - **Tone:** warm with humor. No scare tactics, no "must".
 - **Medical content:** tests by week per common Israeli practice + appointment management. General information only, an internal `source` for every fact (Ministry of Health, health funds), and a visible disclaimer on every medical screen: the app does not diagnose or give medical advice. No professional review is planned.
 - **Baby's sex:** optional, with a reveal screen. Wording adapts (he/she) after it is set; otherwise neutral.

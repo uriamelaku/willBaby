@@ -1,6 +1,6 @@
 # willBaby — Content Structure & Writing Rules
 
-The content bank: 42 weekly summaries and 294 daily items (42 × 7), each with a pregnant and a partner version. Claude writes the first draft; the user reviews and approves.
+The content bank: 42 weekly summaries and 1,176 daily items (4 for each of the 294 days, 42 × 7), each with a pregnant and a partner version. Claude writes the first draft; the user reviews and approves.
 
 ## Weekly summary (`content/he/weeks.json`)
 ```json
@@ -21,7 +21,7 @@ The content bank: 42 weekly summaries and 294 daily items (42 × 7), each with a
 ```
 
 ## Daily item (`content/he/daily.json`)
-`{ day, type, text, partnerText, source? }`, where `type` is one of `tip` · `fact` · `funny` · `emotional` · `partner`. A fixed weekly rotation keeps variety.
+`{ day, type, text, partnerText, source? }`, where `type` is one of `tip` · `fact` · `funny` · `emotional` · `partner`. Each day has exactly 4 items with different types and texts; the first is the original item of the day. Today rotates through them (next one on every load and with the "another tip" button). Keep each item short enough to fit Today in three lines (about 85 characters after rendering).
 
 ## Tests (`content/he/tests.json`)
 `{ id, name, weekFrom, weekTo, description, isOptional, source }`. Initial list per common Israeli practice — verify the ranges against official sources (Ministry of Health, health funds) before publishing:

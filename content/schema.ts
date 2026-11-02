@@ -181,5 +181,11 @@ const missingNumbers = (present: number[], from: number, to: number) => {
 export const findMissingWeeks = (weeks: WeekContent[]) =>
   missingNumbers(weeks.map((w) => w.week), 1, MAX_CONTENT_WEEK);
 
-export const findMissingDays = (daily: DailyItem[]) =>
-  missingNumbers(daily.map((d) => d.day), 0, TOTAL_DAILY_DAYS - 1);
+/** Days with fewer than DAILY_ITEMS_PER_DAY items (Today rotates through all of them). */
+export const findIncompleteDays = (daily: DailyItem[]) => {
+  const counts = new Map<number, number>();
+  daily.forEach((item) => counts.set(item.day, (counts.get(item.day) ?? 0) + 1));
+  return Array.from({ length: TOTAL_DAILY_DAYS }, (_, day) => day).filter(
+    (day) => (counts.get(day) ?? 0) < DAILY_ITEMS_PER_DAY,
+  );
+};

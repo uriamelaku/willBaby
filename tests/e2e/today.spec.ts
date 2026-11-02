@@ -30,6 +30,35 @@ test("Today still fits with the longest daily tip (three lines)", async ({ page 
   await enterApp(page);
   await expect(page.getByText("הבחילות נרגעות? זה הזמן להחזיר לתפריט")).toBeVisible();
   expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
+
+  // The day's other items fit too.
+  for (const current of [2, 3, 4]) {
+    await page.getByRole("button", { name: /טיפ נוסף/ }).click();
+    await expect(page.getByRole("button", { name: `טיפ נוסף (${current} מתוך 4)` })).toBeVisible();
+    expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
+  }
+});
+
+test("the daily tip moves to the next of the day's four on each load and with the button", async ({ page }) => {
+  await completeOnboarding(page);
+  await enterApp(page);
+  const first = "סוף סוף מישהו בבית שמבין בטוסט אבוקדו";
+  const second = "העיניים של הבייבי כבר מתחילות לזוז";
+  const third = "אם יש צרבת, אוכל חריף ושומני";
+  const fourth = "לצלם אותך עם הבטן כל שבוע";
+  await expect(page.getByText(first)).toBeVisible();
+
+  const next = page.getByRole("button", { name: /טיפ נוסף/ });
+  await next.click();
+  await expect(page.getByText(second)).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByText(third)).toBeVisible();
+
+  await next.click();
+  await expect(page.getByText(fourth)).toBeVisible();
+  await next.click();
+  await expect(page.getByText(first)).toBeVisible();
 });
 
 test("a special week shows its surprise once", async ({ page }) => {

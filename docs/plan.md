@@ -18,6 +18,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Weekly summary with navigation between weeks and role-based version
 - ✅ Bottom navigation: Today · Week · Journal · Tools · More
 - ✅ Content: 42 weekly summaries + 294 daily items (pregnant + partner versions); a draft to review against official sources
+- ✅ 4 daily items per day (1,176 in total) with rotation on Today: next item on every load + "another tip" button; the 882 new items are a draft to review
 - ✅ Journal + mood (1–5)
 - ✅ Belly photos: one per week, compression, timeline gallery
 - ✅ Tests by week + appointments linked to tests; upcoming ones on "Today"

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   dailySchema,
-  findMissingDays,
+  findIncompleteDays,
   findMissingWeeks,
   findUnknownTestIds,
   badgesSchema,
@@ -76,9 +76,9 @@ describe("content files (build gate)", () => {
     expect(findUnknownTestIds(weeksSchema.parse(weeks), testsSchema.parse(tests))).toEqual([]);
   });
 
-  it("has all 42 weeks and 294 daily items (missing content fails the build)", () => {
+  it("has all 42 weeks and 4 daily items for each of the 294 days (missing content fails the build)", () => {
     expect(findMissingWeeks(weeksSchema.parse(weeks))).toEqual([]);
-    expect(findMissingDays(dailySchema.parse(daily))).toEqual([]);
+    expect(findIncompleteDays(dailySchema.parse(daily))).toEqual([]);
   });
 });
 
@@ -248,13 +248,16 @@ describe("surprisesSchema", () => {
 });
 
 describe("completeness", () => {
-  it("lists missing weeks and days", () => {
+  it("lists missing weeks and incomplete days", () => {
     const allWeeks = Array.from({ length: 42 }, (_, i) => ({ ...validWeek, week: i + 1 }));
     expect(findMissingWeeks(allWeeks)).toEqual([]);
     expect(findMissingWeeks(allWeeks.filter((w) => w.week !== 7))).toEqual([7]);
 
-    const allDays = Array.from({ length: 294 }, (_, day) => ({ ...validDailyItem, day }));
-    expect(findMissingDays(allDays)).toEqual([]);
-    expect(findMissingDays(allDays.slice(1, 293))).toEqual([0, 293]);
+    const fullDay = (day: number) =>
+      Array.from({ length: 4 }, (_, i) => ({ ...validDailyItem, day, text: `טיפ ${i}` }));
+    const allDays = Array.from({ length: 294 }, (_, day) => fullDay(day)).flat();
+    expect(findIncompleteDays(allDays)).toEqual([]);
+    const withGaps = allDays.filter((item, i) => item.day !== 0 && i !== allDays.length - 1);
+    expect(findIncompleteDays(withGaps)).toEqual([0, 293]);
   });
 });
