@@ -59,6 +59,13 @@ export const ShareIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const RefreshIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg {...base} width={20} height={20} {...props}>
+    <path d="M20 11a8 8 0 1 0-2.3 5.7" />
+    <path d="M20 4v7h-7" />
+  </svg>
+);
+
 export const CameraIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg {...base} width={28} height={28} {...props}>
     <path d="M4 7h3l2-3h6l2 3h3v12H4z" />

@@ -5,7 +5,9 @@ import { findUnknownVariables, hasMalformedSelector } from "@/lib/text";
 // Content rules: see docs/content.md. Validated at build time (`prebuild` runs tests/content.test.ts).
 
 export const DAYS_PER_WEEK = 7;
-export const TOTAL_DAILY_ITEMS = MAX_CONTENT_WEEK * DAYS_PER_WEEK;
+export const TOTAL_DAILY_DAYS = MAX_CONTENT_WEEK * DAYS_PER_WEEK;
+/** Today rotates through the day's items, so each day has several. */
+export const DAILY_ITEMS_PER_DAY = 4;
 export const MAX_DAILY_WORDS = 25;
 
 const text = z
@@ -52,7 +54,7 @@ export const dailyItemTypes = ["tip", "fact", "funny", "emotional", "partner"] a
 
 export const dailyItemSchema = z
   .strictObject({
-    day: z.int().min(0).max(TOTAL_DAILY_ITEMS - 1),
+    day: z.int().min(0).max(TOTAL_DAILY_DAYS - 1),
     type: z.enum(dailyItemTypes),
     text: shortText,
     partnerText: shortText,
@@ -137,7 +139,19 @@ export const surpriseSchema = z.strictObject({
 });
 
 export const weeksSchema = uniqueBy(weekSchema, "week");
-export const dailySchema = uniqueBy(dailyItemSchema, "day");
+export const dailySchema = z.array(dailyItemSchema).superRefine((items, ctx) => {
+  const daysSeen = new Map<number, Set<string>>();
+  items.forEach((item, index) => {
+    const texts = daysSeen.get(item.day) ?? new Set<string>();
+    if (texts.size >= DAILY_ITEMS_PER_DAY) {
+      ctx.addIssue({ code: "custom", message: `Day ${item.day} has more than ${DAILY_ITEMS_PER_DAY} items`, path: [index, "day"] });
+    }
+    if (texts.has(item.text)) {
+      ctx.addIssue({ code: "custom", message: `Duplicate text on day ${item.day}`, path: [index, "text"] });
+    }
+    daysSeen.set(item.day, texts.add(item.text));
+  });
+});
 export const testsSchema = uniqueBy(medicalTestSchema, "id");
 export const hospitalBagSchema = uniqueBy(hospitalBagItemSchema, "id").min(1);
 export const badgesSchema = uniqueBy(badgeSchema, "id").min(1);
@@ -168,4 +182,4 @@ export const findMissingWeeks = (weeks: WeekContent[]) =>
   missingNumbers(weeks.map((w) => w.week), 1, MAX_CONTENT_WEEK);
 
 export const findMissingDays = (daily: DailyItem[]) =>
-  missingNumbers(daily.map((d) => d.day), 0, TOTAL_DAILY_ITEMS - 1);
+  missingNumbers(daily.map((d) => d.day), 0, TOTAL_DAILY_DAYS - 1);

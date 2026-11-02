@@ -2,16 +2,16 @@
 
 import { useFormatter, useTranslations } from "next-intl";
 import { Screen, StorageError } from "@/components/Screen";
-import { ShareableCard } from "@/components/ShareableCard";
 import { WeekFruit } from "@/components/ui/WeekFruit";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
 import { SurpriseOverlay } from "@/features/surprises/components/SurpriseOverlay";
 import { greetingFor } from "@/features/today/today";
-import { getDailyItem, getWeekContent } from "@/lib/content";
+import { getWeekContent } from "@/lib/content";
 import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
 import { useToday } from "@/lib/useToday";
 import { BellyPhotoPrompt } from "./BellyPhotoPrompt";
+import { DailyTipCard } from "./DailyTipCard";
 import { ToolShortcuts } from "./ToolShortcuts";
 import { TrimesterRing } from "./TrimesterRing";
 import { UpcomingCard } from "./UpcomingCard";
@@ -40,9 +40,6 @@ function TodayContent({ data }: { data: PregnancyData }) {
   if (!status) return <p>{t("pregnancy.outOfRange")}</p>;
 
   const weekContent = getWeekContent(status.contentWeek);
-  const dailyItem = getDailyItem(status.daysPregnant);
-  const dailyText =
-    dailyItem && (data.profile.role === "partner" ? dailyItem.partnerText : dailyItem.text);
 
   return (
     <>
@@ -90,14 +87,7 @@ function TodayContent({ data }: { data: PregnancyData }) {
         <ToolShortcuts contentWeek={status.contentWeek} />
       </div>
 
-      {dailyItem && dailyText && (
-        <ShareableCard
-          tone="sun"
-          title={t(`today.daily.${dailyItem.type}`)}
-          text={render(dailyText)}
-          footnote={<p className="text-[11px] leading-tight text-sun-text">{t("common.disclaimer")}</p>}
-        />
-      )}
+      <DailyTipCard daysPregnant={status.daysPregnant} role={data.profile.role} render={render} />
 
       <SurpriseOverlay data={data} contentWeek={status.contentWeek} />
     </>

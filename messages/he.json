@@ -99,7 +99,8 @@
       "fact": "עובדה להיום",
       "funny": "חיוך להיום",
       "emotional": "רגע להיום",
-      "partner": "לזוג"
+      "partner": "לזוג",
+      "next": "טיפ נוסף ({current} מתוך {total})"
     },
     "upcoming": {
       "title": "בקרוב",

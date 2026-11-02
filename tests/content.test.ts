@@ -168,9 +168,16 @@ describe("dailySchema", () => {
     expect(dailySchema.safeParse([{ ...fact, source: "משרד הבריאות" }]).success).toBe(true);
   });
 
-  it("rejects duplicate days", () => {
+  it("allows up to 4 different items per day", () => {
+    const dayItems = (count: number) =>
+      Array.from({ length: count }, (_, i) => ({ ...validDailyItem, text: `טיפ ${i}` }));
+    expect(dailySchema.safeParse(dayItems(4)).success).toBe(true);
+    expect(issuesOf(dailySchema.safeParse(dayItems(5)))).toEqual(["Day 0 has more than 4 items"]);
+  });
+
+  it("rejects the same text twice on one day", () => {
     const result = dailySchema.safeParse([validDailyItem, validDailyItem]);
-    expect(issuesOf(result)).toEqual(["Duplicate day 0"]);
+    expect(issuesOf(result)).toEqual(["Duplicate text on day 0"]);
   });
 });
 
