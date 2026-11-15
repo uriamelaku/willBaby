@@ -31,9 +31,12 @@ export function DateCalculatorButton({ lmpDate, today }: { lmpDate: string; toda
         type="button"
         onClick={() => setOpen(true)}
         aria-label={t("open")}
-        className="absolute end-1.5 bottom-1.5 flex size-11 items-center justify-center rounded-full text-brand-text"
+        className="-my-1.5 flex min-h-11 items-center"
       >
-        <CalculatorIcon />
+        <span className="flex items-center gap-1.5 rounded-full bg-peach-soft px-3.5 py-1 text-[13px] font-semibold text-brand-text">
+          <CalculatorIcon className="size-[18px]" />
+          {t("button")}
+        </span>
       </button>
       <dialog
         ref={ref}

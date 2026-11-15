@@ -43,7 +43,7 @@ function TodayContent({ data }: { data: PregnancyData }) {
 
   return (
     <>
-      <section className="relative flex flex-col gap-1.5 rounded-card bg-card px-[18px] py-3 shadow-hero">
+      <section className="flex flex-col gap-1.5 rounded-card bg-card px-[18px] py-3 shadow-hero">
         {/* The due date and the share button share the greeting's line so the hero card does not grow. */}
         <div className="flex items-baseline justify-between gap-2">
           <h1 className="text-[15px] text-muted">
@@ -77,10 +77,11 @@ function TodayContent({ data }: { data: PregnancyData }) {
             </span>
 
           </div>
-          <TrimesterRing status={status} />
+          <div className="flex flex-col items-center gap-0.5">
+            <TrimesterRing status={status} />
+            <DateCalculatorButton lmpDate={data.pregnancy.lmpDate} today={now} />
+          </div>
         </div>
-        {/* In the empty corner below the ring, so it adds no height. */}
-        <DateCalculatorButton lmpDate={data.pregnancy.lmpDate} today={now} />
       </section>
 
       <UpcomingCard daysPregnant={status.daysPregnant} today={now} />
