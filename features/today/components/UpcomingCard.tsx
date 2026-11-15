@@ -3,23 +3,25 @@
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { CheckIcon } from "@/components/icons";
-import { bookTestHref, editAppointmentHref } from "@/features/appointments/appointments";
+import { bookTestHref, editAppointmentHref, plannedTests } from "@/features/appointments/appointments";
 import { upcomingItems, type UpcomingItem } from "@/features/today/today";
 import { getMedicalTests } from "@/lib/content";
 import { parseLocalDate } from "@/lib/pregnancy";
 import { useRecords } from "@/lib/storage/useRecords";
 
 /**
- * A small timeline of the next three tests and appointments. Booked appointments (mint, with a
- * check) look different from tests that still need an appointment (dashed, "to book").
+ * A small timeline of the user's upcoming appointments and the tests they added to "my tests",
+ * three at a time, swiped sideways for the rest. Booked appointments (mint, with a check) look
+ * different from tests that still need an appointment (dashed, "to book").
  */
 export function UpcomingCard({ daysPregnant, today }: { daysPregnant: number; today: Date }) {
   const t = useTranslations("today.upcoming");
   const format = useFormatter();
   const { records } = useRecords("appointments");
+  const { records: settings } = useRecords("settings");
 
-  if (!records) return null;
-  const items = upcomingItems(records, getMedicalTests(), daysPregnant, today);
+  if (!records || !settings) return null;
+  const items = upcomingItems(records, plannedTests(getMedicalTests(), settings[0]), daysPregnant, today);
 
   const detail = (item: UpcomingItem) =>
     item.kind === "test"
@@ -48,15 +50,21 @@ export function UpcomingCard({ daysPregnant, today }: { daysPregnant: number; to
       {items.length === 0 ? (
         <p className="text-sm text-muted">{t("empty")}</p>
       ) : (
-        <ol className="relative grid grid-cols-3 gap-2">
-          <span aria-hidden className="absolute inset-x-4 top-[7px] h-0.5 bg-line" />
-          {items.map((item) => {
+        // Each item is just under a third wide, so a fourth one peeks in as a hint to swipe.
+        <ol
+          aria-label={t("title")}
+          className="-mx-[18px] flex snap-x snap-mandatory gap-2 overflow-x-auto scroll-px-[18px] px-[18px] [scrollbar-width:none]"
+        >
+          {items.map((item, index) => {
             const booked = item.kind === "appointment";
             return (
-              <li key={`${item.kind}-${item.id}`} className="relative">
+              <li key={`${item.kind}-${item.id}`} className="relative w-[31%] shrink-0 snap-start">
+                {index < items.length - 1 && (
+                  <span aria-hidden className="absolute start-4 -end-2 top-[7px] h-0.5 bg-line" />
+                )}
                 <Link
                   href={booked ? editAppointmentHref(item.id) : bookTestHref(item.id)}
-                  className="flex flex-col items-start gap-1"
+                  className="relative flex flex-col items-start gap-1"
                 >
                   {booked ? (
                     <span aria-hidden className="flex size-4 items-center justify-center rounded-full bg-mint ring-4 ring-mint-soft">

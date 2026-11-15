@@ -197,7 +197,9 @@ test("up to four tools can be pinned to Today", async ({ page }) => {
   await expect(page.getByText(/אפשר עד 4 במסך הבית/)).toBeVisible();
   await expect(pin("מונה בעיטות")).toBeDisabled();
 
-  await expect(pin("ספריית ידע")).toHaveAttribute("aria-pressed", "true");
+  // The library has its own square on Today, so it cannot be pinned.
+  await expect(pin("ספריית ידע")).toHaveCount(0);
+  await expect(pin("שמות")).toHaveAttribute("aria-pressed", "true");
   await pin("שמות").click();
   await expect(pin("שמות")).toHaveAttribute("aria-pressed", "false");
   await pin("מונה בעיטות").click();
@@ -205,7 +207,7 @@ test("up to four tools can be pinned to Today", async ({ page }) => {
 
   await page.getByRole("link", { name: "היום" }).click();
   const shortcuts = page.getByRole("navigation", { name: "קיצורי דרך לכלים" });
-  await expect(shortcuts.getByRole("link")).toHaveText([/ספריית ידע/, /מונה בעיטות/, /מעקב משקל/, /תיק לידה/]);
+  await expect(shortcuts.getByRole("link")).toHaveText([/מונה בעיטות/, /מעקב משקל/, /תיק לידה/, /הימורים/]);
 });
 
 test("the knowledge library opens topics with when-to-call notes and official links", async ({ page }) => {

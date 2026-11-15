@@ -4,10 +4,12 @@ import {
   editAppointmentHref,
   emptyAppointmentInput,
   formFromLink,
+  plannedTests,
   sortAppointments,
   testTiming,
   toAppointmentInput,
   toAppointmentRecord,
+  togglePlannedTest,
   upcomingAppointments,
   validateAppointmentInput,
 } from "@/features/appointments/appointments";
@@ -121,5 +123,31 @@ describe("links from Today", () => {
     });
     expect(formFromLink(new URLSearchParams("edit=gone"), [appointment], [test])).toBeNull();
     expect(formFromLink(new URLSearchParams(""), [appointment], [test])).toBeNull();
+  });
+});
+
+describe("my tests", () => {
+  const tests = [{ id: "nt" }, { id: "early" }, { id: "late" }] as MedicalTest[];
+  const settings = (plannedTestIds?: string[]) => ({
+    id: "s",
+    createdAt: "2026-09-01T10:00:00.000Z",
+    updatedAt: "2026-09-01T10:00:00.000Z",
+    schemaVersion: 2,
+    plannedTestIds,
+  });
+
+  it("starts empty: recommended tests are not planned until the user adds them", () => {
+    expect(plannedTests(tests, undefined)).toEqual([]);
+    expect(plannedTests(tests, settings())).toEqual([]);
+  });
+
+  it("keeps content order and ignores unknown ids", () => {
+    expect(plannedTests(tests, settings(["late", "gone", "nt"])).map((test) => test.id)).toEqual(["nt", "late"]);
+  });
+
+  it("adds and removes a test, keeping the other settings", () => {
+    const added = togglePlannedTest({ schemaVersion: 2, homeShortcuts: ["weight"] }, "nt");
+    expect(added).toEqual({ schemaVersion: 2, homeShortcuts: ["weight"], plannedTestIds: ["nt"] });
+    expect(togglePlannedTest(togglePlannedTest(added, "late"), "nt").plannedTestIds).toEqual(["late"]);
   });
 });

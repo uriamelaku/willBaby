@@ -64,6 +64,15 @@ describe("upcomingItems", () => {
     ]);
   });
 
+  it("returns every upcoming item, not just the first three (Today swipes through them)", () => {
+    const appointments = [appointment("a", "2026-10-29"), appointment("b", "2026-12-01")];
+    expect(upcomingItems(appointments, tests, daysPregnant, today)).toHaveLength(5);
+  });
+
+  it("shows only the tests it is given (the user's planned tests)", () => {
+    expect(upcomingItems([], [], daysPregnant, today)).toEqual([]);
+  });
+
   it("mixes appointments by date and hides tests that already have one", () => {
     const items = upcomingItems(
       [appointment("סקירה", "2026-10-30", { linkedTestId: "early", time: "10:30" })],

@@ -9,6 +9,7 @@ import {
   MAX_HOME_SHORTCUTS,
   TOOLS,
   homeShortcuts,
+  isPinnable,
   toggleShortcut,
   withShortcuts,
   type ToolId,
@@ -69,16 +70,18 @@ export function ToolsList() {
                   <span className="text-sm text-muted">{t(`${tool.id}Description`)}</span>
                 </span>
               </Link>
-              <button
-                type="button"
-                aria-pressed={isPinned}
-                aria-label={t("pin", { tool: t(tool.id) })}
-                disabled={!isPinned && full}
-                onClick={() => toggle(tool.id)}
-                className={`flex size-11 shrink-0 items-center justify-center rounded-full text-xl transition disabled:opacity-30 motion-reduce:transition-none ${isPinned ? "bg-brand-soft" : "grayscale opacity-50"}`}
-              >
-                📌
-              </button>
+              {isPinnable(tool.id) && (
+                <button
+                  type="button"
+                  aria-pressed={isPinned}
+                  aria-label={t("pin", { tool: t(tool.id) })}
+                  disabled={!isPinned && full}
+                  onClick={() => toggle(tool.id)}
+                  className={`flex size-11 shrink-0 items-center justify-center rounded-full text-xl transition disabled:opacity-30 motion-reduce:transition-none ${isPinned ? "bg-brand-soft" : "grayscale opacity-50"}`}
+                >
+                  📌
+                </button>
+              )}
             </li>
           );
         })}

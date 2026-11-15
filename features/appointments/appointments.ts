@@ -1,6 +1,6 @@
 import type { MedicalTest } from "@/content/schema";
 import { formatLocalDate, parseLocalDate } from "@/lib/pregnancy";
-import type { Appointment, CalendarDate, RecordInput } from "@/lib/storage/types";
+import type { Appointment, CalendarDate, RecordInput, Settings } from "@/lib/storage/types";
 
 export const MAX_APPOINTMENT_TEXT = 200;
 export const UPCOMING_LIMIT = 3;
@@ -107,4 +107,17 @@ export function formFromLink(
   const test = tests.find((item) => item.id === query.get("book"));
   if (test) return { input: { ...emptyAppointmentInput, title: test.name, linkedTestId: test.id } };
   return null;
+}
+
+/** The recommended tests the user added to "my tests", in content order. */
+export const plannedTests = (tests: MedicalTest[], settings: Settings | undefined) =>
+  tests.filter((test) => settings?.plannedTestIds?.includes(test.id));
+
+/** Settings record data with the test added to or removed from "my tests". */
+export function togglePlannedTest(settings: RecordInput<"settings">, testId: string): RecordInput<"settings"> {
+  const current = settings.plannedTestIds ?? [];
+  const plannedTestIds = current.includes(testId)
+    ? current.filter((id) => id !== testId)
+    : [...current, testId];
+  return { ...settings, plannedTestIds };
 }

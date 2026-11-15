@@ -89,6 +89,7 @@ const settingsSchema: z.ZodType<Settings> = z.object({
   ...base,
   seenSurprises: z.array(week).optional(),
   homeShortcuts: z.array(shortText).max(4).optional(),
+  plannedTestIds: z.array(shortText).max(100).optional(),
   disclaimerAcceptedAt: timestamp.optional(),
   lastBackupAt: timestamp.optional(),
   schemaVersion: z.int().min(1),

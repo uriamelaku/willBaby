@@ -5,7 +5,11 @@ import { useTranslations } from "next-intl";
 import { findTool, homeShortcuts } from "@/features/tools/tools";
 import { useRecords } from "@/lib/storage/useRecords";
 
-/** Up to four tool shortcuts (2×2, next to the belly-photo square), chosen with 📌 on the Tools screen. */
+/**
+ * Up to four tool shortcuts in a 2×2 grid beside the library square, chosen with 📌 on the Tools
+ * screen. When the belly-photo square also takes room, the shortcuts shrink to icons (names stay
+ * for screen readers).
+ */
 export function ToolShortcuts({ contentWeek }: { contentWeek: number }) {
   const t = useTranslations("tools");
   const { records } = useRecords("settings");
@@ -14,22 +18,24 @@ export function ToolShortcuts({ contentWeek }: { contentWeek: number }) {
   if (shortcuts.length === 0) return null;
 
   return (
-    <nav aria-label={t("shortcuts")} className="grid h-[120px] flex-1 grid-cols-2 grid-rows-2 gap-2">
-      {shortcuts.map((id) => {
-        const tool = findTool(id);
-        return (
-          <Link
-            key={id}
-            href={tool.href}
-            className="flex min-h-11 items-center gap-2 rounded-2xl bg-card px-3 text-[13px] leading-tight font-semibold"
-          >
-            <span aria-hidden className="text-xl">
-              {tool.icon}
-            </span>
-            {t(id === "bets" ? "betsShort" : id)}
-          </Link>
-        );
-      })}
+    <nav aria-label={t("shortcuts")} className="@container min-w-24 flex-1">
+      <div className="grid h-[120px] grid-cols-2 grid-rows-2 gap-2">
+        {shortcuts.map((id) => {
+          const tool = findTool(id);
+          return (
+            <Link
+              key={id}
+              href={tool.href}
+              className="flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-2xl bg-card text-[13px] leading-tight font-semibold @[150px]:justify-start @[150px]:px-3"
+            >
+              <span aria-hidden className="text-xl">
+                {tool.icon}
+              </span>
+              <span className="sr-only @[150px]:not-sr-only">{t(id === "bets" ? "betsShort" : id)}</span>
+            </Link>
+          );
+        })}
+      </div>
     </nav>
   );
 }

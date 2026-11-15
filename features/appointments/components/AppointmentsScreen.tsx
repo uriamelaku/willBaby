@@ -11,14 +11,18 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import {
   emptyAppointmentInput,
   formFromLink,
+  plannedTests,
   sortAppointments,
   testTiming,
   toAppointmentInput,
   toAppointmentRecord,
+  togglePlannedTest,
   type AppointmentInput,
 } from "@/features/appointments/appointments";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
+import type { MedicalTest } from "@/content/schema";
 import { getMedicalTests } from "@/lib/content";
+import { SCHEMA_VERSION } from "@/lib/db";
 import { findPregnancyStatus, parseLocalDate } from "@/lib/pregnancy";
 import { storage } from "@/lib/storage";
 import type { Appointment } from "@/lib/storage/types";
@@ -53,6 +57,7 @@ interface Editing {
 function TestsAndAppointments({ data }: { data: PregnancyData }) {
   const t = useTranslations();
   const { records, failed, reload } = useRecords("appointments");
+  const { records: settingsRecords, failed: settingsFailed } = useRecords("settings");
   const [today] = useState(() => new Date());
   const query = useSearchParams();
   const router = useRouter();
@@ -101,13 +106,26 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
     setDeleting(null);
   };
 
+  const togglePlanned = (testId: string) =>
+    run(
+      () => storage.save("settings", togglePlannedTest(settingsRecords?.[0] ?? { schemaVersion: SCHEMA_VERSION }, testId)),
+      "Updating my tests failed",
+    );
+
+  const bookTest = (test: MedicalTest) => book({ title: test.name, linkedTestId: test.id });
+
   const book = (input: Partial<AppointmentInput>) => {
     setEditing({ input: { ...emptyAppointmentInput, ...input } });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (failed) return <StorageError />;
-  if (!records) return null;
+  if (failed || settingsFailed) return <StorageError />;
+  if (!records || !settingsRecords) return null;
+
+  const linkedTests = new Set(records.map((appointment) => appointment.linkedTestId));
+  const plannedIds = new Set(settingsRecords[0]?.plannedTestIds);
+  // Tests in "my tests" that still need an appointment; once booked, the appointment stands for them.
+  const toBook = plannedTests(getMedicalTests(), settingsRecords[0]).filter((test) => !linkedTests.has(test.id));
 
   return (
     <>
@@ -124,8 +142,31 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
           <Button onClick={() => book({})}>{t("appointments.new")}</Button>
         )}
         {actionFailed && <StorageError />}
-        {records.length === 0 && !editing && <p className="text-muted">{t("appointments.empty")}</p>}
+        {records.length === 0 && toBook.length === 0 && !editing && (
+          <p className="text-muted">{t("appointments.empty")}</p>
+        )}
         <ul className="flex flex-col gap-3">
+          {toBook.map((test) => (
+            <li key={test.id}>
+              <Card className="flex flex-col gap-3 border-2 border-dashed border-brand/40">
+                <div className="flex flex-col gap-0.5">
+                  <p className="font-semibold">{test.name}</p>
+                  <p className="text-sm font-semibold text-brand-text">
+                    {t("appointments.toBook")} ·{" "}
+                    {t("appointments.weeks", { from: test.weekFrom, to: test.weekTo })}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button className="text-sm" onClick={() => bookTest(test)}>
+                    {t("appointments.book")}
+                  </Button>
+                  <Button variant="secondary" className="text-sm" onClick={() => togglePlanned(test.id)}>
+                    {t("appointments.unplan")}
+                  </Button>
+                </div>
+              </Card>
+            </li>
+          ))}
           {sortAppointments(records).map((appointment) => (
             <li key={appointment.id}>
               <Card className="flex flex-col gap-3">
@@ -183,13 +224,19 @@ function TestsAndAppointments({ data }: { data: PregnancyData }) {
                   </div>
                   <p className="text-sm">{test.description}</p>
                   {timing !== "past" && (
-                    <Button
-                      variant="secondary"
-                      className="self-start text-sm"
-                      onClick={() => book({ title: test.name, linkedTestId: test.id })}
-                    >
-                      {t("appointments.book")}
-                    </Button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        variant="secondary"
+                        aria-pressed={plannedIds.has(test.id)}
+                        className="text-sm aria-pressed:border-mint aria-pressed:bg-mint-soft aria-pressed:text-mint-text"
+                        onClick={() => togglePlanned(test.id)}
+                      >
+                        {t(plannedIds.has(test.id) ? "appointments.planned" : "appointments.plan")}
+                      </Button>
+                      <Button variant="secondary" className="text-sm" onClick={() => bookTest(test)}>
+                        {t("appointments.book")}
+                      </Button>
+                    </div>
                   )}
                 </Card>
               </li>

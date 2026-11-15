@@ -48,15 +48,14 @@ export type UpcomingItem =
   | { kind: "test"; id: string; title: string; week: number; daysUntil: number };
 
 /**
- * The next appointments and tests, soonest first. A test shows until it has an appointment
- * (or its window has passed); one whose window is open now has daysUntil 0.
+ * Upcoming appointments and tests, soonest first. `tests` are the ones the user added to "my tests":
+ * a test shows until it has an appointment (or its window has passed); an open window has daysUntil 0.
  */
 export function upcomingItems(
   appointments: Appointment[],
   tests: MedicalTest[],
   daysPregnant: number,
   today: Date,
-  limit = 3,
 ): UpcomingItem[] {
   const todayDate = formatLocalDate(today);
   const linkedTests = new Set(appointments.map((appointment) => appointment.linkedTestId));
@@ -83,8 +82,7 @@ export function upcomingItems(
     }));
 
   return [...fromAppointments, ...fromTests]
-    .sort((a, b) => a.daysUntil - b.daysUntil || (a.kind === "appointment" ? -1 : 1))
-    .slice(0, limit);
+    .sort((a, b) => a.daysUntil - b.daysUntil || (a.kind === "appointment" ? -1 : 1));
 }
 
 /** Overall progress as a fraction rounded down to whole percents (day 107 of 280 → 0.38). */

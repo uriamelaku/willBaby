@@ -16,7 +16,7 @@ export function BellyPhotoPrompt({ week }: { week: number }) {
   return (
     <Link
       href="/journal/photos"
-      className="flex h-[120px] w-[140px] flex-col gap-1.5 self-start rounded-card bg-card p-2.5"
+      className="flex h-[120px] w-[116px] shrink-0 flex-col gap-1.5 rounded-card bg-card p-2.5"
     >
       <span className="flex flex-1 flex-col items-center justify-center gap-0.5 rounded-[20px] border-2 border-dashed border-brand/50 bg-peach-soft text-brand-text">
         <CameraIcon />

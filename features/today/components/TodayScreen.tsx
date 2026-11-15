@@ -12,6 +12,7 @@ import { EARLY_WEEKS, findPregnancyStatus, parseLocalDate } from "@/lib/pregnanc
 import { useToday } from "@/lib/useToday";
 import { BellyPhotoPrompt } from "./BellyPhotoPrompt";
 import { DailyTipCard } from "./DailyTipCard";
+import { LibraryTile } from "./LibraryTile";
 import { ShareProgressButton } from "./ShareProgressButton";
 import { ToolShortcuts } from "./ToolShortcuts";
 import { TrimesterRing } from "./TrimesterRing";
@@ -83,6 +84,7 @@ function TodayContent({ data }: { data: PregnancyData }) {
 
       <div className="flex gap-3">
         <BellyPhotoPrompt week={status.contentWeek} />
+        <LibraryTile />
         <ToolShortcuts contentWeek={status.contentWeek} />
       </div>
 

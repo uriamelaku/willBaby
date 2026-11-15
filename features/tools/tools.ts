@@ -16,24 +16,27 @@ export const TOOLS = [
 export type ToolId = (typeof TOOLS)[number]["id"];
 export type Tool = (typeof TOOLS)[number];
 
-/** Today has room for four shortcuts (2×2 beside the belly-photo square). */
+/** Today has room for four shortcuts (beside or under the belly-photo and library squares). */
 export const MAX_HOME_SHORTCUTS = 4;
 /** From this content week the default shortcuts lead with the kick counter and contraction timer. */
 export const LATE_SHORTCUTS_WEEK = 28;
 
 const isToolId = (id: string): id is ToolId => TOOLS.some((tool) => tool.id === id);
 
-/** The default shortcuts (library and weight always), until the user picks their own. */
+/** The library always has its own square on Today, so it is not offered as a shortcut. */
+export const isPinnable = (id: ToolId) => id !== "library";
+
+/** The default shortcuts, until the user picks their own. */
 export const defaultShortcuts = (contentWeek: number): ToolId[] =>
   contentWeek >= LATE_SHORTCUTS_WEEK
-    ? ["library", "kicks", "contractions", "weight"]
-    : ["library", "weight", "hospitalBag", "names"];
+    ? ["kicks", "contractions", "weight", "hospitalBag"]
+    : ["weight", "hospitalBag", "names", "bets"];
 
 /** The tools shown on Today: the user's choice (even empty) once made, otherwise the defaults. */
 export function homeShortcuts(settings: Settings | undefined, contentWeek: number): ToolId[] {
   const chosen = settings?.homeShortcuts;
   if (!chosen) return defaultShortcuts(contentWeek);
-  return chosen.filter(isToolId).slice(0, MAX_HOME_SHORTCUTS);
+  return chosen.filter(isToolId).filter(isPinnable).slice(0, MAX_HOME_SHORTCUTS);
 }
 
 /** Adds or removes a tool; adding a fifth is refused (null). Keeps the Tools screen order. */

@@ -3,6 +3,7 @@ import {
   MAX_HOME_SHORTCUTS,
   defaultShortcuts,
   homeShortcuts,
+  isPinnable,
   toggleShortcut,
   withShortcuts,
 } from "@/features/tools/tools";
@@ -17,9 +18,9 @@ const settings = (homeShortcuts?: string[]): Settings => ({
 });
 
 describe("home shortcuts", () => {
-  it("defaults to the library and weight, adding kicks and contractions from week 28", () => {
-    expect(defaultShortcuts(27)).toEqual(["library", "weight", "hospitalBag", "names"]);
-    expect(defaultShortcuts(28)).toEqual(["library", "kicks", "contractions", "weight"]);
+  it("defaults to weight, bag, names and bets, leading with kicks and contractions from week 28", () => {
+    expect(defaultShortcuts(27)).toEqual(["weight", "hospitalBag", "names", "bets"]);
+    expect(defaultShortcuts(28)).toEqual(["kicks", "contractions", "weight", "hospitalBag"]);
     expect(homeShortcuts(settings(), 20)).toEqual(defaultShortcuts(20));
     expect(homeShortcuts(undefined, 30)).toEqual(defaultShortcuts(30));
   });
@@ -30,12 +31,17 @@ describe("home shortcuts", () => {
     expect(homeShortcuts(settings(["names", "old-tool"]), 30)).toEqual(["names"]);
   });
 
+  it("never shows the library as a shortcut (it has its own square on Today)", () => {
+    expect(isPinnable("library")).toBe(false);
+    expect(homeShortcuts(settings(["library", "names"]), 30)).toEqual(["names"]);
+  });
+
   it("adds in Tools order, removes, and refuses a fifth", () => {
     expect(toggleShortcut(["weight"], "kicks")).toEqual(["kicks", "weight"]);
     expect(toggleShortcut(["kicks", "weight"], "kicks")).toEqual(["weight"]);
     const full = defaultShortcuts(20);
     expect(full).toHaveLength(MAX_HOME_SHORTCUTS);
-    expect(toggleShortcut(full, "bets")).toBeNull();
+    expect(toggleShortcut(full, "kicks")).toBeNull();
   });
 
   it("stores the choice on the settings record", () => {

@@ -7,6 +7,21 @@ test.use({ viewport: { width: 390, height: 844 } });
 const verticalOverflow = (page: Page) =>
   page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
 
+const upcomingCard = (page: Page) => page.locator("section").filter({ hasText: "בקרוב" });
+
+/** Adds recommended tests to "my tests" on the tests screen, then returns to Today. */
+async function planTests(page: Page, names: string[]) {
+  await upcomingCard(page).getByRole("link", { name: "כל הבדיקות" }).click();
+  for (const name of names) {
+    const card = page.locator("li").filter({ has: page.getByRole("heading", { name, exact: true }) });
+    await card.getByRole("button", { name: "הוספה לבדיקות שלי" }).click();
+    await expect(card.getByRole("button", { name: "✓ בבדיקות שלי" })).toHaveAttribute("aria-pressed", "true");
+  }
+  await page.getByRole("link", { name: "היום" }).click();
+}
+
+const SOON_TESTS = ["סקירת מערכות מוקדמת", "סקר שליש שני (תבחין משולש)", "סקירת מערכות מאוחרת"];
+
 test("Today shows the approved layout and fits the screen without scrolling", async ({ page }) => {
   await completeOnboarding(page);
   await enterApp(page);
@@ -15,10 +30,11 @@ test("Today shows the approved layout and fits the screen without scrolling", as
   await expect(page.getByRole("img", { name: /שבוע 15\+2, שליש שני/ })).toBeVisible();
   await expect(page.getByText("עוד 173 ימים ללידה")).toBeVisible();
   await expect(page.getByText("תאריך משוער: 19 באפר׳ 2027")).toBeVisible();
-  const upcoming = page.getByRole("region").or(page.locator("section")).filter({ hasText: "בקרוב" });
-  await expect(upcoming.getByText("סקירה מוקדמת")).toBeVisible();
-  await expect(upcoming.getByText("זה הזמן").first()).toBeVisible();
+  // Recommended tests stay off Today until the user adds them.
+  await expect(upcomingCard(page).getByText("עוד לא הוספתם בדיקות או תורים")).toBeVisible();
   await expect(page.getByRole("link", { name: /לצלם עכשיו/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /ספריית ידע/ })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "קיצורי דרך לכלים" }).getByRole("link")).toHaveCount(4);
   await expect(page.getByText("סוף סוף מישהו בבית שמבין בטוסט אבוקדו")).toBeVisible();
 
   expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
@@ -28,15 +44,17 @@ test("Today still fits with the longest daily tip (three lines)", async ({ page 
   // Day 91: the longest tip in the content, plus the belly-photo prompt and three upcoming tests.
   await completeOnboarding(page, { lmpDate: "2026-07-29" });
   await enterApp(page);
-  await expect(page.getByText("הבחילות נרגעות? זה הזמן להחזיר לתפריט")).toBeVisible();
-  expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
-
-  // The day's other items fit too.
-  for (const current of [2, 3, 4]) {
-    await page.getByRole("button", { name: /טיפ נוסף/ }).click();
-    await expect(page.getByRole("button", { name: `טיפ נוסף (${current} מתוך 4)` })).toBeVisible();
+  await planTests(page, SOON_TESTS);
+  // Coming back to Today moved the rotation on, so go through all four of the day's items.
+  const longest = page.getByText("הבחילות נרגעות? זה הזמן להחזיר לתפריט");
+  let sawLongest = false;
+  for (let shown = 0; shown < 4; shown++) {
+    if (shown > 0) await page.getByRole("button", { name: /טיפ נוסף/ }).click();
+    await expect(page.getByRole("button", { name: /טיפ נוסף/ })).toBeVisible();
+    sawLongest ||= (await longest.count()) > 0;
     expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
   }
+  expect(sawLongest).toBe(true);
 });
 
 test("the daily tip moves to the next of the day's four on each load and with the button", async ({ page }) => {
@@ -83,15 +101,19 @@ test("Today shows the progress percent and tells booked appointments from tests 
   // Day 107 of 280.
   await expect(page.getByRole("img", { name: /38% מההיריון/ })).toBeVisible();
 
-  const upcoming = page.locator("section").filter({ hasText: "בקרוב" });
-  await expect(upcoming.getByText("לקבוע תור").first()).toBeVisible();
+  await planTests(page, ["סקירת מערכות מוקדמת"]);
+  const upcoming = upcomingCard(page);
+  await expect(upcoming.getByText("לקבוע תור")).toHaveCount(1);
 
   await upcoming.getByRole("link", { name: "כל הבדיקות" }).click();
-  await page.getByRole("button", { name: "הוספת תור" }).first().click();
+  // The planned test waits under "my tests" until it is booked.
+  await expect(page.getByText("עוד לא נקבע תור")).toBeVisible();
+  await page.getByRole("button", { name: "קביעת תור" }).first().click();
   await page.getByLabel("תאריך").fill("2026-11-02");
   await page.getByRole("button", { name: "שמירה" }).click();
   await page.getByRole("link", { name: "היום" }).click();
   await expect(upcoming.getByText(/נקבע:/)).toHaveCount(1);
+  await expect(upcoming.getByText("לקבוע תור")).toHaveCount(0);
   await expect(upcoming.getByText("עוד 5 ימים")).toBeVisible();
 
   // Moving the appointment updates Today.
@@ -106,7 +128,8 @@ test("Today shows the progress percent and tells booked appointments from tests 
 test("tapping an upcoming item books the test or opens the appointment", async ({ page }) => {
   await completeOnboarding(page);
   await enterApp(page);
-  const upcoming = page.locator("section").filter({ hasText: "בקרוב" });
+  await planTests(page, ["סקירת מערכות מאוחרת"]);
+  const upcoming = upcomingCard(page);
 
   await upcoming.getByRole("link", { name: /סקירה מאוחרת/ }).click();
   await expect(page.getByLabel("מה הבדיקה או הפגישה?")).toHaveValue("סקירת מערכות מאוחרת");
@@ -117,6 +140,19 @@ test("tapping an upcoming item books the test or opens the appointment", async (
   await page.getByRole("link", { name: "היום" }).click();
   await upcoming.getByRole("link", { name: /סקירה מאוחרת|סקירת מערכות מאוחרת/ }).click();
   await expect(page.getByLabel("תאריך")).toHaveValue("2026-11-20");
+});
+
+test("the upcoming card swipes sideways to later tests", async ({ page }) => {
+  await completeOnboarding(page);
+  await enterApp(page);
+  await planTests(page, [...SOON_TESTS, "העמסת סוכר", "תרבית GBS"]);
+  const list = upcomingCard(page).getByRole("list", { name: "בקרוב" });
+  await expect(list.getByRole("listitem")).toHaveCount(5);
+  const gbs = list.getByRole("link", { name: /תרבית GBS/ });
+  await expect(gbs).not.toBeInViewport();
+  await gbs.scrollIntoViewIfNeeded();
+  await expect(gbs).toBeInViewport();
+  expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
 });
 
 test("the week's progress can be shared", async ({ page }) => {

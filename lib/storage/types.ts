@@ -137,6 +137,8 @@ export interface Settings extends BaseRecord {
   seenSurprises?: number[];
   /** Tool ids shown as shortcuts on Today (at most 4); missing until the user picks. */
   homeShortcuts?: string[];
+  /** Recommended tests the user added to "my tests"; only these show on Today until booked. */
+  plannedTestIds?: string[];
   disclaimerAcceptedAt?: Timestamp;
   lastBackupAt?: Timestamp;
   schemaVersion: number;
