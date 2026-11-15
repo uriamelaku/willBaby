@@ -182,3 +182,31 @@ test("week 38 (long fruit name) still fits with each of the day's tips", async (
     expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
   }
 });
+
+test("the date calculator tells the week on a future date", async ({ page }) => {
+  await completeOnboarding(page);
+  await enterApp(page);
+  await page.getByRole("button", { name: /מחשבון תאריכים/ }).click();
+  const calculator = page.getByRole("dialog", { name: "מחשבון תאריכים" });
+
+  // Starts from the saved day 0 and today (15+2).
+  await expect(calculator.getByLabel("תחילת ההיריון (יום 0)")).toHaveValue("2026-07-13");
+  await expect(calculator.getByText("שבוע 15+2")).toBeVisible();
+
+  await calculator.getByLabel("באיזה תאריך?").fill("2026-12-25");
+  await expect(calculator.getByText("שבוע 23+4")).toBeVisible();
+  await expect(calculator.getByText("השבוע ה-24 של ההיריון · שליש שני")).toBeVisible();
+  await expect(calculator.getByText("115 ימים לפני התאריך המשוער")).toBeVisible();
+
+  // Day 0 can be changed for the calculation only.
+  await calculator.getByLabel("תחילת ההיריון (יום 0)").fill("2026-07-20");
+  await expect(calculator.getByText("שבוע 22+4")).toBeVisible();
+  await calculator.getByLabel("באיזה תאריך?").fill("2026-07-01");
+  await expect(calculator.getByText("התאריך הזה לפני תחילת ההיריון.")).toBeVisible();
+
+  await calculator.getByRole("button", { name: "סגירה" }).click();
+  await expect(calculator).toBeHidden();
+  await page.getByRole("button", { name: /מחשבון תאריכים/ }).click();
+  await expect(calculator.getByLabel("תחילת ההיריון (יום 0)")).toHaveValue("2026-07-13");
+  expect(await verticalOverflow(page)).toBeLessThanOrEqual(0);
+});

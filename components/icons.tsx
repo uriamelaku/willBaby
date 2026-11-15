@@ -78,3 +78,11 @@ export const CheckIcon = (props: SVGProps<SVGSVGElement>) => (
     <path d="M5 12.5l4.5 4.5L19 7.5" />
   </svg>
 );
+
+export const CalculatorIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg {...base} width={20} height={20} {...props}>
+    <rect x="5" y="2.5" width="14" height="19" rx="2" />
+    <path d="M8 6.5h8" />
+    <path d="M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h.01M15.5 18h.01" />
+  </svg>
+);

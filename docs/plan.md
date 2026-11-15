@@ -48,6 +48,7 @@ Mark ✅ only after tests, lint and build actually passed.
 - ✅ Names: a saved list first, couple voting optional
 - ✅ Knowledge library (`content/he/library.json`): 54 topics in pregnancy, birth, after birth, "what's normal?" and rights in Israel, with search; library and weight are default Today shortcuts
 - ✅ Content review of test windows (GBS, early anatomy scan); see `docs/content.md`
+- ✅ Date calculator on Today: the pregnancy week on any date (day 0 prefilled, editable, not saved)
 - ✅ Today: permanent library square beside the belly photo; swipeable "Upcoming" card; only tests the user adds to "my tests" (`settings.plannedTestIds`) or books appear there; new wording on the tests screen
 
 ## Phase 3 — After birth

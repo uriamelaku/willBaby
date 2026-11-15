@@ -5,6 +5,7 @@ import { Screen, StorageError } from "@/components/Screen";
 import { WeekFruit } from "@/components/ui/WeekFruit";
 import { useContentText } from "@/features/pregnancy/useContentText";
 import { usePregnancy, type PregnancyData } from "@/features/pregnancy/usePregnancy";
+import { DateCalculatorButton } from "@/features/calculator/components/DateCalculatorButton";
 import { SurpriseOverlay } from "@/features/surprises/components/SurpriseOverlay";
 import { daysLeftStatus, greetingFor } from "@/features/today/today";
 import { getWeekContent } from "@/lib/content";
@@ -42,7 +43,7 @@ function TodayContent({ data }: { data: PregnancyData }) {
 
   return (
     <>
-      <section className="flex flex-col gap-1.5 rounded-card bg-card px-[18px] py-3 shadow-hero">
+      <section className="relative flex flex-col gap-1.5 rounded-card bg-card px-[18px] py-3 shadow-hero">
         {/* The due date and the share button share the greeting's line so the hero card does not grow. */}
         <div className="flex items-baseline justify-between gap-2">
           <h1 className="text-[15px] text-muted">
@@ -78,6 +79,8 @@ function TodayContent({ data }: { data: PregnancyData }) {
           </div>
           <TrimesterRing status={status} />
         </div>
+        {/* In the empty corner below the ring, so it adds no height. */}
+        <DateCalculatorButton lmpDate={data.pregnancy.lmpDate} today={now} />
       </section>
 
       <UpcomingCard daysPregnant={status.daysPregnant} today={now} />
